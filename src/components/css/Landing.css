@@ -1,0 +1,80 @@
+.landing {
+    height: 100vh;
+    width: 100vw;   
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.landing .background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+.landing-content {
+    text-align: left;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* No background, keep it transparent */
+}
+
+.landing-content h1 {
+    /* font-size: 10rem; */
+    font-size: 4rem;
+    font-style: italic;
+    font-weight: normal;
+    
+    color: #fff;
+    font-family: 'Tiempos Headline', serif;
+    
+    max-width: 80vw;
+    
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    line-height: 1.5;
+}
+.landing-content h1 * {
+    text-wrap: nowrap;
+    text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.landing-content .text-spotlight{
+    line-height: normal;
+    padding: 0px 15px;
+}
+
+.landing-content h2 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #fff;
+    font-family: 'Aeonik', serif;
+    
+    padding: 20px;
+}
+
+@media (max-width: 600px) {
+    .landing-content {
+        max-width: 95vw;
+        align-items: flex-start;
+        text-align: left;
+    }
+    .landing-content h1 {
+        font-size: 2.2rem;
+    }
+    .landing-content h2 {
+        font-size: 1.1rem;
+    }
+}
