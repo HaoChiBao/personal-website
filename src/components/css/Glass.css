@@ -15,13 +15,16 @@
     --frost-blur: 2px;
 
     /* SVG noise/distortion */
-    --noise-frequency: 0.008;
-    --distortion-strength: 77;
+    /* --noise-frequency: 0.008; */
+    /* --distortion-strength: 77; */
+    --noise-frequency: 0.118;
+    --distortion-strength: 500;
 
     /* Outer shadow blur */
     --outer-shadow-blur: 24px;
 
-    border-radius: 28px;
+    /* border-radius: 28px; */
+    border-radius: 20px;
     isolation: isolate;
     position: relative; /* Add this line */
     box-shadow: 0px 6px var(--outer-shadow-blur) rgba(0, 0, 0, 0.2);
