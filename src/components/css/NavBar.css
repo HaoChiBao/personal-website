@@ -14,6 +14,7 @@
     overflow-x: hidden;
 
     font-family: 'Aeonik', sans-serif;
+    z-index: 1000;
 }
 
 .navbar nav {
@@ -48,4 +49,8 @@
 
 .navbar-links li a:hover {
     color: #0078ff;
+}
+
+.navbar .mouse-light {
+    display: none;
 }
