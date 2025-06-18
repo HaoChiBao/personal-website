@@ -18,36 +18,36 @@ const Projects = () => {
     const listRef = useRef(null);
 
     useEffect(() => {
-        // let ticking = false;
+        let ticking = false;
 
-        // const handleScroll = () => {
-        //     if (!ticking) {
-        //         window.requestAnimationFrame(() => {
-        //             const items = listRef.current.querySelectorAll('.project-item');
-        //             const viewportHeight = window.innerHeight;
-        //             const viewportCenter = window.scrollY + viewportHeight / 2;
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const items = listRef.current.querySelectorAll('.project-item');
+                    const viewportHeight = window.innerHeight;
+                    const viewportCenter = window.scrollY + viewportHeight / 2;
 
-        //             items.forEach(item => {
-        //                 const rect = item.getBoundingClientRect();
-        //                 const itemCenter = rect.top + window.scrollY + rect.height / 2;
-        //                 const distance = Math.abs(viewportCenter - itemCenter);
+                    items.forEach(item => {
+                        const rect = item.getBoundingClientRect();
+                        const itemCenter = rect.top + window.scrollY + rect.height / 2;
+                        const distance = Math.abs(viewportCenter - itemCenter);
 
-        //                 const maxDistance = viewportHeight / 2;
-        //                 const scale = 1 - Math.min(distance / maxDistance, 1) * 0.18;
-        //                 item.style.transform = `scale(${scale})`;
-        //                 item.style.transition = 'transform 0.18s cubic-bezier(.4,2,.6,1)';
-        //                 item.style.zIndex = scale > 0.97 ? 2 : 1;
-        //             });
-        //             ticking = false;
-        //         });
-        //         ticking = true;
-        //     }
-        // };
+                        const maxDistance = viewportHeight / 2;
+                        const scale = 1 - Math.min(distance / maxDistance, 1) * 0.18;
+                        item.style.transform = `scale(${scale})`;
+                        item.style.transition = 'transform 0.18s cubic-bezier(.4,2,.6,1)';
+                        item.style.zIndex = scale > 0.97 ? 2 : 1;
+                    });
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
 
-        // window.addEventListener('scroll', handleScroll, { passive: true });
-        // handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
 
-        // return () => window.removeEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
