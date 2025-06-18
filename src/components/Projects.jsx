@@ -8,10 +8,10 @@ const projectsData = [
     { title: "Project 2", description: "Description of project 2.", tags: ["Node.js", "Backend"] },
     { title: "Project 3", description: "Description of project 3.", tags: ["API", "Express"] },
     { title: "Project 4", description: "Description of project 4.", tags: ["Fullstack", "MongoDB"] },
-    { title: "Project 1", description: "Description of project 1.", tags: ["React", "Frontend"] },
-    { title: "Project 2", description: "Description of project 2.", tags: ["Node.js", "Backend"] },
-    { title: "Project 3", description: "Description of project 3.", tags: ["API", "Express"] },
-    { title: "Project 4", description: "Description of project 4.", tags: ["Fullstack", "MongoDB"] },
+    // { title: "Project 1", description: "Description of project 1.", tags: ["React", "Frontend"] },
+    // { title: "Project 2", description: "Description of project 2.", tags: ["Node.js", "Backend"] },
+    // { title: "Project 3", description: "Description of project 3.", tags: ["API", "Express"] },
+    // { title: "Project 4", description: "Description of project 4.", tags: ["Fullstack", "MongoDB"] },
 ];
 
 const Projects = () => {
