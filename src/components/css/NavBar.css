@@ -24,6 +24,7 @@
     justify-content: space-between;
 
     color: white;
+    z-index: 1000;
 }
 
 .navbar-logo {
@@ -45,13 +46,13 @@
     color: inherit;
     font-weight: 500;
     transition: color 0.2s;
+    z-index: 1000;
 }
 
 .navbar-links li a:hover {
-    color: #0078ff;
+    color: #aeefff;
 }
 
 .navbar .mouse-light {
-    transform: translate(-300%, -75%);
-    /* display: none; */
+    display: none;
 }
