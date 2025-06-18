@@ -13,7 +13,7 @@ const Landing = () => {
                 <h1>
                     <span>Hi, I'm</span>&nbsp;
                     <Glass className='text-spotlight'><span>James</span></Glass>&nbsp;
-                    <span>— a passionate</span>&nbsp;
+                    <span>- a passionate</span>&nbsp;
                     <Glass className = 'text-spotlight'><span>Software Engineer</span></Glass>&nbsp;
                     <span>and</span>&nbsp;
                     <Glass className = 'text-spotlight'><span>Chronic Builder</span></Glass>

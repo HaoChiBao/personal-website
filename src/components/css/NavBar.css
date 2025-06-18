@@ -52,5 +52,6 @@
 }
 
 .navbar .mouse-light {
-    display: none;
+    transform: translate(-300%, -75%);
+    /* display: none; */
 }
