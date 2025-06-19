@@ -12,9 +12,9 @@ const NavBar = () => {
             if (currentScroll <= 40) {
                 setActive(false); // At the top, hide
             } else if (currentScroll > lastScroll.current) {
-                setActive(false); // scrolling down, hide
+                setActive(true); // scrolling down, hide
             } else {
-                setActive(true); // scrolling up, show
+                setActive(false); // scrolling up, show
             }
             lastScroll.current = currentScroll;
         };
