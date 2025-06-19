@@ -78,7 +78,7 @@
 
 .profile-card .pfp{
     width: 250px;
-    aspect-ratio: 1 / 1;
+    height: 250px;
 
     display: flex;
     align-items: center;
@@ -145,8 +145,8 @@
     font-weight: bold;
 
     border: 3px solid #000;
-    /* color: #fff;
-    background-color: #000; */
+    color: #fff;
+    background-color: #000;
     border-radius: 15px;
     height: 100%;
 
@@ -166,6 +166,7 @@
 @media (max-width: 700px) {
     .profile-card .pfp{
         width: 100px;
+        height: 100px;
     }
 
     .profile-card .content{
