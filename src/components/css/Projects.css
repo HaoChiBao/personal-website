@@ -177,7 +177,7 @@
 
 @media (max-width: 700px) {
     .projects {
-        margin-top: 0;
+        margin-top: 100px;
     }
     .project-list {
         flex-direction: column;
