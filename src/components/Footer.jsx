@@ -10,19 +10,19 @@ const Footer = () => {
                 <div className="left"><h2>I Made This Sh*t</h2></div>
                 <div className="right">
                     {/* links for linkedin, github, email, devpost, twitter */}
-                    <a href="https://www.linkedin.com/in/your-linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <a href="https://www.linkedin.com/in/jpyang" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                         LinkedIn
                     </a>
-                    <a href="https://github.com/your-github" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <a href="https://github.com/haochibao" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                         GitHub
                     </a>
-                    <a href="mailto:your.email@example.com" aria-label="Email">
+                    <a href="mailto:jamesyang663@gmail.com" aria-label="Email">
                         Email
                     </a>
-                    <a href="https://devpost.com/your-devpost" target="_blank" rel="noopener noreferrer" aria-label="Devpost">
+                    <a href="https://devpost.com/jamesyang663" target="_blank" rel="noopener noreferrer" aria-label="Devpost">
                         Devpost
                     </a>
-                    <a href="https://twitter.com/your-twitter" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                    <a href="https://x.com/autocommitter" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
                         Twitter
                     </a>
                 </div>
