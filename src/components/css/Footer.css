@@ -1,6 +1,21 @@
 footer {
     width: 100%;
-    margin: 100px 0 50px 0;
+    margin-top: 100px;
+    
+    background-color: black;
+}
+
+footer .dots{
+    width: 100%;
+    height: 400px;
+    background-image: url(../../assets/images/dots.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+footer .dots img{
+
 }
 
 footer .info {
@@ -8,16 +23,14 @@ footer .info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 80px;
+    padding: 70px 80px;
     box-sizing: border-box;
 }
 
 footer .info .left h2 {
-    font-family: 'Aeonik', sans-serif;
     font-size: 2rem;
     font-weight: normal;
     color: #fff;
-    text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.5);
     margin: 0;
 }
 
@@ -32,16 +45,14 @@ footer .info .right {
 footer .info .right a {
     text-decoration: none;
     color: #fff;
-    font-family: 'Aeonik', sans-serif;
     font-size: 1.5rem;
     font-weight: normal;
-    text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.5);
     transition: color 0.2s;
     word-break: break-word;
 }
 
 footer .info .right a:hover {
-    color: #aeefff;
+    text-decoration: underline;
 }
 
 @media (max-width: 700px) {
@@ -49,7 +60,7 @@ footer .info .right a:hover {
         flex-direction: column;
         align-items: flex-start;
         width: 100%;
-        padding: 18px 40px;
+        padding: 70px 40px;
         gap: 1.2rem;
     }
 

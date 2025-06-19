@@ -3,10 +3,10 @@ import Glass from './Glass';
 
 const ProjectItem = ({ project }) => {
     return (
-        <Glass className='project-item' id ='projects'>
-            <video className="project-video" autoPlay loop muted playsInline>
+        <div className='project-item' id ='projects'>
+            {/* <video className="project-video" autoPlay loop muted playsInline>
                 <source src={TEST} type="video/mp4" />
-            </video>
+            </video> */}
             <div className="project-content">
                 <h2>{project.title}</h2>
                 {/* <p>{project.description}</p> */}
@@ -16,7 +16,7 @@ const ProjectItem = ({ project }) => {
                     ))}
                 </div>
             </div>
-        </Glass>
+        </div>
     )
 }
 

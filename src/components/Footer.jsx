@@ -1,6 +1,8 @@
 import React from 'react';
 import './css/Footer.css';
 
+import dots from '../assets/images/dots.png';
+
 const Footer = () => {
     return (
         <footer id = "contact">
@@ -24,6 +26,9 @@ const Footer = () => {
                         Twitter
                     </a>
                 </div>
+            </div>
+            <div className='dots'>
+                {/* <img src={dots} alt="Decorative dots" /> */}
             </div>
         </footer>
     )

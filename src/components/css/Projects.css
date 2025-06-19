@@ -6,6 +6,8 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+
+    margin-top: 200px;
 }
 
 .project-list {
@@ -20,20 +22,100 @@
     font-family: 'Aeonik', sans-serif;
 }
 
+.projects .heading{
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    position: relative;
+
+    margin-bottom: 50px;
+}
+
+.projects .heading h1{
+    font-size: 6rem;
+    font-weight: normal;
+    text-decoration: underline;
+}
+
+.projects .heading p{
+    font-size: 1.2rem;
+}
+
+
+.more-projects{
+    margin-top: 50px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.more-projects h2{
+
+}
+
+.more-projects button{
+    background-color: #000;
+    color: #fff;
+
+    border: 3px solid #000;
+    padding: 20px 30px;
+    border-radius: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+    
+    max-width: 80vw;
+
+    cursor: pointer;
+
+    /* transition: 0.3s ease; */
+}
+
+.more-projects button:hover {
+    animation: rave-strobe 0.7s linear infinite;
+    background-color: #fff; /* fallback */
+    color: #000;            /* fallback */
+}
+
+@keyframes rave-strobe {
+    0%   { background: #ff0055; color: #fff; }
+    14%  { background: #fffa00; color: #000; }
+    28%  { background: #00ffea; color: #000; }
+    42%  { background: #ff00ea; color: #fff; }
+    57%  { background: #00ff2a; color: #000; }
+    71%  { background: #ff7f00; color: #fff; }
+    85%  { background: #0055ff; color: #fff; }
+    100% { background: #ff0055; color: #fff; }
+}
+
+
+/* Project Items _____________________ */
+
 .project-item {
     max-width: 70vw;
     width: 40vw;
-    /* padding: 15px; */
-    border-radius: 18px;
+    aspect-ratio: 16/12;
+
+    border-radius: 20px;
     
     display: flex;
     flex-direction: column;
     /* gap: 20px; */
     
+    position: relative;
     overflow: hidden;
 
     transition: 0.4s ease;
     will-change: transform;
+
+    border: 3px solid #000;
 
 }
 
@@ -42,41 +124,35 @@
 }
 
 .project-item video{
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    
     width: 100%;
-    height: auto;
+    height: 100%;
+
+    object-fit: cover;
     /* border-radius: 18px; */
 }
 
 .project-item .project-content{
     display: flex;
     flex-direction: column;
+
     gap: 10px;
     padding: 15px;
+
+    bottom: 0;
+    position: absolute;
 }
 
-.projects h1{
-    width: 80%;
-    font-family: 'Aeonik', sans-serif;
-    font-size: 3.5rem;
-    font-weight: normal;
-    text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.5);
-    color: #fff
-}
-
-.projects h2{
-    font-family: 'Aeonik', sans-serif;
+.projects .project-item h2{
     font-size: 1.5rem;
     font-weight: normal;
-    text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.5);
-    color: #fff
 }
-.projects p{
-    font-family: 'Aeonik', sans-serif;
+.projects .project-item p{
     font-size: 1rem;
     font-weight: normal;
-    text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.5);
-    color: #fff;
-    opacity: 0.8;
 }
 
 .projects .tags{
@@ -86,12 +162,11 @@
 }
 
 .project-item .tags .tag{
-    background-color: #3333336c;
+    background-color: #000;
     color: #fff;
-    opacity: 0.8;
 
     padding: 5px 10px;
-    border-radius: 10px;
+    border-radius: 20px;
     font-size: 0.9rem;
     font-family: 'Aeonik', sans-serif;
     text-transform: uppercase;
@@ -99,11 +174,6 @@
 }
 
 
-@media (max-width: 900px) {
-    .project-item {
-        width: calc(100% - 60px);
-    }
-}
 
 @media (max-width: 700px) {
     .project-list {
@@ -116,8 +186,20 @@
         /* min-width: 0; */
         width: calc(100% - 60px);
     }
-    .projects h1 {
+
+    .projects .heading h1 {
         font-size: 2rem;
+    }
+    .projects .more-projects h2 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        max-width: 80%;
+
+        text-align: center;
+    }
+    .projects .more-projects button {
         width: 80%;
+        font-size: 1.5rem;
+        padding: 15px 20px;
     }
 }

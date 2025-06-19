@@ -34,25 +34,48 @@
     
     background-color: #000;
 }
-
-.profile-card .banner img{
+.profile-card .banner img {
     position: absolute;
+    transition: transform 0.5s;
+    will-change: transform;
 }
 
-.profile-card .banner img#cloud-1{
+/* Cloud 1: moves left to right slowly */
+@keyframes cloud-move-1 {
+    0% {
+        left: -20%;
+        transform: translateY(-50%);
+    }
+    100% {
+        left: 100%;
+        transform: translateY(-50%);
+    }
+}
+
+/* Cloud 2: moves right to left, slightly faster and lower */
+@keyframes cloud-move-2 {
+    0% {
+        right: -25%;
+        transform: translateY(-40%);
+    }
+    100% {
+        right: 100%;
+        transform: translateY(-40%);
+    }
+}
+
+.profile-card .banner img#cloud-1 {
     top: 50%;
-    left: -10%;
-    transform: translate(0%, -50%);
-    /* height: 200px; */
+    left: -20%;
     height: 67%;
+    animation: cloud-move-1 200s linear infinite;
 }
 
-.profile-card .banner img#cloud-2{
-    top: 60%;
-    right: -20%;
-    transform: translate(0%, -50%);
-    /* height: 200px; */
-    height: 67%;
+.profile-card .banner img#cloud-2 {
+    top: 65%;
+    right: -25%;
+    height: 60%;
+    animation: cloud-move-2 120s linear infinite;
 }
 
 .profile-card .content{
