@@ -3,13 +3,15 @@ import { useEffect, useRef, useState } from 'react';
 
 const NavBar = () => {
     const navRef = useRef(null);
-    const [active, setActive] = useState(true);
+    const [active, setActive] = useState(false);
     const lastScroll = useRef(window.scrollY);
 
     useEffect(() => {
         const handleScroll = () => {
             const currentScroll = window.scrollY;
-            if (currentScroll > lastScroll.current) {
+            if (currentScroll <= 40) {
+                setActive(false); // At the top, hide
+            } else if (currentScroll > lastScroll.current) {
                 setActive(false); // scrolling down, hide
             } else {
                 setActive(true); // scrolling up, show

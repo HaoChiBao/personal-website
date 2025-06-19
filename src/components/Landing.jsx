@@ -1,6 +1,6 @@
 import './css/Landing.css';
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import pfp1 from '../assets/images/pfp (1).png';
 import pfp2 from '../assets/images/pfp (2).png';
@@ -10,6 +10,8 @@ import verified from '../assets/images/verified.png';
 
 import cloud1 from '../assets/images/cloud (1).png';
 import cloud2 from '../assets/images/cloud (2).png';
+
+const pfps = [pfp3, pfp1, pfp2];
 
 const metrics = [
     {
@@ -27,8 +29,14 @@ const metrics = [
 ]
 
 const Landing = () => {
+    const [pfpIndex, setPfpIndex] = useState(0);
+
     useEffect(() => {
     }, []);
+
+    const handlePfpHover = () => {
+        setPfpIndex((prev) => (prev + 1) % pfps.length);
+    };
 
     return (
         <div className="landing">
@@ -39,8 +47,8 @@ const Landing = () => {
                     <div className="social-links"></div>
                 </div>
                 <div className="content">
-                    <div className="pfp">
-                        <img src={pfp3} alt="Profile" className="pfp-image" />
+                    <div className="pfp" onMouseEnter={handlePfpHover}>
+                        <img src={pfps[pfpIndex]} alt="Profile" className="pfp-image" />
                     </div>
                     <h1 className="name">James Yang</h1>
                     <div className="verified">
