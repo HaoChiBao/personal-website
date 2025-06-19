@@ -1,4 +1,4 @@
-import TEST from '../assets/project test.mp4'
+import TEST from '../assets/videos/project test.mp4'
 import Glass from './Glass';
 
 const ProjectItem = ({ project }) => {
