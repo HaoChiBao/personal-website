@@ -14,6 +14,8 @@
     max-width: 90vw;
     /* height: 90vh; */
 
+    margin-top: 70px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
