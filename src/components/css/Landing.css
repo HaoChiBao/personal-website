@@ -83,8 +83,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    max-width: 50%;
 
     border-radius: 50%;
     border: 3px solid #000;
@@ -116,10 +114,12 @@
 .profile-card .bio{
     width: 80%;
     max-width: 600px;
+
+    margin-bottom: 20px;
+
     text-align: center;
     font-size: 1.5rem;
     line-height: 1.5;
-    /* color: #333; */
 }
 
 .profile-card .metrics{
