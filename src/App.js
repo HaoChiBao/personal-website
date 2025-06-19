@@ -11,8 +11,8 @@ function App() {
       {/* <NavBar /> */}
       {/* <Background background={1} /> */}
       <Landing />
-      {/* <Projects />
-      <Footer /> */}
+      {/* <Projects /> */}
+      {/* <Footer /> */}
     </div>
   );
 }
