@@ -60,14 +60,6 @@ const Landing = () => {
         return () => clearInterval(tickRef.current);
     }, []);
 
-    const handlePfpHover = () => {
-        setPfpIndex(prev => (prev + 1) % pfps.length);
-        setLoadingKey(prev => prev + 1); // force animation restart
-        startTimeRef.current = Date.now();
-        setProgress(0);
-        // Do NOT call restartInterval() here
-    };
-
     return (
         <div className="landing">
             <div className="profile-card">
@@ -77,7 +69,7 @@ const Landing = () => {
                     <div className="social-links"></div>
                 </div>
                 <div className="content">
-                    <div className="pfp" onMouseOut={handlePfpHover}>
+                    <div className="pfp">
                         <span key={`loader-${loadingKey}`} className="pfp-loader">
                             <svg
                                 className="pfp-loader-svg"

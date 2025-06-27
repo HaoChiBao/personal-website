@@ -1,11 +1,13 @@
-import TEST from '../assets/videos/project test.mp4'
-
-const ProjectItem = ({ project }) => {
+const ProjectItem = ({ project, video_index}) => {
     return (
         <div className='project-item' id ='projects'>
-            {/* <video className="project-video" autoPlay loop muted playsInline>
-                <source src={TEST} type="video/mp4" />
-            </video> */}
+            { project.video ? 
+                <video className="project-video" autoPlay loop muted playsInline>
+                    <source src={project.video} type="video/mp4" />
+                </video>
+                :
+                <img className="project-image" src={project.image} alt={project.title} />
+            }
             <div className="project-content">
                 <h2>{project.title}</h2>
                 {/* <p>{project.description}</p> */}

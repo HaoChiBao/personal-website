@@ -140,6 +140,10 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+    user-drag: none;
+    user-select: none;
+    pointer-events: none;
+    -webkit-user-drag: none;
 }
 
 .profile-card .verified{

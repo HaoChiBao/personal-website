@@ -12,12 +12,23 @@ function App() {
     const storedTheme = localStorage.getItem('data-theme');
     const theme = storedTheme === 'dark' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
+
+    // Log when all images, videos, and assets are loaded
+    const onLoad = () => {
+      console.log('All images, videos, and assets have loaded!');
+    };
+
+    if (document.readyState === 'complete') {
+      onLoad();
+    } else {
+      window.addEventListener('load', onLoad);
+      return () => window.removeEventListener('load', onLoad);
+    }
   }, []);
 
   return (
     <div className="App">
       <NavBar />
-      {/* <Background background={1} /> */}
       <Landing />
       <Projects />
       <Footer />

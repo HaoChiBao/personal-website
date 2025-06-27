@@ -71,10 +71,12 @@
     font-weight: bold;
     max-width: 80vw;
     cursor: pointer;
+    transition: 0.2s ease;
 }
 
 .more-projects button:hover {
     /* animation: rave-strobe 0.7s linear infinite; */
+    transform: scale(1.02);
     animation: rave-strobe 1s linear infinite;
 }
 
@@ -169,6 +171,22 @@
     position: absolute;
     z-index: 1;
     pointer-events: none;
+    
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    top: 5px;
+    left: 5px;
+    
+    object-fit: cover;
+    border-radius: 15px;
+    
+    filter: brightness(0.9) blur(2px) grayscale(1);
+}
+
+.project-item img {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
 
     width: calc(100% - 10px);
     height: calc(100% - 10px);
@@ -177,6 +195,18 @@
 
     object-fit: cover;
     border-radius: 15px;
+
+    filter: brightness(0.9) blur(2px) grayscale(1);
+}
+
+.project-item:hover img {
+    filter: brightness(1) blur(0);
+    transition: filter 0.3s ease;
+}
+
+.project-item:hover video {
+    filter: brightness(1) blur(0);
+    transition: filter 0.3s ease;
 }
 
 .project-item .project-content {
@@ -193,6 +223,12 @@
     font-size: 1.5rem;
     font-weight: normal;
     color: var(--inverse-color);
+    /* text-shadow: 0 0px 24px var(--main-color), 0 0px 2px var(--main-color); */
+  text-shadow:
+    -1px -1px 0 var(--main-color),
+     1px -1px 0 var(--main-color),
+    -1px  1px 0 var(--main-color),
+     1px  1px 0 var(--main-color);
 }
 
 .projects .project-item p {
