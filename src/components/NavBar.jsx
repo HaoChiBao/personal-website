@@ -28,7 +28,7 @@ const NavBar = () => {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
       if (currentScroll <= 40) {
-        setActive(true);
+        setActive(false);
       } else if (currentScroll > lastScroll.current) {
         setActive(true);
       } else {
