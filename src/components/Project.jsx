@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 
 const ProjectItem = ({ project, video_index }) => {
     const itemRef = useRef(null);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
     const [inView, setInView] = useState(false);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 700);
+        const handleResize = () => setIsMobile(window.innerWidth <= 900);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
