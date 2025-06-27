@@ -112,14 +112,14 @@
     background-clip: padding-box;
 }
 
-.project-item:hover {
+.project-item.hover {
     transform: scale(1.02);
     border: 3px solid transparent;
     transition: 0.4s ease, border 0s;
 }
 
 /* Outer rotating gradient border */
-.project-item:hover::before {
+.project-item.hover::before {
     content: '';
     position: absolute;
     top: 0;
@@ -150,7 +150,7 @@
 }
 
 /* Inner white mask layer */
-.project-item:hover::after {
+.project-item.hover::after {
     content: '';
     position: absolute;
     top: 5px;
@@ -199,12 +199,8 @@
     filter: brightness(0.9) blur(2px) grayscale(1);
 }
 
-.project-item:hover img {
-    filter: brightness(1) blur(0);
-    transition: filter 0.3s ease;
-}
-
-.project-item:hover video {
+.project-item.hover img,
+.project-item.hover video {
     filter: brightness(1) blur(0);
     transition: filter 0.3s ease;
 }
