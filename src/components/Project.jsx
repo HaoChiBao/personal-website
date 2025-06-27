@@ -2,17 +2,22 @@ import { useEffect, useRef, useState } from "react";
 
 const ProjectItem = ({ project, video_index }) => {
     const itemRef = useRef(null);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
     const [inView, setInView] = useState(false);
 
+    // Update isMobile on resize
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 900);
+        const handleResize = () => setIsMobile(window.innerWidth <= 700);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    // Use IntersectionObserver for inView detection on mobile
     useEffect(() => {
-        if (!isMobile) return;
+        if (!isMobile) {
+            setInView(false);
+            return;
+        }
         const observer = new window.IntersectionObserver(
             ([entry]) => setInView(entry.isIntersecting),
             { threshold: 0.2 }
