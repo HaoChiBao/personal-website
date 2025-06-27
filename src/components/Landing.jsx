@@ -22,11 +22,16 @@ import profile_metrics from '../resources/profile_metrics';
 const pfps = [pfp1, pfp2, pfp3, pfp4, pfp5, pfp6, pfp7, pfp8, pfp9];
 
 const LOAD_TIME = 5000;
+const CIRCLE_RADIUS = 48;
+const CIRCLE_CIRCUM = 2 * Math.PI * CIRCLE_RADIUS;
 
 const Landing = () => {
     const [pfpIndex, setPfpIndex] = useState(0);
     const [loadingKey, setLoadingKey] = useState(0);
+    const [progress, setProgress] = useState(0);
     const intervalRef = useRef();
+    const tickRef = useRef();
+    const startTimeRef = useRef(Date.now());
 
     // Helper to clear and restart the interval
     const restartInterval = () => {
@@ -34,6 +39,8 @@ const Landing = () => {
         intervalRef.current = setInterval(() => {
             setPfpIndex(prev => (prev + 1) % pfps.length);
             setLoadingKey(prev => prev + 1); // force animation restart
+            startTimeRef.current = Date.now();
+            setProgress(0);
         }, LOAD_TIME);
     };
 
@@ -43,9 +50,21 @@ const Landing = () => {
         // eslint-disable-next-line
     }, []);
 
+    // Loader tick for smooth progress
+    useEffect(() => {
+        if (tickRef.current) clearInterval(tickRef.current);
+        tickRef.current = setInterval(() => {
+            const elapsed = Date.now() - startTimeRef.current;
+            setProgress(Math.min(elapsed / LOAD_TIME, 1));
+        }, 100); // update every 100ms
+        return () => clearInterval(tickRef.current);
+    }, []);
+
     const handlePfpHover = () => {
         setPfpIndex(prev => (prev + 1) % pfps.length);
         setLoadingKey(prev => prev + 1); // force animation restart
+        startTimeRef.current = Date.now();
+        setProgress(0);
         // Do NOT call restartInterval() here
     };
 
@@ -58,12 +77,8 @@ const Landing = () => {
                     <div className="social-links"></div>
                 </div>
                 <div className="content">
-                    {/* <div className="pfp" onMouseEnter={handlePfpHover}> */}
                     <div className="pfp" onMouseOut={handlePfpHover}>
-                        <span
-                            key={`loader-${loadingKey}`}
-                            className="pfp-loader"
-                        >
+                        <span key={`loader-${loadingKey}`} className="pfp-loader">
                             <svg
                                 className="pfp-loader-svg"
                                 viewBox="0 0 100 100"
@@ -94,6 +109,9 @@ const Landing = () => {
                                     cy="50"
                                     r="48"
                                     fill="none"
+                                    strokeDasharray={CIRCLE_CIRCUM}
+                                    strokeDashoffset={CIRCLE_CIRCUM * (1 - progress)}
+                                    style={{ transition: 'stroke-dashoffset 0.1s linear' }}
                                 />
                             </svg>
                         </span>

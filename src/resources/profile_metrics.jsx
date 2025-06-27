@@ -5,7 +5,7 @@ const profile_metrics = [
     },
     {
         title: 'All Nighters',
-        value: '100+',
+        value: '99+',
     },
     // {
     //     title: 'Projects Coded',
