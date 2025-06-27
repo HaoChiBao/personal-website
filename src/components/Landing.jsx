@@ -11,22 +11,9 @@ import verified from '../assets/images/verified.png';
 import cloud1 from '../assets/images/cloud (1).png';
 import cloud2 from '../assets/images/cloud (2).png';
 
-const pfps = [pfp3, pfp1, pfp2];
+import profile_metrics from '../resources/profile_metrics';
 
-const metrics = [
-    {
-        title: 'Hackathon Wins',
-        value: '20',
-    },
-    {
-        title: 'Projects Coded',
-        value: '50+',
-    },
-    {
-        title: 'Dogs',
-        value: '2',
-    }
-]
+const pfps = [pfp3, pfp1, pfp2];
 
 const Landing = () => {
     const [pfpIndex, setPfpIndex] = useState(0);
@@ -55,9 +42,10 @@ const Landing = () => {
                         <img src={verified} alt="Verified" className="verified-icon" />
                         <span className="verified-text">Chronic Builder</span>
                     </div>
-                    <p className="bio">I’m a software engineer that builds ideas into reality. Checkout out the things I’ve worked on.</p>
+                    {/* <p className="bio">I’m a software engineer that builds ideas into reality. Checkout out the things I’ve worked on.</p> */}
+                    <p className="bio">Software engineer who turns caffeine into applications. Check out my recent experiments.</p>
                     <div className="metrics">
-                        {metrics.map((metric, index) => (
+                        {profile_metrics.map((metric, index) => (
                             <div className="metric" key={index}>
                                 <h2 className="metric-value">{metric.value}</h2>
                                 <p className="metric-title">{metric.title}</p>

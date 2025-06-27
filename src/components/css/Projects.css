@@ -1,3 +1,9 @@
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
 .projects {
     width: 100%;
     position: relative;
@@ -6,7 +12,6 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-
     margin-top: 200px;
 }
 
@@ -15,41 +20,34 @@
     flex-wrap: wrap;
     gap: 2rem;
     width: 100%;
-    /* max-width: 1100px; */
     justify-content: center;
     margin-top: 2rem;
-
     font-family: 'Aeonik', sans-serif;
 }
 
-.projects .heading{
+.projects .heading {
     width: 100%;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 15px;
-
     position: relative;
-
     margin-bottom: 50px;
 }
 
-.projects .heading h1{
+.projects .heading h1 {
     font-size: 6rem;
     font-weight: normal;
     text-decoration: underline;
 }
 
-.projects .heading p{
+.projects .heading p {
     font-size: 1.2rem;
 }
 
-
-.more-projects{
+.more-projects {
     margin-top: 50px;
-    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -57,31 +55,23 @@
     gap: 10px;
 }
 
-.more-projects h2{
-
-}
-
-.more-projects button{
+.more-projects button {
     background-color: #000;
     color: #fff;
-
     border: 3px solid #000;
     padding: 20px 30px;
     border-radius: 20px;
     font-size: 2rem;
     font-weight: bold;
-    
     max-width: 80vw;
-
     cursor: pointer;
-
-    /* transition: 0.3s ease; */
 }
 
 .more-projects button:hover {
-    animation: rave-strobe 0.7s linear infinite;
-    background-color: #fff; /* fallback */
-    color: #000;            /* fallback */
+    /* animation: rave-strobe 0.7s linear infinite; */
+    animation: rave-strobe 1s linear infinite;
+    background-color: #fff;
+    color: #000;
 }
 
 @keyframes rave-strobe {
@@ -95,76 +85,125 @@
     100% { background: #ff0055; color: #fff; }
 }
 
-
 /* Project Items _____________________ */
 
 .project-item {
-    max-width: 70vw;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    z-index: 1;
+
     width: 40vw;
     aspect-ratio: 16/12;
+    max-width: 70vw;
 
-    border-radius: 20px;
-    
     display: flex;
     flex-direction: column;
-    /* gap: 20px; */
-    
-    position: relative;
-    overflow: hidden;
-
     transition: 0.4s ease;
     will-change: transform;
-
+    
     border: 3px solid #000;
-
+    background-clip: padding-box;
 }
 
 .project-item:hover {
-    /* transform: scale(1.02); */
+    transform: scale(1.02);
+    border: 3px solid transparent;
+    transition: 0.4s ease, border 0s;
 }
 
-.project-item video{
+/* Outer rotating gradient border */
+.project-item:hover::before {
+    content: '';
     position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    z-index: -2;
+
+    padding: 5px;
+    background: linear-gradient(
+        var(--rotate),
+        #ff0055,
+        #fffa00 16%,
+        #00ffea 32%,
+        #ff00ea 48%,
+        #00ff2a 64%,
+        #ff7f00 80%,
+        #0055ff 100%
+    );
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    animation: spin-gradient 2.5s linear infinite;
+}
+
+/* Inner white mask layer */
+.project-item:hover::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    background: #fff;
+    border-radius: 15px;
     z-index: -1;
+}
+
+@keyframes spin-gradient {
+    0% { --rotate: 0deg; }
+    100% { --rotate: 360deg; }
+}
+
+.project-item video {
+    position: absolute;
+    z-index: 1;
     pointer-events: none;
-    
-    width: 100%;
-    height: 100%;
+
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    top: 5px;
+    left: 5px;
 
     object-fit: cover;
-    /* border-radius: 18px; */
+    border-radius: 15px;
 }
 
-.project-item .project-content{
+.project-item .project-content {
     display: flex;
     flex-direction: column;
-
     gap: 10px;
     padding: 15px;
-
     bottom: 0;
     position: absolute;
+    z-index: 2;
 }
 
-.projects .project-item h2{
+.projects .project-item h2 {
     font-size: 1.5rem;
     font-weight: normal;
 }
-.projects .project-item p{
+
+.projects .project-item p {
     font-size: 1rem;
     font-weight: normal;
 }
 
-.projects .tags{
+.projects .tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.project-item .tags .tag{
+.project-item .tags .tag {
     background-color: #000;
     color: #fff;
-
     padding: 5px 10px;
     border-radius: 20px;
     font-size: 0.9rem;
@@ -173,33 +212,33 @@
     cursor: pointer;
 }
 
-
-
 @media (max-width: 700px) {
     .projects {
         margin-top: 100px;
     }
+
     .project-list {
         flex-direction: column;
         gap: 1.2rem;
         align-items: center;
     }
+
     .project-item {
         max-width: 90vw;
-        /* min-width: 0; */
         width: calc(100% - 60px);
     }
 
     .projects .heading h1 {
         font-size: 2rem;
     }
+
     .projects .more-projects h2 {
         font-size: 1rem;
         margin-bottom: 10px;
         max-width: 80%;
-
         text-align: center;
     }
+
     .projects .more-projects button {
         width: 80%;
         font-size: 1.5rem;
