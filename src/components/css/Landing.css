@@ -247,8 +247,8 @@
     top: 50%;
     left: 50%;
     z-index: 2;
-    width: 270px;   /* slightly larger than .pfp */
-    height: 270px;  /* slightly larger than .pfp */
+    width: calc(100% + 20px);   /* 10px extra border on each side */
+    height: calc(100% + 20px);
     pointer-events: none;
     display: flex;
     align-items: center;
