@@ -191,13 +191,13 @@
 
 @media (max-width: 700px) {
     .profile-card .pfp{
-        width: 100px;
-        height: 100px;
+        width: 140px;
+        height: 140px;
     }
 
     .profile-card .content{
         padding: 10px;
-        padding-top: 50px;
+        padding-top: 80px;
     }
     
     .profile-card .metrics{
