@@ -4,7 +4,7 @@ import dots from '../assets/images/dots.png';
 import useScramble from '../hooks/useScramble';
 
 const Footer = () => {
-    const [scrambledHeading, headingRef] = useScramble("I Made This Sh*t", 700);
+    const [scrambledHeading, headingRef] = useScramble("I Made This Sh*t", 500);
 
     return (
         <footer id="contact">

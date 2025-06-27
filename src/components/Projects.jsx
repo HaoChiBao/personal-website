@@ -9,8 +9,8 @@ const projectsData = highlight_projects;
 
 const Projects = () => {
     const listRef = useRef(null);
-    const [scrambledH1, h1Ref] = useScramble("The Things I Do", 700);
-    const [scrambledP, pRef] = useScramble("a showcase of highlight experiences", 700);
+    const [scrambledH1, h1Ref] = useScramble("The Things I Do", 500);
+    const [scrambledP, pRef] = useScramble("a showcase of highlight experiences", 300);
 
     return (
         <div className="projects">
