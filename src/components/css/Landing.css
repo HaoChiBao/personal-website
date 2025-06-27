@@ -23,7 +23,7 @@
     justify-content: center;
 
     border-radius: 20px;
-    border: 3px solid #000;
+    border: 3px solid var(--inverse-color);
 
     overflow: hidden;
 }
@@ -35,7 +35,7 @@
     aspect-ratio: 8/3;
 
     
-    background-color: #000;
+    background-color: var(--inverse-color);
 }
 .profile-card .banner img {
     position: absolute;
@@ -81,6 +81,11 @@
     animation: cloud-move-2 120s linear infinite;
 }
 
+/* Invert clouds when in dark mode */
+[data-theme="dark"] .profile-card .banner img {
+    filter: invert(1) brightness(1.2) contrast(1.1);
+}
+
 .profile-card .content{
     position: relative;
 
@@ -97,9 +102,16 @@
     padding-top: 125px;
     box-sizing: border-box;
 
-    background-color: rgb(255, 255, 255);
+    background-color: var(--main-color);
 
     z-index: 10;
+}
+
+.profile-card .name{
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--inverse-color);
+    text-align: center;
 }
 
 .profile-card .pfp{
@@ -130,11 +142,17 @@
     justify-content: center;
 
     gap: 5px;
+
+    color: var(--inverse-color);
 }
 
 .profile-card .verified img{
     aspect-ratio: 1 / 1;
     width: 20px;
+}
+
+[data-theme="dark"] .profile-card .verified img {
+    filter: invert(1);
 }
 
 .profile-card .bio{
@@ -146,6 +164,8 @@
     text-align: center;
     font-size: 1.5rem;
     line-height: 1.5;
+
+    color: var(--inverse-color);
 }
 
 .profile-card .metrics{
@@ -170,9 +190,9 @@
 
     font-weight: bold;
 
-    border: 3px solid #000;
-    color: #fff;
-    background-color: #000;
+    border: 3px solid var(--inverse-color);
+    color: var(--main-color);
+    background-color: var(--inverse-color);
     border-radius: 15px;
     height: 100%;
 
@@ -182,7 +202,7 @@
 .profile-card .metrics .metric .metric-value{
     font-size: clamp(5rem, 5vh, 3rem);
     font-weight: bold;
-    /* color: #000; */
+    /* color: var(--main-color); */
 }
 
 .profile-card .metrics .metric .metric-title{

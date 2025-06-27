@@ -40,10 +40,12 @@
     font-size: 6rem;
     font-weight: normal;
     text-decoration: underline;
+    color: var(--inverse-color);
 }
 
 .projects .heading p {
     font-size: 1.2rem;
+    color: var(--inverse-color);
 }
 
 .more-projects {
@@ -55,10 +57,14 @@
     gap: 10px;
 }
 
+.more-projects h2{
+    color: var(--inverse-color);
+}
+
 .more-projects button {
-    background-color: #000;
-    color: #fff;
-    border: 3px solid #000;
+    background-color: var(--inverse-color);
+    color: var(--main-color);
+    border: 3px solid var(--inverse-color);
     padding: 20px 30px;
     border-radius: 20px;
     font-size: 2rem;
@@ -70,8 +76,6 @@
 .more-projects button:hover {
     /* animation: rave-strobe 0.7s linear infinite; */
     animation: rave-strobe 1s linear infinite;
-    background-color: #fff;
-    color: #000;
 }
 
 @keyframes rave-strobe {
@@ -102,7 +106,7 @@
     transition: 0.4s ease;
     will-change: transform;
     
-    border: 3px solid #000;
+    border: 3px solid var(--inverse-color);
     background-clip: padding-box;
 }
 
@@ -151,7 +155,7 @@
     left: 5px;
     right: 5px;
     bottom: 5px;
-    background: #fff;
+    background: var(--main-color);
     border-radius: 15px;
     z-index: -1;
 }
@@ -188,6 +192,7 @@
 .projects .project-item h2 {
     font-size: 1.5rem;
     font-weight: normal;
+    color: var(--inverse-color);
 }
 
 .projects .project-item p {
@@ -202,8 +207,8 @@
 }
 
 .project-item .tags .tag {
-    background-color: #000;
-    color: #fff;
+    background-color: var(--inverse-color);
+    color: var(--main-color);
     padding: 5px 10px;
     border-radius: 20px;
     font-size: 0.9rem;

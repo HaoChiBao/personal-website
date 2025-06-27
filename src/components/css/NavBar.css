@@ -14,10 +14,12 @@ nav {
     /* height: 30px; */
     height: 20px;
 
-    background-color: rgb(255, 255, 255);
+    background-color: var(--main-color);
     transition: 0.3s ease;
 
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid var(--inverse-color);
+    color: var(--inverse-color);
+
 }
 
 nav.active{
@@ -40,6 +42,7 @@ nav.active{
     text-decoration: none;
     color: inherit;
     z-index: 1000;
+    color: var(--text-color);
 }
 
 .navbar-links li a:hover {

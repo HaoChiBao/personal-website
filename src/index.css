@@ -178,3 +178,18 @@ html {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE and Edge */
 }
+
+
+:root {
+  --main-color: #ffffff;
+  --inverse-color: #000000;
+}
+
+[data-theme='dark'] {
+  --main-color: #000000;
+  --inverse-color: #ffffff;
+}
+
+body {
+  background-color: var(--main-color);
+}

@@ -2,9 +2,9 @@ footer {
     width: 100%;
     margin-top: 100px;
     
-    background-color: black;
+    background-color: var(--inverse-color);
+    color: var(--main-color);
 }
-
 footer .dots{
     width: 100%;
     height: 400px;
@@ -12,6 +12,11 @@ footer .dots{
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+}
+
+/* Invert the dots image in dark theme */
+[data-theme='dark'] footer .dots {
+    filter: invert(1);
 }
 
 footer .dots img{
@@ -30,7 +35,6 @@ footer .info {
 footer .info .left h2 {
     font-size: 2rem;
     font-weight: normal;
-    color: #fff;
     margin: 0;
 }
 
@@ -44,8 +48,8 @@ footer .info .right {
 
 footer .info .right a {
     text-decoration: none;
-    color: #fff;
     font-size: 1.5rem;
+    color: var(--main-color);
     font-weight: normal;
     transition: color 0.2s;
     word-break: break-word;
