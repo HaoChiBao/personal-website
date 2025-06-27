@@ -44,9 +44,9 @@ const Landing = () => {
     }, []);
 
     const handlePfpHover = () => {
-        setPfpIndex((prev) => (prev + 1) % pfps.length);
+        setPfpIndex(prev => (prev + 1) % pfps.length);
         setLoadingKey(prev => prev + 1); // force animation restart
-        restartInterval(); // Reset the interval on hover
+        // Do NOT call restartInterval() here
     };
 
     return (
@@ -58,9 +58,10 @@ const Landing = () => {
                     <div className="social-links"></div>
                 </div>
                 <div className="content">
-                    <div className="pfp" onMouseEnter={handlePfpHover}>
+                    {/* <div className="pfp" onMouseEnter={handlePfpHover}> */}
+                    <div className="pfp" onMouseOut={handlePfpHover}>
                         <span
-                            key={loadingKey}
+                            key={`loader-${loadingKey}`}
                             className="pfp-loader"
                         >
                             <svg
@@ -96,7 +97,13 @@ const Landing = () => {
                                 />
                             </svg>
                         </span>
-                        <img src={pfps[pfpIndex]} alt="Profile" className="pfp-image" style={{ position: "relative", zIndex: 1 }} />
+                        <img
+                            key={`img-${loadingKey}`}
+                            src={pfps[pfpIndex]}
+                            alt="Profile"
+                            className="pfp-image"
+                            style={{ position: "relative", zIndex: 1 }}
+                        />
                     </div>
                     <h1 className="name">James Yang</h1>
                     <div className="verified">

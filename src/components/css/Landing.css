@@ -290,3 +290,29 @@
         stroke-dashoffset: 0;
     }
 }
+
+.pfp-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+    opacity: 1;
+    animation: pfp-fade 0.6s;
+}
+
+@keyframes pfp-fade {
+    0% {
+        opacity: 0;
+        filter: blur(6px);
+    }
+    40% {
+        opacity: 1;
+        filter: blur(0.5px);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
