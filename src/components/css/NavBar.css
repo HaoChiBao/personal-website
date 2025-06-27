@@ -36,6 +36,12 @@ nav.active{
     list-style: none;
     margin: 0;
     padding: 0;
+    align-items: center; /* Center items vertically */
+}
+
+.navbar-links li {
+    display: flex;
+    align-items: center; /* Ensure li contents are centered */
 }
 
 .navbar-links li a {
@@ -43,6 +49,9 @@ nav.active{
     color: inherit;
     z-index: 1000;
     color: var(--text-color);
+    display: flex;
+    align-items: center; /* Center text vertically */
+    height: 100%; /* Optional: ensures full height */
 }
 
 .navbar-links li a:hover {

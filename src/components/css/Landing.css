@@ -123,16 +123,22 @@
     justify-content: center;
 
     border-radius: 50%;
-    border: 3px solid #000;
+    /* border: 3px solid #000; */
+    border: 3px solid var(--inverse-color);
+    
+    overflow: visible; /* changed from hidden to visible */
     
     position: absolute;
     top: 0;
     transform: translateY(-60%);
+    background: none;
+    z-index: 10;
 }
 
 .profile-card .pfp img{
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     object-fit: cover;
 }
 
@@ -233,4 +239,54 @@
         font-size: 10px;
     }
     
+}
+
+
+.pfp-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    width: 270px;   /* slightly larger than .pfp */
+    height: 270px;  /* slightly larger than .pfp */
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0;
+    transform: translate(-50%, -50%);
+}
+
+.pfp-loader-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.pfp-loader-bg {
+    stroke: #e0e0e0;
+    stroke-width: 2.5;
+    opacity: 0;
+}
+
+.pfp-loader-bar {
+    stroke: url(#pfp-rainbow-gradient);
+    /* stroke: var(--inverse-color); */
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 301.59; /* 2 * PI * 48 */
+    stroke-dashoffset: 301.59;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    animation: pfp-loader-spin 5s linear forwards;
+}
+
+@keyframes pfp-loader-spin {
+    from {
+        stroke-dashoffset: 301.59;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
 }
