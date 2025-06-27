@@ -125,13 +125,13 @@
     border-radius: 50%;
     /* border: 3px solid #000; */
     border: 3px solid var(--inverse-color);
+    background: var(--inverse-color);
     
     overflow: visible; /* changed from hidden to visible */
     
     position: absolute;
     top: 0;
     transform: translateY(-60%);
-    background: none;
     z-index: 10;
 }
 
