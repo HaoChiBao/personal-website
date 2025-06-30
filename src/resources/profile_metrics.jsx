@@ -1,7 +1,7 @@
 const profile_metrics = [
     {
-        title: 'Hackathon Wins',
-        value: '20',
+        title: 'Hackathon Awards',
+        value: '15',
     },
     {
         title: 'All Nighters',

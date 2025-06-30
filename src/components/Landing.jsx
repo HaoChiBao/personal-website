@@ -69,7 +69,7 @@ const Landing = () => {
                     <div className="social-links"></div>
                 </div>
                 <div className="content">
-                    <div className="pfp">
+                    <div className="pfp" >
                         <span key={`loader-${loadingKey}`} className="pfp-loader">
                             <svg
                                 className="pfp-loader-svg"
@@ -107,20 +107,31 @@ const Landing = () => {
                                 />
                             </svg>
                         </span>
-                        <img
-                            key={`img-${loadingKey}`}
-                            src={pfps[pfpIndex]}
-                            alt="Profile"
-                            className="pfp-image"
-                            style={{ position: "relative", zIndex: 1 }}
-                        />
+                        {pfps.map((src, idx) => (
+                            <img
+                                key={`pfp-img-${idx}`}
+                                src={src}
+                                alt={`Profile ${idx + 1}`}
+                                className="pfp-image"
+                                style={{
+                                    zIndex: idx === pfpIndex ? 2 : 1,
+                                    opacity: idx === pfpIndex ? 1 : 0,
+                                    filter: idx === pfpIndex
+                                        ? "blur(0px)"
+                                        : "blur(8px)"
+                                }}
+                                draggable={false}
+                            />
+                        ))}
                     </div>
                     <h1 className="name">James Yang</h1>
                     <div className="verified">
                         <img src={verified} alt="Verified" className="verified-icon" />
                         <span className="verified-text">Chronic Builder</span>
                     </div>
-                    <p className="bio">Software engineer who turns caffeine into applications. Check out my recent experiments.</p>
+                    <p className="bio">
+                        I used to play with with Lego now I build with code. scroll to explore some cool stuff.
+                    </p>
                     <div className="metrics">
                         {profile_metrics.map((metric, index) => (
                             <div className="metric" key={index}>

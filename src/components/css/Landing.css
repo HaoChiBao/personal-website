@@ -135,7 +135,7 @@
     z-index: 10;
 }
 
-.profile-card .pfp img{
+.profile-card .pfp .pfp-image {
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -144,6 +144,20 @@
     user-select: none;
     pointer-events: none;
     -webkit-user-drag: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* NEW: transition for fade/blur between images */
+    transition: opacity 0.6s, filter 0.6s;
+    z-index: 1;
+    opacity: 0;
+    filter: blur(8px);
+}
+
+.profile-card .pfp .pfp-image.active {
+    opacity: 1;
+    filter: blur(0px);
+    z-index: 2;
 }
 
 .profile-card .verified{

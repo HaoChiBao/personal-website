@@ -167,7 +167,7 @@
     100% { --rotate: 360deg; }
 }
 
-.project-item video {
+.project-item .project-video {
     position: absolute;
     z-index: 1;
     pointer-events: none;
@@ -183,7 +183,7 @@
     filter: brightness(0.9) blur(2px) grayscale(1);
 }
 
-.project-item img {
+.project-item .project-image {
     position: absolute;
     z-index: 1;
     pointer-events: none;
@@ -241,12 +241,26 @@
 .project-item .tags .tag {
     background-color: var(--inverse-color);
     color: var(--main-color);
-    padding: 5px 10px;
+    /* padding: 5px 15px; */
     border-radius: 20px;
     font-size: 0.9rem;
     font-family: 'Aeonik', sans-serif;
     text-transform: uppercase;
     cursor: pointer;
+
+    height: 30px;
+    padding: 0 15px 0 10px;
+    
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+
+.project-item .tags .tag img{
+    height: 100%;
+    object-fit: contain;
 }
 
 @media (max-width: 700px) {
@@ -281,4 +295,26 @@
         font-size: 1.5rem;
         padding: 15px 20px;
     }
+}
+
+
+
+
+/* specifc css for special things */
+
+.Boardy{
+    background-color: #009B0A !important;
+}
+
+.Nodes{
+    background-color: #8154AC !important;
+}
+
+.RBC{
+    background-color: #0038C6 !important;
+}
+
+.Winner {
+    background-color: #EFDF00 !important;
+    color:#000 !important;
 }

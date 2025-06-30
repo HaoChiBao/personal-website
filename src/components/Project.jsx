@@ -81,9 +81,9 @@ const ProjectItem = ({ project, video_index }) => {
                 <div className="tags">
                     {Array.isArray(project.tags) &&
                         project.tags.map((tag, idx) => (
-                            <span key={tag + idx} className="tag">
+                            <div key={idx}>
                                 {tag}
-                            </span>
+                            </div>
                         ))}
                 </div>
             </div>
