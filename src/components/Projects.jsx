@@ -10,7 +10,7 @@ const projectsData = highlight_projects;
 const Projects = () => {
     const listRef = useRef(null);
     const [scrambledH1, h1Ref] = useScramble("The Things I Do", 500);
-    const [scrambledP, pRef] = useScramble("a showcase of highlight experiences", 300);
+    const [scrambledP, pRef] = useScramble("A showcase of highlight experiences", 300);
 
     return (
         <div className="projects">
