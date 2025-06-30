@@ -130,7 +130,8 @@ const Landing = () => {
                         <span className="verified-text">Chronic Builder</span>
                     </div>
                     <p className="bio">
-                        I used to play with with Lego now I build with code. scroll to explore some cool stuff.
+                        I used to play with Legos, now I build with code.<br />
+                        Scroll to explore some cool stuff.
                     </p>
                     <div className="metrics">
                         {profile_metrics.map((metric, index) => (
