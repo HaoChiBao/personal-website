@@ -1,11 +1,15 @@
 const profile_metrics = [
     {
-        title: 'Hackathon Awards',
+        title: 'Hackathon Wins',
         value: '15',
     },
+    // {
+    //     title: 'All Nighters',
+    //     value: '99+',
+    // },
     {
-        title: 'All Nighters',
-        value: '99+',
+        title: 'Coffees Drank',
+        value: '∞',
     },
     // {
     //     title: 'Projects Coded',
