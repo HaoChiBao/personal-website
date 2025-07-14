@@ -1,7 +1,11 @@
 const profile_metrics = [
+    // {
+    //     title: 'Hackathon Wins',
+    //     value: '15',
+    // },
     {
-        title: 'Hackathon Wins',
-        value: '15',
+        title: 'Tall',
+        value: '6"3',
     },
     // {
     //     title: 'All Nighters',
