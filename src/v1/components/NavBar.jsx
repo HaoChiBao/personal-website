@@ -1,7 +1,7 @@
 import './css/NavBar.css';
 
-import moon from '../assets/images/theme-moon.png'
-import sun from '../assets/images/theme-sun.png';
+import moon from '../../assets/images/theme-moon.png'
+import sun from '../../assets/images/theme-sun.png';
 
 import { useEffect, useRef, useState } from 'react';
 import useScramble from '../hooks/useScramble';

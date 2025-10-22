@@ -1,11 +1,11 @@
-import nodes_video from '../assets/videos/nodes.mp4';
-import boardy_video from '../assets/videos/boardy.mp4';
-import uofthacks from '../assets/videos/uofthacks.mp4';
-import rbc from '../assets/images/rbc-logo.jpg'
+import nodes_video from '../../assets/videos/nodes.mp4';
+import boardy_video from '../../assets/videos/boardy.mp4';
+import uofthacks from '../../assets/videos/uofthacks.mp4';
+import rbc from '../../assets/images/rbc-logo.jpg'
 
-import boardy_tag from '../assets/images/tag-boardy.png';
-import nodes_tag from '../assets/images/tag-nodes.png';
-import rbc_tag from '../assets/images/tag-rbc.png';
+import boardy_tag from '../../assets/images/tag-boardy.png';
+import nodes_tag from '../../assets/images/tag-nodes.png';
+import rbc_tag from '../../assets/images/tag-rbc.png';
 
 const Tag = (name, img_src = null) => {
     return (

@@ -1,13 +1,11 @@
-import './App.css';
-import Background from './components/Background';
-import NavBar from './components/NavBar';
-import Landing from './components/Landing';
-import Projects from './components/Projects';
-import Footer from './components/Footer';
+import NavBar from '../components/NavBar';
+import Landing from '../components/Landing';
+import Projects from '../components/Projects';
+import Footer from '../components/Footer';
 
 import { useEffect } from 'react';
 
-function App() {
+function Home_V1() {
   useEffect(() => {
     const storedTheme = localStorage.getItem('data-theme');
     const theme = storedTheme === 'dark' ? 'dark' : 'light';
@@ -27,7 +25,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="Home" style = {{width: '100vw'}}>
       <NavBar />
       <Landing />
       <Projects />
@@ -36,4 +34,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home_V1;

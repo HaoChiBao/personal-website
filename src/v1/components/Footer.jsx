@@ -1,6 +1,5 @@
 import React from 'react';
 import './css/Footer.css';
-import dots from '../assets/images/dots.png';
 import useScramble from '../hooks/useScramble';
 
 const Footer = () => {

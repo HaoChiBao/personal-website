@@ -2,22 +2,22 @@ import './css/Landing.css';
 
 import { useEffect, useRef, useState } from "react";
 
-import pfp1 from '../assets/images/pfp/pfp (1).png';
-import pfp2 from '../assets/images/pfp/pfp (2).png';
-import pfp3 from '../assets/images/pfp/pfp (3).png';
-import pfp4 from '../assets/images/pfp/pfp (4).png';
-import pfp5 from '../assets/images/pfp/pfp (5).png';
-import pfp6 from '../assets/images/pfp/pfp (6).png';
-import pfp7 from '../assets/images/pfp/pfp (7).png';
-import pfp8 from '../assets/images/pfp/pfp (8).png';
-import pfp9 from '../assets/images/pfp/pfp (9).png';
+import pfp1 from '../../assets/images/pfp/pfp (1).png';
+import pfp2 from '../../assets/images/pfp/pfp (2).png';
+import pfp3 from '../../assets/images/pfp/pfp (3).png';
+import pfp4 from '../../assets/images/pfp/pfp (4).png';
+import pfp5 from '../../assets/images/pfp/pfp (5).png';
+import pfp6 from '../../assets/images/pfp/pfp (6).png';
+import pfp7 from '../../assets/images/pfp/pfp (7).png';
+import pfp8 from '../../assets/images/pfp/pfp (8).png';
+import pfp9 from '../../assets/images/pfp/pfp (9).png';
 
-import verified from '../assets/images/verified.png';
+import verified from '../../assets/images/verified.png';
 
-import cloud1 from '../assets/images/cloud (1).png';
-import cloud2 from '../assets/images/cloud (2).png';
+import cloud1 from '../../assets/images/cloud (1).png';
+import cloud2 from '../../assets/images/cloud (2).png';
 
-import profile_metrics from '../resources/profile_metrics';
+import profile_metrics from '../resources/profile_metrics'
 
 const pfps = [pfp1, pfp2, pfp3, pfp4, pfp5, pfp6, pfp7, pfp8, pfp9];
 
