@@ -10,7 +10,8 @@ root.render(
   <BrowserRouter>
     <Routes>
       {/* <Route path="/" element={<Home />} /> */}
-      <Route path="/legacy/v1" element={<Home_V1 />} />
+      <Route path="/" element={<Home_V1 />} />
+      {/* <Route path="/legacy/v1" element={<Home_V1 />} /> */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   </BrowserRouter>

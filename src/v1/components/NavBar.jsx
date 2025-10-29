@@ -5,6 +5,7 @@ import sun from '../../assets/images/theme-sun.png';
 
 import { useEffect, useRef, useState } from 'react';
 import useScramble from '../hooks/useScramble';
+import resume from '../../assets/files/James_Yang-Resume.pdf';
 
 const NavBar = () => {
   const navRef = useRef(null);
@@ -70,7 +71,8 @@ const NavBar = () => {
         <li><a href="#projects" onClick={handleNavClick}>Projects</a></li>
         <li><a href="#contact" onClick={handleNavClick}>Contact</a></li>
         <li>
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" onClick={handleNavClick}>
+          {/* <a href="src\assets\files\James_Yang-Resume.pdf" target="_blank" rel="noopener noreferrer" onClick={handleNavClick}> */}
+          <a href={resume} target="_blank" rel="noopener noreferrer" onClick={handleNavClick}>
             Resume
           </a>
         </li>
