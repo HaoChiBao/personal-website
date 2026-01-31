@@ -20,7 +20,7 @@ const Projects = () => {
             </div>
             <div className="project-list" ref={listRef}>
                 {projectsData.map((project, idx) => (
-                    <ProjectItem key={project.title + idx} project={project} />
+                    <ProjectItem key={project.title + idx} project={project} id = {project.id} />
                 ))}
             </div>
             <div className="more-projects">

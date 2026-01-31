@@ -1,0 +1,418 @@
+/* v2.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+.v2-container {
+  font-family: 'Aeonik', 'Inter', sans-serif;
+  color: #000;
+  background-color: #fff;
+  min-height: 100vh;
+  padding: 40px;
+  /* max-width: 1200px; */
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.headers {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 80px;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.header-right {
+  display: flex;
+  gap: 40px;
+}
+
+.header-link {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
+.intro-section {
+  margin-bottom: 80px;
+}
+
+.cloud-images {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 7/1; /* Matching V1 banner aspect ratio */
+  background-color: #000; /* Assuming black background based on V2 styling context, or use var(--inverse-color) if available. V1 uses var(--inverse-color). Let's stick to black for now or inherit. */ 
+  /* Actually, looking at V2 design, it seems to be just on the page background. 
+     V1 has 'background-color: var(--inverse-color);'. 
+     The V2 screenshot shows a black box. I will set it to black #000 matching the apparent design. 
+  */
+  background-color: #000;
+  overflow: hidden;
+  margin-bottom: 40px;
+  border-radius: 12px;
+}
+
+.cloud-img {
+  position: absolute;
+  transition: transform 0.5s;
+  will-change: transform;
+  /* Removed grayscale filter to match V1 */
+}
+
+/* Cloud 1: moves left to right slowly */
+@keyframes cloud-move-1 {
+    0% {
+        left: -20%;
+        transform: translateY(-50%);
+    }
+    100% {
+        left: 100%;
+        transform: translateY(-50%);
+    }
+}
+
+/* Cloud 2: moves right to left, slightly faster and lower */
+@keyframes cloud-move-2 {
+    0% {
+        right: -25%;
+        transform: translateY(-40%);
+    }
+    100% {
+        right: 100%;
+        transform: translateY(-40%);
+    }
+}
+
+#cloud-1 {
+    top: 50%;
+    left: -20%;
+    height: 67%;
+    animation: cloud-move-1 200s linear infinite;
+    width: auto; /* Override V2 width: 48% */
+}
+
+#cloud-2 {
+    top: 65%;
+    right: -25%;
+    height: 60%;
+    animation: cloud-move-2 120s linear infinite;
+    width: auto; /* Override V2 width: 48% */
+}
+
+.intro-text h2 {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.intro-text p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
+  max-width: 800px;
+  margin-bottom: 40px;
+}
+
+.highlights-section {
+  margin-bottom: 80px;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  font-weight: 500;
+  color: #333;
+}
+
+.highlight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.highlight-item {
+  display: flex;
+  flex-direction: column; 
+  gap: 0; 
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  padding: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative; /* Anchor for absolute video */
+  width: fit-content; /* Fit around text and video */
+  max-width: 540px; /* Constrain width to strictly fit video + padding, forcing text wrap for 'tight' look */
+}
+
+/* Remove :hover background color if we want transparent video background? 
+   No, user said "background is grey". 
+*/
+.highlight-item:hover {
+  background-color: #f9f9f9; 
+}
+
+
+/* Header Row Layout: Avatar + Title */
+.highlight-header {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 4px; /* Tighter spacing (was 8px) */
+}
+
+/* Avatar Placeholder - Smaller size */
+.avatar-placeholder {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.highlight-item:hover .avatar-placeholder {
+  width: 0;
+  opacity: 0;
+}
+
+.highlight-item:hover .highlight-header {
+  gap: 0;
+}
+
+/* Metadata Section */
+.highlight-metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Spacer that pushes card height */
+.video-spacer {
+  width: 100%;
+  height: 0;
+  transition: height 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  flex-shrink: 0;
+}
+
+.video-spacer.expanded {
+  height: 300px; /* Match video height (was 400px) */
+  width: 500px; /* Force container width expansion (match video width) */
+  margin-top: 20px;
+}
+
+/* The Magic Video Element */
+.magic-video-container {
+  position: absolute;
+  /* Default State (Avatar Position) */
+  top: 20px; /* Aligned with top padding */
+  left: 20px; /* Aligned with left padding */
+  width: 24px;   /* Smaller size */
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 1; /* Below text context but above background */
+  
+  transition: 
+    top 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    left 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    height 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    border-radius 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.magic-video-container.expanded {
+  /* Expanded State (Bottom Position) */
+  /* top needs recalculating based on new height (300px) */
+  /* top = 100% - PaddingBottom - VideoHeight */
+  top: calc(100% - 20px - 300px); 
+  left: 20px;
+  width: 500px; /* Fixed width */
+  max-width: calc(100% - 40px); /* Safety constraint */
+  height: 300px; /* Fixed height for animation stability, or use aspect-ratio if supported well in transition */
+  border-radius: 12px;
+}
+
+.highlight-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Preserve aspect ratio, don't crop */
+  object-position: left; /* Align content to left if container is wider than video aspect */
+  background-color: #000; /* Letterboxing background if needed, or consistent with card */
+}
+
+.highlight-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Text Styles - Keep dark */
+.highlight-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.highlight-role, .highlight-date {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* Override previous specific hover colors since we now use grey bg */
+.highlight-item:hover .highlight-title {
+    color: #000; 
+}
+.highlight-item:hover .highlight-role, 
+.highlight-item:hover .highlight-date {
+    color: #666;
+}
+
+  /* Removed highlight-content class usage */
+
+.highlight-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arrow-icon {
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.highlight-role, .highlight-date {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* Blog Post Styles */
+.blog-post-container {
+  max-width: 1200px;
+  padding: 40px;
+  margin: 0 auto;
+  font-family: 'Aeonik', 'Inter', sans-serif;
+}
+
+.post-header-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 60px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.post-title {
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  max-width: 800px;
+}
+
+.post-date-range {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.hero-video-container {
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+
+  border: 2px solid #000;
+}
+
+.hero-video {
+  width: 100%;
+  height: auto;
+  /* border-radius: 12px; */
+  display: block;
+}
+
+.caption {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: right;
+  margin-bottom: 60px;
+}
+
+.post-content {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+}
+
+.overview-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 20px 10px;
+  font-size: 0.9rem;
+  margin-bottom: 60px;
+}
+
+.meta-label {
+  text-decoration: underline;
+  color: #333;
+}
+
+.meta-value {
+  color: #000;
+}
+
+.story-section h3, .contributions-section h3, .outcomes-section h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  margin-top: 40px;
+}
+
+.story-section h3:first-child {
+  margin-top: 0;
+}
+
+.story-text, .contribution-text, .outcome-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-right {
+    display: none; /* Simplification */
+  }
+  
+  .post-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .highlight-content {
+      /* Adjust padding for mobile if needed */
+  }
+
+
+}

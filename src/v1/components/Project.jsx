@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 
 const MOBILE_CENTER_THRESHOLD = 0.3; // 0.2 = center fifth of viewport, change as needed
 
-const ProjectItem = ({ project, video_index }) => {
+const ProjectItem = ({ project, video_index, id }) => {
     const itemRef = useRef(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
     const [inView, setInView] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+
+    const navigate = useNavigate();
 
     // Update isMobile on resize
     useEffect(() => {
@@ -60,6 +63,10 @@ const ProjectItem = ({ project, video_index }) => {
         };
     }, []);
 
+    const handleClick = (e) => {
+        navigate(`/blog/${id}`);
+    }
+
     const hoverActive = (isMobile && inView) || (!isMobile && isHovered);
 
     return (
@@ -67,6 +74,8 @@ const ProjectItem = ({ project, video_index }) => {
             className={`project-item${hoverActive ? " hover" : ""}`}
             id="projects"
             ref={itemRef}
+
+            onClick={handleClick}
         >
             {project.video ? (
                 <video className="project-video" autoPlay loop muted playsInline>
