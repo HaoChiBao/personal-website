@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 
 import { useEffect } from 'react';
 
-function Home_V1() {
+function Home() {
   useEffect(() => {
     const storedTheme = localStorage.getItem('data-theme');
     const theme = storedTheme === 'dark' ? 'dark' : 'light';
