@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import Glass from './Glass';
 import ProjectItem from "./Project";
 import './css/Projects.css';
 import { highlight_projects } from "../resources/highlight_projects";
