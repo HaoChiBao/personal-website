@@ -34,4 +34,4 @@ function Home() {
   );
 }
 
-export default Home_V1;
+export default Home;
