@@ -344,9 +344,13 @@
 }
 
 .post-content {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sidebar {
+  margin-bottom: 20px;
 }
 
 .overview-title {
@@ -357,10 +361,10 @@
 
 .meta-grid {
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 150px 1fr; /* Increased label width for better spacing */
   gap: 20px 10px;
   font-size: 0.9rem;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
 .meta-label {
@@ -370,6 +374,13 @@
 
 .meta-value {
   color: #000;
+}
+
+.tech-stack-list {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 20px; /* Horizontal space between items */
+  row-gap: 4px;     /* Vertical space if it wraps */
 }
 
 .story-section h3, .contributions-section h3, .outcomes-section h3 {
@@ -410,9 +421,7 @@
     grid-template-columns: 1fr;
   }
   
-  .highlight-content {
-      /* Adjust padding for mobile if needed */
-  }
+
 
 
 }
