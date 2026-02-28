@@ -15,7 +15,7 @@ const Footer = () => {
                     <a href="https://www.linkedin.com/in/jpyang" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     <a href="https://github.com/haochibao" target="_blank" rel="noopener noreferrer">GitHub</a>
                     <a href="mailto:jamesyang663@gmail.com">Email</a>
-                    <a href="https://devpost.com/jamesyang663" target="_blank" rel="noopener noreferrer">Devpost</a>
+                    <a href="https://devpost.com/jamesyang" target="_blank" rel="noopener noreferrer">Devpost</a>
                     <a href="https://x.com/jamesyanger" target="_blank" rel="noopener noreferrer">Twitter</a>
                 </div>
             </div>
