@@ -12,13 +12,13 @@ const Home_V2 = () => {
       <div className="headers">
         <div className="header-left" style={{ fontWeight: 700 }}>James Yang</div>
         <div className="header-right">
-          <a className="header-link">About</a>
-          <a className="header-link">Hackathons</a>
-          <a className="header-link">Fun</a>
+          <a className="header-link" href="#about">About</a>
+          <a className="header-link" href="#hackathons">Hackathons</a>
+          <a className="header-link" href="#fun">Fun</a>
         </div>
       </div>
 
-      <div className="intro-section">
+      <div className="intro-section" id="about">
         <div className="cloud-images">
              <img id="cloud-1" src={cloud1} className="cloud-img" alt="cloud 1" />
              <img id="cloud-2" src={cloud2} className="cloud-img" alt="cloud 2" />
