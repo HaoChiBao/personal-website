@@ -1,0 +1,43 @@
+.ultra-wip {
+  min-height: 100vh;
+  margin: 0;
+  padding: clamp(2rem, 6vw, 5rem);
+  box-sizing: border-box;
+  background:
+    radial-gradient(700px 420px at 20% 10%, rgba(191, 224, 255, 0.35), transparent 60%),
+    radial-gradient(640px 380px at 85% 30%, rgba(0, 60, 255, 0.22), transparent 55%),
+    linear-gradient(180deg, #f7f9ff, #eaf0ff);
+  color: #06122e;
+  font-family: Aeonik, system-ui, sans-serif;
+}
+
+.ultra-wip-eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #003cff;
+}
+
+.ultra-wip h1 {
+  margin: 0 0 1rem;
+  font-family: 'Tiempos Fine', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  letter-spacing: -0.02em;
+}
+
+.ultra-wip-body {
+  max-width: 36rem;
+  margin: 0;
+  line-height: 1.55;
+  font-size: 1.05rem;
+  color: rgba(6, 18, 46, 0.78);
+}
+
+.ultra-wip code {
+  font-size: 0.92em;
+  padding: 0.1em 0.35em;
+  border-radius: 6px;
+  background: rgba(0, 60, 255, 0.08);
+}

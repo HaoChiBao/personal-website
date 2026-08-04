@@ -1,0 +1,85 @@
+.design-switcher {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 100000;
+  font-family: Aeonik, system-ui, sans-serif;
+}
+
+.design-switcher-toggle {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(10, 10, 10, 0.88);
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.design-switcher-toggle:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.design-switcher-menu {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 8px;
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  width: min(280px, calc(100vw - 32px));
+  background: rgba(12, 12, 12, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
+.design-switcher-menu button {
+  appearance: none;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 10px;
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+}
+
+.design-switcher-menu button:hover,
+.design-switcher-menu button.is-active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.design-switcher-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.design-switcher-status {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.design-switcher-status.is-wip {
+  color: #9ec1ff;
+}
+
+.design-switcher-status.is-ready {
+  color: #9dffb0;
+}
+
+.design-switcher-summary {
+  font-size: 11px;
+  opacity: 0.55;
+  line-height: 1.35;
+}
