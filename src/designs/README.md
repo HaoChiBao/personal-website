@@ -8,9 +8,11 @@ Shared media (fonts, images, videos, resume) lives in [`src/assets`](../assets).
 | Method | How |
 |--------|-----|
 | Dev UI | Floating **Design:** control (bottom-right) while `npm start` |
+| Testing preview | Same switcher auto-shows on the Vercel `testing` branch URL |
 | URL | `http://localhost:3000/?design=classic-bw` |
 | Persist | Choice saved to `localStorage` (`jy-active-design`) |
 | Env | `REACT_APP_DESIGN=studio-cloud` (see `.env`) |
+| Force switcher | `?designSwitcher=1` or `REACT_APP_DESIGN_SWITCHER=1` |
 
 Current packs:
 

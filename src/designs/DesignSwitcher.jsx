@@ -2,17 +2,33 @@ import { useState } from 'react';
 import './DesignSwitcher.css';
 
 /**
- * Dev-facing design picker. Hidden in production builds unless
- * ?designSwitcher=1 is present.
+ * Design picker — shown in local dev and on the Vercel `testing` preview.
+ * Hidden on production (master / jamesyang.ca).
  */
+function shouldShowDesignSwitcher() {
+  if (process.env.NODE_ENV !== 'production') return true;
+  if (process.env.REACT_APP_DESIGN_SWITCHER === '1') return true;
+
+  // Injected at build time by scripts/embed-vercel-meta.js on Vercel
+  if (process.env.REACT_APP_GIT_BRANCH === 'testing') return true;
+
+  if (typeof window === 'undefined') return false;
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('designSwitcher')) return true;
+
+  // Fallback: Vercel branch alias host
+  // personal-website-git-testing-<team>.vercel.app
+  const host = window.location.hostname;
+  if (host.includes('-git-testing-')) return true;
+
+  return false;
+}
+
 export default function DesignSwitcher({ designs, activeId, onChange }) {
   const [open, setOpen] = useState(false);
 
-  const forceShow =
-    typeof window !== 'undefined' &&
-    new URLSearchParams(window.location.search).has('designSwitcher');
-
-  if (process.env.NODE_ENV === 'production' && !forceShow) return null;
+  if (!shouldShowDesignSwitcher()) return null;
 
   const active = designs.find((d) => d.id === activeId) || designs[0];
 
