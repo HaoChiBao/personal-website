@@ -6,9 +6,9 @@ import type { LetterVariantMap } from "@/lib/letter-assets";
 type Props = {
   text: string;
   variants: LetterVariantMap;
-  /** How long the rapid shuffle runs after assets are ready (ms). */
+  /** How long the intro shuffle runs after assets are ready (ms). */
   durationMs?: number;
-  /** Interval between random picks while shuffling (ms). */
+  /** Base interval between swaps for a single letter (ms). */
   tickMs?: number;
 };
 
@@ -20,9 +20,13 @@ type Slot = {
   active: number;
   /** Exit/enter lean in degrees (sign flips the tilt). */
   rot: number;
+  /** Per-letter transition length (seconds). */
+  dur: number;
+  /** Display width of the active glyph (px); animated via CSS. */
+  width: number | null;
 };
 
-/** Keep in sync with CSS transition on `.flicker-name__glyph`. */
+/** Keep roughly in sync with CSS transition on `.flicker-name__glyph`. */
 const SWAP_MS = 520;
 
 function pickIndex(len: number, avoid: number): number {
@@ -41,15 +45,52 @@ function pickRot(avoid = 0): number {
   return Math.sign(next) === Math.sign(avoid) ? -next : next;
 }
 
-function shuffleOnce(slots: Slot[]): Slot[] {
-  return slots.map((slot) => {
-    if (slot.urls.length < 2) return slot;
+function pickDur(): number {
+  return 0.4 + Math.random() * 0.28; // 0.40–0.68s
+}
+
+function glyphWidth(
+  src: string,
+  widths: Map<string, number>,
+): number | null {
+  return widths.get(src) ?? null;
+}
+
+function swapSlotAt(
+  slots: Slot[],
+  index: number,
+  widths: Map<string, number>,
+): Slot[] {
+  return slots.map((slot, i) => {
+    if (i !== index || slot.urls.length < 2) return slot;
+    const active = pickIndex(slot.urls.length, slot.active);
+    const src = slot.urls[active];
     return {
       ...slot,
-      active: pickIndex(slot.urls.length, slot.active),
+      active,
       rot: pickRot(slot.rot),
+      dur: pickDur(),
+      width: glyphWidth(src, widths) ?? slot.width,
     };
   });
+}
+
+function letterIndices(slots: Slot[]): number[] {
+  const out: number[] = [];
+  slots.forEach((slot, i) => {
+    if (slot.urls.length >= 2) out.push(i);
+  });
+  return out;
+}
+
+/** Fisher–Yates shuffle. */
+function shuffled<T>(items: T[]): T[] {
+  const arr = [...items];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
 /** Deterministic first frame for SSR / hydration. */
@@ -64,7 +105,17 @@ function buildSlots(text: string, variants: LetterVariantMap): Slot[] {
       urls,
       active: urls.length ? 0 : -1,
       rot: i % 2 === 0 ? -18 : 18,
+      dur: 0.52,
+      width: null,
     };
+  });
+}
+
+function withWidths(slots: Slot[], widths: Map<string, number>): Slot[] {
+  return slots.map((slot) => {
+    if (!slot.urls.length || slot.active < 0) return slot;
+    const src = slot.urls[slot.active];
+    return { ...slot, width: widths.get(src) ?? slot.width };
   });
 }
 
@@ -78,27 +129,45 @@ function urlsNeeded(text: string, variants: LetterVariantMap): string[] {
   return [...set];
 }
 
-/** Load + decode so swaps hit an already-decoded bitmap. */
-function preloadDecoded(src: string): Promise<void> {
+/** Load, decode, and record display width at the given glyph height. */
+function preloadMeasured(
+  src: string,
+  heightPx: number,
+): Promise<{ src: string; width: number }> {
   return new Promise((resolve) => {
     const img = new Image();
     img.decoding = "async";
-    const done = () => resolve();
+    const finish = () => {
+      const ratio =
+        img.naturalHeight > 0 ? img.naturalWidth / img.naturalHeight : 1;
+      resolve({ src, width: heightPx * ratio });
+    };
     img.onload = () => {
       if (typeof img.decode === "function") {
-        img.decode().then(done).catch(done);
+        img.decode().then(finish).catch(finish);
       } else {
-        done();
+        finish();
       }
     };
-    img.onerror = done;
+    img.onerror = () => resolve({ src, width: heightPx });
     img.src = src;
   });
 }
 
+function readFlickHeightPx(): number {
+  if (typeof document === "undefined") return 50;
+  const probe = document.createElement("div");
+  probe.style.cssText =
+    "position:absolute;visibility:hidden;height:var(--flick-size);pointer-events:none";
+  document.body.appendChild(probe);
+  const h = probe.getBoundingClientRect().height || 50;
+  probe.remove();
+  return h;
+}
+
 /**
- * Name as stacked per-letter images. Intro runs a multi-tick shuffle; hover/click
- * swaps each letter once with a scale/rotate transition.
+ * Name as stacked per-letter images. Intro and hover swaps stagger each letter
+ * on its own random timeline; slot width eases between glyph sizes.
  */
 export default function FlickerName({
   text,
@@ -110,11 +179,22 @@ export default function FlickerName({
   const [ready, setReady] = useState(false);
   const reduceMotion = useRef(false);
   const busy = useRef(false);
-  const unlockTimer = useRef<number | undefined>(undefined);
+  const timers = useRef<number[]>([]);
+  const widthsRef = useRef<Map<string, number>>(new Map());
+
+  function clearTimers() {
+    for (const id of timers.current) window.clearTimeout(id);
+    timers.current = [];
+  }
+
+  function later(ms: number, fn: () => void) {
+    const id = window.setTimeout(fn, ms);
+    timers.current.push(id);
+    return id;
+  }
 
   useEffect(() => {
     let alive = true;
-    let intervalId: number | undefined;
 
     reduceMotion.current = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -123,50 +203,67 @@ export default function FlickerName({
     const needed = urlsNeeded(text, variants);
 
     (async () => {
-      if (needed.length) {
-        await Promise.all(needed.map(preloadDecoded));
-      }
+      const heightPx = readFlickHeightPx();
+      const measured = needed.length
+        ? await Promise.all(needed.map((src) => preloadMeasured(src, heightPx)))
+        : [];
       if (!alive) return;
 
+      const widths = new Map(measured.map((m) => [m.src, m.width]));
+      widthsRef.current = widths;
+
+      const initial = withWidths(buildSlots(text, variants), widths);
       setReady(true);
-      setSlots(buildSlots(text, variants));
+      setSlots(initial);
 
       if (reduceMotion.current) return;
 
       busy.current = true;
       const started = performance.now();
-      intervalId = window.setInterval(() => {
-        if (!alive) return;
-        setSlots((prev) => shuffleOnce(prev));
-        if (performance.now() - started >= durationMs) {
-          if (intervalId !== undefined) window.clearInterval(intervalId);
-          intervalId = undefined;
-          busy.current = false;
-        }
-      }, tickMs);
+      const indices = letterIndices(initial);
+
+      for (const idx of indices) {
+        const run = () => {
+          if (!alive) return;
+          setSlots((prev) => swapSlotAt(prev, idx, widthsRef.current));
+          if (performance.now() - started < durationMs) {
+            const nextIn = tickMs * (0.45 + Math.random() * 1.1);
+            later(nextIn, run);
+          }
+        };
+        later(Math.random() * tickMs * 1.2, run);
+      }
+
+      later(durationMs + tickMs + SWAP_MS, () => {
+        if (alive) busy.current = false;
+      });
     })();
 
     return () => {
       alive = false;
       busy.current = false;
-      if (intervalId !== undefined) window.clearInterval(intervalId);
-      if (unlockTimer.current !== undefined) {
-        window.clearTimeout(unlockTimer.current);
-      }
+      clearTimers();
     };
   }, [text, variants, durationMs, tickMs]);
 
   function swapOnce() {
     if (!ready || reduceMotion.current || busy.current) return;
     busy.current = true;
-    setSlots((prev) => shuffleOnce(prev));
-    if (unlockTimer.current !== undefined) {
-      window.clearTimeout(unlockTimer.current);
-    }
-    unlockTimer.current = window.setTimeout(() => {
+
+    const order = shuffled(letterIndices(slots));
+    let maxDelay = 0;
+
+    order.forEach((idx, rank) => {
+      const delay = rank * (35 + Math.random() * 55) + Math.random() * 160;
+      maxDelay = Math.max(maxDelay, delay);
+      later(delay, () => {
+        setSlots((cur) => swapSlotAt(cur, idx, widthsRef.current));
+      });
+    });
+
+    later(maxDelay + SWAP_MS + 80, () => {
       busy.current = false;
-      unlockTimer.current = undefined;
-    }, SWAP_MS);
+    });
   }
 
   return (
@@ -194,16 +291,11 @@ export default function FlickerName({
                 style={
                   {
                     "--flick-rot": `${slot.rot}deg`,
+                    "--flick-dur": `${slot.dur}s`,
+                    ...(slot.width != null ? { width: `${slot.width}px` } : {}),
                   } as CSSProperties
                 }
               >
-                <img
-                  className="flicker-name__sizer"
-                  src={slot.urls[slot.active]}
-                  alt=""
-                  aria-hidden
-                  draggable={false}
-                />
                 {slot.urls.map((src, i) => (
                   <img
                     key={src}

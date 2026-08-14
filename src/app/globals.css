@@ -107,7 +107,7 @@ a:hover {
   display: inline-flex;
   align-items: flex-end;
   flex-wrap: nowrap;
-  gap: 0.08em;
+  gap: 3px;
   line-height: 1;
 }
 
@@ -117,40 +117,38 @@ a:hover {
   height: var(--flick-size);
   vertical-align: bottom;
   --flick-rot: -18deg;
+  overflow: visible;
 }
 
-.flicker-name__sizer {
-  display: block;
-  height: var(--flick-size);
-  width: auto;
-  visibility: hidden;
-  pointer-events: none;
+.flicker-name.is-ready .flicker-name__slot {
+  transition: width var(--flick-dur, 0.52s) ease;
 }
 
 .flicker-name__glyph {
   display: block;
   height: var(--flick-size);
   width: auto;
+  max-width: none;
   user-select: none;
   -webkit-user-drag: none;
   position: absolute;
-  left: 0;
+  left: 50%;
   bottom: 0;
   opacity: 0;
-  transform: scale(0.52) rotate(var(--flick-rot));
+  transform: translateX(-50%) scale(0.52) rotate(var(--flick-rot));
   pointer-events: none;
   transform-origin: 50% 85%;
 }
 
 .flicker-name.is-ready .flicker-name__glyph {
   transition:
-    opacity 0.52s ease,
-    transform 0.52s ease;
+    opacity var(--flick-dur, 0.52s) ease,
+    transform var(--flick-dur, 0.52s) ease;
 }
 
 .flicker-name__glyph.is-on {
   opacity: 1;
-  transform: scale(1) rotate(0deg);
+  transform: translateX(-50%) scale(1) rotate(0deg);
 }
 
 .flicker-name__space {
@@ -170,7 +168,8 @@ a:hover {
     opacity: 1;
   }
 
-  .flicker-name.is-ready .flicker-name__glyph {
+  .flicker-name.is-ready .flicker-name__glyph,
+  .flicker-name.is-ready .flicker-name__slot {
     transition: none;
   }
 }
