@@ -154,20 +154,43 @@ a:hover {
 
 .loading-screen__clip {
   isolation: isolate;
-  -webkit-mask-image: radial-gradient(
-    ellipse 68% 62% at 50% 50%,
-    #000 0%,
-    #000 28%,
-    rgba(0, 0, 0, 0.7) 52%,
-    transparent 78%
-  );
-  mask-image: radial-gradient(
-    ellipse 68% 62% at 50% 50%,
-    #000 0%,
-    #000 28%,
-    rgba(0, 0, 0, 0.7) 52%,
-    transparent 78%
-  );
+  background: transparent;
+  --feather: 5px;
+  /* Only the outer 5px shows the bloom: 100% blur at the rim, 100% sharp inside. */
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      #000 var(--feather),
+      #000 calc(100% - var(--feather)),
+      transparent
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      #000 var(--feather),
+      #000 calc(100% - var(--feather)),
+      transparent
+    );
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      #000 var(--feather),
+      #000 calc(100% - var(--feather)),
+      transparent
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      #000 var(--feather),
+      #000 calc(100% - var(--feather)),
+      transparent
+    );
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 .loading-screen__media {
