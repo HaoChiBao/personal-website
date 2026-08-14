@@ -147,8 +147,8 @@ a:hover {
 
 /* Same-size copy, then blur — the glow stays aligned with the doodle. */
 .loading-screen__bloom {
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
+  filter: blur(3px);
+  -webkit-filter: blur(3px);
   pointer-events: none;
 }
 
