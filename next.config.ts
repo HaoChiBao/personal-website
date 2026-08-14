@@ -1,7 +1,24 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  turbopack: {
+    root: path.join(__dirname),
+  },
+  async headers() {
+    return [
+      {
+        source: "/loading.:ext(mp4|webm|png)",
+        headers: [
+          { key: "Accept-Ranges", value: "bytes" },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
