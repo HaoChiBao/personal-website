@@ -154,34 +154,37 @@ export default function LoadingScreen() {
       aria-live="polite"
     >
       <div className="loading-screen__frame">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="loading-screen__media loading-screen__media--poster"
-          src="/loading-poster.png?v=4"
-          alt=""
-          width={560}
-          height={316}
-          draggable={false}
-        />
-        {src ? (
-          <video
-            ref={videoRef}
-            className="loading-screen__media loading-screen__media--video"
-            data-ready={showVideo ? "true" : "false"}
+        <div className="loading-screen__clip">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="loading-screen__media loading-screen__media--poster"
+            src="/loading-poster.png?v=4"
+            alt=""
             width={560}
             height={316}
-            muted
-            playsInline
-            preload="auto"
-            autoPlay
-            loop={false}
-            controls={false}
-            disablePictureInPicture
-            src={src}
-            // iOS < 13 ignores playsInline unless the webkit attribute is set.
-            {...{ "webkit-playsinline": "true" }}
+            draggable={false}
           />
-        ) : null}
+          {src ? (
+            <video
+              ref={videoRef}
+              className="loading-screen__media loading-screen__media--video"
+              data-ready={showVideo ? "true" : "false"}
+              width={560}
+              height={316}
+              muted
+              playsInline
+              preload="auto"
+              autoPlay
+              loop={false}
+              controls={false}
+              disablePictureInPicture
+              src={src}
+              // iOS < 13 ignores playsInline unless the webkit attribute is set.
+              {...{ "webkit-playsinline": "true" }}
+            />
+          ) : null}
+        </div>
+        <div className="loading-screen__edge" aria-hidden />
       </div>
     </div>
   );
