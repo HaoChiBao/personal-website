@@ -57,6 +57,17 @@ listWork({ labels: ["internship"] });
 1. Create `projects/<id>.ts` exporting a `ProjectEntry`.
 2. Register it in `projects/index.ts`.
 3. Optionally link it from `work.ts` via `projectIds`.
+4. Optional `caseStudy` with structured blocks; without it, `/case/[id]` falls back to `summary`, `story`, `contributions`, `outcomes`, and `media`.
+
+## Case study media
+
+Put assets under `public/media/<project-id>/...` and reference them as `/media/<project-id>/...` (or a flat path like `/media/nodes.mp4`). Missing files are skipped so the layout does not break.
+
+```ts
+import { caseHref, getProject } from "@/content";
+
+caseHref("nodes"); // "/case/nodes"
+```
 
 ## Hackathons
 

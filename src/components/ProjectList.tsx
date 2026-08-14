@@ -1,4 +1,5 @@
-import type { ProjectEntry } from "@/content";
+import Link from "next/link";
+import { caseHref, type ProjectEntry } from "@/content";
 
 type Props = {
   items: ProjectEntry[];
@@ -19,18 +20,7 @@ export default function ProjectList({ items }: Props) {
       {items.map((project) => (
         <li key={project.id} className="entry">
           <span>
-            {project.links[0] ? (
-              <a
-                href={project.links[0].href}
-                {...(project.links[0].external
-                  ? { target: "_blank", rel: "noreferrer" }
-                  : {})}
-              >
-                {project.name}
-              </a>
-            ) : (
-              project.name
-            )}
+            <Link href={caseHref(project.id)}>{project.name}</Link>
             {project.hackathon?.event ? (
               <span className="entry__meta"> · {project.hackathon.event}</span>
             ) : null}

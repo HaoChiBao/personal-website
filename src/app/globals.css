@@ -5,8 +5,11 @@
   --ink: #111;
   --muted: #888;
   --measure: 28rem;
+  --name-measure: calc(var(--measure) * 1.5);
+  --case-measure: 40rem;
   --pad: 1.25rem;
   --font: "IBM Plex Sans", "Helvetica Neue", Helvetica, sans-serif;
+  --flick-size: 3.6em;
 }
 
 * {
@@ -15,6 +18,7 @@
 
 html {
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 body {
@@ -24,6 +28,7 @@ body {
   font-family: var(--font);
   font-size: 14px;
   line-height: 1.45;
+  overflow-x: clip;
 }
 
 a {
@@ -42,17 +47,132 @@ a:hover {
   padding: var(--pad);
   padding-top: 2.5rem;
   padding-bottom: 3rem;
+  overflow-x: visible;
+}
+
+.site:has(.case) {
+  width: min(var(--case-measure), 100%);
 }
 
 .hero {
+  /* Full-bleed out of .site so the wide name centers on the viewport */
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   margin-bottom: 2rem;
+  padding-left: var(--pad);
+  padding-right: var(--pad);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-.hero h1 {
-  margin: 0 0 0.35rem;
+.hero h1,
+.flicker-name {
+  margin: 0 auto 0.35rem;
   font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: -0.02em;
+}
+
+.flicker-name {
+  width: max-content;
+  max-width: min(var(--name-measure), calc(100vw - 2 * var(--pad)));
+}
+
+.flicker-name:not(.is-ready) {
+  opacity: 0.55;
+}
+
+.flicker-name__hit {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+
+.flicker-name__hit:hover {
+  text-decoration: none;
+}
+
+.flicker-name__row {
+  display: inline-flex;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  gap: 0.08em;
+  line-height: 1;
+}
+
+.flicker-name__slot {
+  position: relative;
+  display: inline-block;
+  height: var(--flick-size);
+  vertical-align: bottom;
+  --flick-rot: -18deg;
+}
+
+.flicker-name__sizer {
+  display: block;
+  height: var(--flick-size);
+  width: auto;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.flicker-name__glyph {
+  display: block;
+  height: var(--flick-size);
+  width: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  opacity: 0;
+  transform: scale(0.52) rotate(var(--flick-rot));
+  pointer-events: none;
+  transform-origin: 50% 85%;
+}
+
+.flicker-name.is-ready .flicker-name__glyph {
+  transition:
+    opacity 0.52s ease,
+    transform 0.52s ease;
+}
+
+.flicker-name__glyph.is-on {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.flicker-name__space {
+  display: inline-block;
+  width: 0.55em;
+}
+
+.flicker-name__fallback {
+  display: inline-block;
+  line-height: var(--flick-size);
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flicker-name:not(.is-ready) {
+    opacity: 1;
+  }
+
+  .flicker-name.is-ready .flicker-name__glyph {
+    transition: none;
+  }
 }
 
 .hero__links {
@@ -224,4 +344,114 @@ a:hover {
   .loading-screen {
     transition-duration: 0.2s;
   }
+}
+
+/* —— Case study —— */
+.case {
+  width: min(var(--case-measure), 100%);
+  margin: 0 auto;
+}
+
+.case__back {
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.case__header {
+  margin-bottom: 1.25rem;
+}
+
+.case__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.case__meta,
+.case__blurb {
+  margin: 0;
+  color: var(--muted);
+}
+
+.case__blurb {
+  margin-top: 0.5rem;
+}
+
+.case__hero,
+.case__figure {
+  margin: 0 0 1.5rem;
+}
+
+.case__media {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #f5f5f5;
+}
+
+.case__caption {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.case__body {
+  margin-bottom: 2rem;
+}
+
+.case__heading {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.case__p {
+  margin: 0 0 0.9rem;
+}
+
+.case__quote {
+  margin: 1.1rem 0;
+  padding-left: 0.9rem;
+  border-left: 2px solid #ddd;
+  color: var(--ink);
+}
+
+.case__quote p {
+  margin: 0;
+}
+
+.case__cite {
+  display: block;
+  margin-top: 0.35rem;
+  font-style: normal;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.case__list {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+}
+
+.case__list li {
+  margin-bottom: 0.35rem;
+}
+
+.case__footer {
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.case__stack,
+.case__links {
+  margin: 0 0 0.35rem;
+}
+
+.case__links a {
+  color: var(--ink);
 }

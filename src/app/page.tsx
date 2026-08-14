@@ -1,13 +1,17 @@
 import GithubContributions from "@/components/GithubContributions";
+import FlickerName from "@/components/FlickerName";
 import ProjectList from "@/components/ProjectList";
+import Link from "next/link";
 import {
   SECTIONS,
+  caseHref,
   listHackathonProjects,
   listOpenSource,
   listPersonalProjects,
   listWork,
   profile,
 } from "@/content";
+import { loadLetterVariants } from "@/lib/letter-assets";
 
 const GITHUB_USER = "HaoChiBao";
 
@@ -16,6 +20,7 @@ export default function Home() {
   const opensource = listOpenSource({ featured: true });
   const projects = listPersonalProjects({ featured: true });
   const hackathons = listHackathonProjects({ featured: true });
+  const letterVariants = loadLetterVariants();
 
   const links = profile.links.filter((l) =>
     ["email", "github", "linkedin", "resume"].includes(l.label),
@@ -27,7 +32,7 @@ export default function Home() {
   return (
     <main>
       <header className="hero">
-        <h1>{profile.name}</h1>
+        <FlickerName text={profile.name} variants={letterVariants} />
         <p className="hero__links">
           {links.map((link, i) => (
             <span key={link.href}>
@@ -48,20 +53,25 @@ export default function Home() {
       <section className="section" id="work">
         <h2>{SECTIONS.work.title}</h2>
         <ul className="entry-list">
-          {work.map((job) => (
-            <li key={job.id} className="entry">
-              <span>
-                {job.href ? (
-                  <a href={job.href} target="_blank" rel="noreferrer">
-                    {job.org}
-                  </a>
-                ) : (
-                  job.org
-                )}
-              </span>
-              <span className="entry__meta">{job.dates}</span>
-            </li>
-          ))}
+          {work.map((job) => {
+            const caseId = job.projectIds?.[0];
+            return (
+              <li key={job.id} className="entry">
+                <span>
+                  {caseId ? (
+                    <Link href={caseHref(caseId)}>{job.org}</Link>
+                  ) : job.href ? (
+                    <a href={job.href} target="_blank" rel="noreferrer">
+                      {job.org}
+                    </a>
+                  ) : (
+                    job.org
+                  )}
+                </span>
+                <span className="entry__meta">{job.dates}</span>
+              </li>
+            );
+          })}
         </ul>
       </section>
 

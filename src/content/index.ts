@@ -16,6 +16,8 @@ export type { ProjectSection, SectionId } from "./sections";
 
 export type {
   AwardEntry,
+  CaseBlock,
+  CaseStudy,
   ContentLink,
   EducationEntry,
   HackathonInfo,
@@ -24,6 +26,11 @@ export type {
   SkillGroup,
   WorkEntry,
 } from "./types";
+
+/** Path to a project case study page. */
+export function caseHref(id: string): string {
+  return `/case/${id}`;
+}
 
 export { profile, resumeContact } from "./profile";
 export { work } from "./work";

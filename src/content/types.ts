@@ -65,6 +65,23 @@ export type HackathonInfo = {
   notes?: string;
 };
 
+/** Blog-style blocks for a case study page. */
+export type CaseBlock =
+  | { type: "heading"; text: string }
+  | { type: "paragraph"; text: string }
+  | { type: "image"; src: string; alt: string; caption?: string }
+  | { type: "video"; src: string; caption?: string }
+  | { type: "quote"; text: string; attribution?: string }
+  | { type: "list"; items: string[] };
+
+export type CaseStudy = {
+  /** Optional longer title override */
+  headline?: string;
+  /** Hero image/video under the title */
+  hero?: { image?: string; video?: string; caption?: string };
+  blocks: CaseBlock[];
+};
+
 export type ProjectEntry = {
   id: string;
   name: string;
@@ -95,6 +112,8 @@ export type ProjectEntry = {
     image?: string;
     caption?: string;
   };
+  /** Optional structured case study; page falls back to summary/story/etc. */
+  caseStudy?: CaseStudy;
 };
 
 export type AwardEntry = {
