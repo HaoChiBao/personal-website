@@ -129,14 +129,10 @@ a:hover {
 }
 
 .loading-screen__frame {
-  --feather: 5px;
-  --radius: 22px;
   position: relative;
   width: min(280px, 42vw);
   line-height: 0;
-  isolation: isolate;
   background: #fff;
-  /* overflow must stay visible: clipping a blur() kernel turns it into a solid edge */
 }
 
 .loading-screen__media {
@@ -149,75 +145,13 @@ a:hover {
   -webkit-user-drag: none;
 }
 
-/*
- * Sharp copy: opaque in the center, transparent at the rim so the 5px
- * blurred layer shows through. One radial mask — no mask-composite —
- * so Safari / iOS keep the fade instead of a hard rectangle.
- */
-.loading-screen__media--sharp {
-  position: relative;
-  border-radius: var(--radius);
-  -webkit-mask-image: radial-gradient(
-    ellipse 78% 72% at 50% 50%,
-    #000 0%,
-    #000 28%,
-    rgba(0, 0, 0, 0.55) 62%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 78% 72% at 50% 50%,
-    #000 0%,
-    #000 28%,
-    rgba(0, 0, 0, 0.55) 62%,
-    transparent 100%
-  );
-}
-
-/* Blurred replica: strongest at the outside, mixed with sharp toward center */
-.loading-screen__media--edge {
-  position: absolute;
-  /* 2× blur radius so the kernel is not clipped by the element box */
-  top: calc(var(--feather) * -2);
-  left: calc(var(--feather) * -2);
-  width: calc(100% + var(--feather) * 4);
-  height: calc(100% + var(--feather) * 4);
-  max-width: none;
-  pointer-events: none;
-  /* No overflow/radius clip here — that is what made the blur look solid */
-  overflow: visible;
-  filter: blur(5px);
-  -webkit-filter: blur(5px);
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
 .loading-screen__media--poster {
   position: relative;
-  z-index: 1;
-}
-
-.loading-screen__media--poster-edge {
-  z-index: 0;
-}
-
-.loading-screen__media--poster-edge[data-hidden="true"] {
-  opacity: 0;
-}
-
-.loading-screen__media--edge-canvas {
-  z-index: 0;
-  opacity: 0;
-}
-
-.loading-screen__media--edge-canvas[data-ready="true"] {
-  opacity: 1;
 }
 
 .loading-screen__media--video {
   position: absolute;
   inset: 0;
-  z-index: 1;
   width: 100%;
   height: 100%;
   opacity: 0;
