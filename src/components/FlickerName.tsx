@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import type { LetterVariantMap } from "@/lib/letter-assets";
 
 type Props = {
@@ -177,10 +177,15 @@ export default function FlickerName({
 }: Props) {
   const [slots, setSlots] = useState<Slot[]>(() => buildSlots(text, variants));
   const [ready, setReady] = useState(false);
+  const [fitScale, setFitScale] = useState(1);
+  const [shellHeight, setShellHeight] = useState<number | null>(null);
   const reduceMotion = useRef(false);
   const busy = useRef(false);
   const timers = useRef<number[]>([]);
   const widthsRef = useRef<Map<string, number>>(new Map());
+  const hostRef = useRef<HTMLHeadingElement>(null);
+  const hitRef = useRef<HTMLButtonElement>(null);
+  const rowRef = useRef<HTMLSpanElement>(null);
 
   function clearTimers() {
     for (const id of timers.current) window.clearTimeout(id);
@@ -246,6 +251,39 @@ export default function FlickerName({
     };
   }, [text, variants, durationMs, tickMs]);
 
+  // Scale the name down whenever it would overflow the available width.
+  useLayoutEffect(() => {
+    const host = hostRef.current;
+    const row = rowRef.current;
+    if (!host || !row) return;
+
+    const measure = () => {
+      // offset/scroll sizes ignore parent transforms — natural layout width.
+      const naturalW = row.scrollWidth;
+      const naturalH = row.offsetHeight;
+      const available = host.clientWidth;
+      const next =
+        naturalW > 0 && available > 0
+          ? Math.min(1, (available - 2) / naturalW)
+          : 1;
+      setFitScale((prev) => (Math.abs(prev - next) < 0.001 ? prev : next));
+      setShellHeight(naturalH > 0 ? naturalH * next : null);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(host);
+    ro.observe(row);
+    window.addEventListener("resize", measure);
+    window.visualViewport?.addEventListener("resize", measure);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      window.visualViewport?.removeEventListener("resize", measure);
+    };
+  }, [slots, ready]);
+
   function swapOnce() {
     if (!ready || reduceMotion.current || busy.current) return;
     busy.current = true;
@@ -268,57 +306,71 @@ export default function FlickerName({
 
   return (
     <h1
+      ref={hostRef}
       className={`flicker-name${ready ? " is-ready" : ""}`}
       aria-label={text}
     >
-      <button
-        type="button"
-        className="flicker-name__hit"
-        onClick={swapOnce}
-        onMouseEnter={swapOnce}
-        aria-label={`${text} (hover or click to swap letter styles)`}
+      <span
+        className="flicker-name__shell"
+        style={shellHeight != null ? { height: shellHeight } : undefined}
       >
-        <span className="flicker-name__row" aria-hidden="true">
-          {slots.map((slot) =>
-            slot.char === " " ? (
-              <span key={slot.key} className="flicker-name__space">
-                {"\u00a0"}
-              </span>
-            ) : slot.urls.length ? (
-              <span
-                key={slot.key}
-                className="flicker-name__slot"
-                style={
-                  {
-                    "--flick-rot": `${slot.rot}deg`,
-                    "--flick-dur": `${slot.dur}s`,
-                    ...(slot.width != null ? { width: `${slot.width}px` } : {}),
-                  } as CSSProperties
-                }
-              >
-                {slot.urls.map((src, i) => (
-                  <img
-                    key={src}
-                    className={
-                      i === slot.active
-                        ? "flicker-name__glyph is-on"
-                        : "flicker-name__glyph"
-                    }
-                    src={src}
-                    alt=""
-                    draggable={false}
-                    decoding="async"
-                  />
-                ))}
-              </span>
-            ) : (
-              <span key={slot.key} className="flicker-name__fallback">
-                {slot.char}
-              </span>
-            ),
-          )}
-        </span>
-      </button>
+        <button
+          ref={hitRef}
+          type="button"
+          className="flicker-name__hit"
+          style={
+            fitScale < 1
+              ? ({ transform: `scale(${fitScale})` } as CSSProperties)
+              : undefined
+          }
+          onClick={swapOnce}
+          onMouseEnter={swapOnce}
+          aria-label={`${text} (hover or click to swap letter styles)`}
+        >
+          <span ref={rowRef} className="flicker-name__row" aria-hidden="true">
+            {slots.map((slot) =>
+              slot.char === " " ? (
+                <span key={slot.key} className="flicker-name__space">
+                  {"\u00a0"}
+                </span>
+              ) : slot.urls.length ? (
+                <span
+                  key={slot.key}
+                  className="flicker-name__slot"
+                  style={
+                    {
+                      "--flick-rot": `${slot.rot}deg`,
+                      "--flick-dur": `${slot.dur}s`,
+                      ...(slot.width != null
+                        ? { width: `${slot.width}px` }
+                        : {}),
+                    } as CSSProperties
+                  }
+                >
+                  {slot.urls.map((src, i) => (
+                    <img
+                      key={src}
+                      className={
+                        i === slot.active
+                          ? "flicker-name__glyph is-on"
+                          : "flicker-name__glyph"
+                      }
+                      src={src}
+                      alt=""
+                      draggable={false}
+                      decoding="async"
+                    />
+                  ))}
+                </span>
+              ) : (
+                <span key={slot.key} className="flicker-name__fallback">
+                  {slot.char}
+                </span>
+              ),
+            )}
+          </span>
+        </button>
+      </span>
     </h1>
   );
 }

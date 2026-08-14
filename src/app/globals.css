@@ -61,8 +61,8 @@ a:hover {
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   margin-bottom: 2rem;
-  padding-left: var(--pad);
-  padding-right: var(--pad);
+  padding-left: max(var(--pad), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--pad), env(safe-area-inset-right, 0px));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -79,12 +79,21 @@ a:hover {
 }
 
 .flicker-name {
-  width: max-content;
-  max-width: min(var(--name-measure), calc(100vw - 2 * var(--pad)));
+  width: 100%;
+  max-width: min(var(--name-measure), 100%);
+  display: flex;
+  justify-content: center;
 }
 
 .flicker-name:not(.is-ready) {
   opacity: 0.55;
+}
+
+.flicker-name__shell {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  /* Height set inline to natural * scale so layout matches the visual size */
 }
 
 .flicker-name__hit {
@@ -97,6 +106,8 @@ a:hover {
   font: inherit;
   cursor: pointer;
   text-align: center;
+  transform-origin: top center;
+  will-change: transform;
 }
 
 .flicker-name__hit:hover {
