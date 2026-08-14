@@ -14,10 +14,10 @@ const MAX_WAIT_MS = 8000;
 type Phase = "playing" | "holding" | "dissolving" | "done";
 
 function pickLoaderSrc(): string {
-  const probe = document.createElement("video");
-  const webm = probe.canPlayType('video/webm; codecs="vp9"') === "probably";
-  // v=3: inverted doodle on white so the page bg never shows through as black.
-  return webm ? "/loading.webm?v=3" : "/loading.mp4?v=3";
+  // Always MP4: VP9 alpha WebM is often composited onto a black video
+  // plane, which is the intermittent black flash. This file is the
+  // original doodle flattened onto white.
+  return "/loading.mp4?v=4";
 }
 
 function isAbort(err: unknown): boolean {
@@ -185,7 +185,7 @@ export default function LoadingScreen() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="loading-screen__media loading-screen__media--edge loading-screen__media--poster-edge"
-          src="/loading-poster.png?v=3"
+          src="/loading-poster.png?v=4"
           alt=""
           width={560}
           height={316}
@@ -204,7 +204,7 @@ export default function LoadingScreen() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="loading-screen__media loading-screen__media--sharp loading-screen__media--poster"
-          src="/loading-poster.png?v=3"
+          src="/loading-poster.png?v=4"
           alt=""
           width={560}
           height={316}
