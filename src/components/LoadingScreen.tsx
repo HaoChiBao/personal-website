@@ -36,6 +36,7 @@ function isAbort(err: unknown): boolean {
  */
 export default function LoadingScreen() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const bloomCanvasRef = useRef<HTMLCanvasElement>(null);
   const finishedRef = useRef(false);
   const [phase, setPhase] = useState<Phase>("playing");
   const [src, setSrc] = useState<string | null>(null);
@@ -69,7 +70,30 @@ export default function LoadingScreen() {
     let doneTimer: number | undefined;
     let playWatchdog: number | undefined;
     let maxWait: number | undefined;
+    let raf = 0;
     let removed = false;
+
+    const drawBloom = () => {
+      const canvas = bloomCanvasRef.current;
+      if (!canvas || removed) return;
+
+      const w = video.videoWidth;
+      const h = video.videoHeight;
+      if (w && h) {
+        if (canvas.width !== w) canvas.width = w;
+        if (canvas.height !== h) canvas.height = h;
+        const ctx = canvas.getContext("2d", { alpha: false });
+        if (ctx) {
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(video, 0, 0, w, h);
+        }
+      }
+
+      if (!finishedRef.current) {
+        raf = window.requestAnimationFrame(drawBloom);
+      }
+    };
 
     const finish = () => {
       if (finishedRef.current || removed) return;
@@ -80,6 +104,7 @@ export default function LoadingScreen() {
       } catch {
         /* ignore */
       }
+      drawBloom();
 
       setPhase("holding");
       holdTimer = window.setTimeout(() => {
@@ -91,6 +116,8 @@ export default function LoadingScreen() {
     const onPlaying = () => {
       window.clearTimeout(playWatchdog);
       setShowVideo(true);
+      window.cancelAnimationFrame(raf);
+      raf = window.requestAnimationFrame(drawBloom);
     };
 
     const onEnded = () => finish();
@@ -137,6 +164,7 @@ export default function LoadingScreen() {
       video.removeEventListener("error", onError);
       video.removeEventListener("canplay", onCanPlay);
       video.pause();
+      window.cancelAnimationFrame(raf);
       window.clearTimeout(holdTimer);
       window.clearTimeout(doneTimer);
       window.clearTimeout(playWatchdog);
@@ -154,6 +182,24 @@ export default function LoadingScreen() {
       aria-live="polite"
     >
       <div className="loading-screen__frame">
+        <div className="loading-screen__bloom" aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="loading-screen__media loading-screen__media--poster"
+            src="/loading-poster.png?v=4"
+            alt=""
+            width={560}
+            height={316}
+            draggable={false}
+          />
+          <canvas
+            ref={bloomCanvasRef}
+            className="loading-screen__media loading-screen__media--video"
+            data-ready={showVideo ? "true" : "false"}
+            width={560}
+            height={316}
+          />
+        </div>
         <div className="loading-screen__clip">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -184,7 +230,6 @@ export default function LoadingScreen() {
             />
           ) : null}
         </div>
-        <div className="loading-screen__edge" aria-hidden />
       </div>
     </div>
   );
