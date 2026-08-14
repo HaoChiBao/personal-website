@@ -171,7 +171,6 @@ export default function LoadingScreen() {
             width={560}
             height={316}
             muted
-            defaultMuted
             playsInline
             preload="auto"
             autoPlay
