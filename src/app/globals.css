@@ -135,6 +135,7 @@ a:hover {
   width: min(280px, 42vw);
   line-height: 0;
   isolation: isolate;
+  background: #fff;
   /* overflow must stay visible: clipping a blur() kernel turns it into a solid edge */
 }
 
@@ -142,7 +143,7 @@ a:hover {
   width: 100%;
   height: auto;
   display: block;
-  background: transparent;
+  background: #fff;
   object-fit: fill;
   user-select: none;
   -webkit-user-drag: none;

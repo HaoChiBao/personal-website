@@ -16,8 +16,8 @@ type Phase = "playing" | "holding" | "dissolving" | "done";
 function pickLoaderSrc(): string {
   const probe = document.createElement("video");
   const webm = probe.canPlayType('video/webm; codecs="vp9"') === "probably";
-  // Query busts caches of the old black-background MP4.
-  return webm ? "/loading.webm?v=2" : "/loading.mp4?v=2";
+  // v=3: inverted doodle on white so the page bg never shows through as black.
+  return webm ? "/loading.webm?v=3" : "/loading.mp4?v=3";
 }
 
 function isAbort(err: unknown): boolean {
@@ -83,7 +83,11 @@ export default function LoadingScreen() {
         if (canvas.width !== w) canvas.width = w;
         if (canvas.height !== h) canvas.height = h;
         const ctx = canvas.getContext("2d", { alpha: true });
-        ctx?.drawImage(video, 0, 0, w, h);
+        if (ctx) {
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(video, 0, 0, w, h);
+        }
       }
 
       if (!finishedRef.current) {
@@ -181,7 +185,7 @@ export default function LoadingScreen() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="loading-screen__media loading-screen__media--edge loading-screen__media--poster-edge"
-          src="/loading-poster.png?v=2"
+          src="/loading-poster.png?v=3"
           alt=""
           width={560}
           height={316}
@@ -200,7 +204,7 @@ export default function LoadingScreen() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="loading-screen__media loading-screen__media--sharp loading-screen__media--poster"
-          src="/loading-poster.png?v=2"
+          src="/loading-poster.png?v=3"
           alt=""
           width={560}
           height={316}
