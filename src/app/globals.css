@@ -240,6 +240,12 @@ a:hover {
   opacity: 0.9;
 }
 
+.contrib__fallback {
+  display: inline-block;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
 /* —— Loader —— */
 .loading-screen {
   position: fixed;

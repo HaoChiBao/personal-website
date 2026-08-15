@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "optimize:letters": "node scripts/optimize-letters.mjs"
   },
   "dependencies": {
     "next": "^16.3.0",

@@ -14,8 +14,15 @@ public/letters/
 - Folder name must be a single letter `a`–`z`.
 - Any number of files per letter; the site picks randomly while shuffling.
 - Supported: `.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`, `.svg`
+- If a `.webp` sits next to a same-named raster (e.g. `letter_j (2).png` + `.webp`), the site serves the WebP only.
 - Missing letters fall back to plain text for that character.
 
 Needed for “James Yang”: `j`, `a`, `m`, `e`, `s`, `y`, `n`, `g`.
 
-The flicker **waits until those images have loaded and decoded** before shuffling, and keeps every variant mounted so swaps are opacity-only (no mid-animation network/decode stalls).
+Source sketches can stay as large PNGs. After adding or replacing rasters, run:
+
+```bash
+npm run optimize:letters
+```
+
+That writes display-sized WebPs (max 512px). The flicker loads one glyph per letter first so the name appears on a slow link, then streams the rest. A hung image times out instead of blocking the header. On Save-Data / 2G only the first glyph of each letter is fetched.
