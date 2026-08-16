@@ -46,8 +46,18 @@ export default function LoadingScreen() {
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    const conn = (
+      navigator as Navigator & {
+        connection?: { saveData?: boolean; effectiveType?: string };
+      }
+    ).connection;
+    const saveData = Boolean(
+      conn?.saveData ||
+        conn?.effectiveType === "slow-2g" ||
+        conn?.effectiveType === "2g",
+    );
 
-    if (reduceMotion) {
+    if (reduceMotion || saveData) {
       setPhase("holding");
       const t = window.setTimeout(() => setPhase("dissolving"), 200);
       const t2 = window.setTimeout(() => setPhase("done"), 200 + DISSOLVE_MS);

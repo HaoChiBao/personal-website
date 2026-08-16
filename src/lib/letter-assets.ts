@@ -3,9 +3,39 @@ import path from "path";
 
 const LETTERS_DIR = path.join(process.cwd(), "public", "letters");
 const IMAGE_EXT = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"]);
+const RASTER_FALLBACK = new Set([".png", ".jpg", ".jpeg"]);
 
 /** Map of lowercase letter → public URLs for that glyph's variants. */
 export type LetterVariantMap = Record<string, string[]>;
+
+function stem(filename: string): string {
+  const ext = path.extname(filename);
+  return ext ? filename.slice(0, -ext.length) : filename;
+}
+
+/**
+ * Prefer the display-sized `.webp` when it sits next to a source raster.
+ * That keeps the flicker from requesting the original 1–3MB PNGs.
+ */
+export function selectDisplayFiles(files: string[]): string[] {
+  const webpStems = new Set(
+    files
+      .filter((f) => path.extname(f).toLowerCase() === ".webp")
+      .map(stem),
+  );
+
+  return files.filter((f) => {
+    const ext = path.extname(f).toLowerCase();
+    if (!IMAGE_EXT.has(ext)) return false;
+    if (webpStems.has(stem(f)) && RASTER_FALLBACK.has(ext)) return false;
+    return true;
+  });
+}
+
+/** Encode spaces and other reserved characters in a public letter path. */
+export function letterPublicUrl(letter: string, file: string): string {
+  return encodeURI(`/letters/${letter}/${file}`);
+}
 
 /**
  * Scan `public/letters/<char>/*` for image files.
@@ -22,12 +52,12 @@ export function loadLetterVariants(): LetterVariantMap {
     if (!/^[a-z]$/.test(key)) continue;
 
     const dir = path.join(LETTERS_DIR, entry.name);
-    const files = readdirSync(dir)
-      .filter((f) => IMAGE_EXT.has(path.extname(f).toLowerCase()))
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    const files = selectDisplayFiles(readdirSync(dir)).sort((a, b) =>
+      a.localeCompare(b, undefined, { numeric: true }),
+    );
 
     if (files.length) {
-      map[key] = files.map((f) => `/letters/${entry.name}/${f}`);
+      map[key] = files.map((f) => letterPublicUrl(entry.name, f));
     }
   }
 

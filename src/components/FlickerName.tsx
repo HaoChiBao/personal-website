@@ -6,7 +6,7 @@ import type { LetterVariantMap } from "@/lib/letter-assets";
 type Props = {
   text: string;
   variants: LetterVariantMap;
-  /** How long the intro shuffle runs after assets are ready (ms). */
+  /** How long the intro shuffle runs after the first glyphs are ready (ms). */
   durationMs?: number;
   /** Base interval between swaps for a single letter (ms). */
   tickMs?: number;
@@ -15,6 +15,9 @@ type Props = {
 type Slot = {
   char: string;
   key: string;
+  /** Every known variant for this character. */
+  catalog: string[];
+  /** Variants that have loaded (or timed out as unusable). */
   urls: string[];
   /** Index into urls; -1 = plain text fallback */
   active: number;
@@ -28,6 +31,10 @@ type Slot = {
 
 /** Keep roughly in sync with CSS transition on `.flicker-name__glyph`. */
 const SWAP_MS = 520;
+/** Give up on a single glyph so a hung request cannot stall the name. */
+const PRELOAD_TIMEOUT_MS = 6000;
+/** Parallel downloads after the first visible wave. */
+const PRELOAD_CONCURRENCY = 3;
 
 function pickIndex(len: number, avoid: number): number {
   if (len <= 1) return 0;
@@ -93,17 +100,18 @@ function shuffled<T>(items: T[]): T[] {
   return arr;
 }
 
-/** Deterministic first frame for SSR / hydration. */
+/** Deterministic first frame for SSR / hydration: text until images arrive. */
 function buildSlots(text: string, variants: LetterVariantMap): Slot[] {
   return Array.from(text).map((char, i) => {
     const key = char.toLowerCase();
-    const urls =
+    const catalog =
       char === " " || !variants[key]?.length ? [] : variants[key];
     return {
       char,
       key: `${i}-${char}`,
-      urls,
-      active: urls.length ? 0 : -1,
+      catalog,
+      urls: [],
+      active: -1,
       rot: i % 2 === 0 ? -18 : 18,
       dur: 0.52,
       width: null,
@@ -111,37 +119,105 @@ function buildSlots(text: string, variants: LetterVariantMap): Slot[] {
   });
 }
 
-function withWidths(slots: Slot[], widths: Map<string, number>): Slot[] {
+function applyLoaded(
+  slots: Slot[],
+  loaded: Map<string, number>,
+): Slot[] {
   return slots.map((slot) => {
-    if (!slot.urls.length || slot.active < 0) return slot;
-    const src = slot.urls[slot.active];
-    return { ...slot, width: widths.get(src) ?? slot.width };
+    const urls = slot.catalog.filter((src) => loaded.has(src));
+    if (!urls.length) {
+      return { ...slot, urls: [], active: -1, width: null };
+    }
+    const prevSrc =
+      slot.active >= 0 && slot.urls[slot.active]
+        ? slot.urls[slot.active]
+        : urls[0];
+    const active = Math.max(0, urls.indexOf(prevSrc));
+    const src = urls[active] ?? urls[0];
+    return {
+      ...slot,
+      urls,
+      active,
+      width: loaded.get(src) ?? slot.width,
+    };
   });
 }
 
-function urlsNeeded(text: string, variants: LetterVariantMap): string[] {
-  const set = new Set<string>();
+function firstWaveUrls(text: string, variants: LetterVariantMap): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const char of text) {
+    const urls = variants[char.toLowerCase()];
+    const first = urls?.[0];
+    if (!first || seen.has(first)) continue;
+    seen.add(first);
+    out.push(first);
+  }
+  return out;
+}
+
+function remainingUrls(
+  text: string,
+  variants: LetterVariantMap,
+  loaded: Map<string, number>,
+): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
   for (const char of text) {
     const urls = variants[char.toLowerCase()];
     if (!urls) continue;
-    for (const u of urls) set.add(u);
+    for (const src of urls) {
+      if (loaded.has(src) || seen.has(src)) continue;
+      seen.add(src);
+      out.push(src);
+    }
   }
-  return [...set];
+  return out;
+}
+
+function preferSlowNetwork(): boolean {
+  const conn = (
+    navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }
+  ).connection;
+  if (!conn) return false;
+  return (
+    Boolean(conn.saveData) ||
+    conn.effectiveType === "slow-2g" ||
+    conn.effectiveType === "2g"
+  );
 }
 
 /** Load, decode, and record display width at the given glyph height. */
 function preloadMeasured(
   src: string,
   heightPx: number,
-): Promise<{ src: string; width: number }> {
+  timeoutMs = PRELOAD_TIMEOUT_MS,
+): Promise<{ src: string; width: number; ok: boolean }> {
   return new Promise((resolve) => {
     const img = new Image();
     img.decoding = "async";
+    let settled = false;
+
+    const done = (ok: boolean, width: number) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      resolve({ src, width, ok });
+    };
+
+    const timer = window.setTimeout(
+      () => done(false, heightPx),
+      timeoutMs,
+    );
+
     const finish = () => {
       const ratio =
         img.naturalHeight > 0 ? img.naturalWidth / img.naturalHeight : 1;
-      resolve({ src, width: heightPx * ratio });
+      done(img.naturalWidth > 0, heightPx * ratio);
     };
+
     img.onload = () => {
       if (typeof img.decode === "function") {
         img.decode().then(finish).catch(finish);
@@ -149,9 +225,35 @@ function preloadMeasured(
         finish();
       }
     };
-    img.onerror = () => resolve({ src, width: heightPx });
+    img.onerror = () => done(false, heightPx);
     img.src = src;
   });
+}
+
+async function preloadPool(
+  srcs: string[],
+  heightPx: number,
+  concurrency: number,
+  onEach?: (result: { src: string; width: number; ok: boolean }) => void,
+): Promise<{ src: string; width: number; ok: boolean }[]> {
+  const results: { src: string; width: number; ok: boolean }[] = [];
+  let cursor = 0;
+
+  async function worker() {
+    while (cursor < srcs.length) {
+      const index = cursor++;
+      const result = await preloadMeasured(srcs[index], heightPx);
+      results[index] = result;
+      onEach?.(result);
+    }
+  }
+
+  const workers = Array.from(
+    { length: Math.min(concurrency, srcs.length) },
+    () => worker(),
+  );
+  await Promise.all(workers);
+  return results;
 }
 
 function readFlickHeightPx(): number {
@@ -168,6 +270,9 @@ function readFlickHeightPx(): number {
 /**
  * Name as stacked per-letter images. Intro and hover swaps stagger each letter
  * on its own random timeline; slot width eases between glyph sizes.
+ *
+ * First visible variant of each letter loads first so the name appears on a
+ * slow link. Extra styles stream in afterward and join the shuffle set.
  */
 export default function FlickerName({
   text,
@@ -205,42 +310,60 @@ export default function FlickerName({
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    const needed = urlsNeeded(text, variants);
+    const slow = preferSlowNetwork();
+    const heightPx = readFlickHeightPx();
+    const first = firstWaveUrls(text, variants);
 
     (async () => {
-      const heightPx = readFlickHeightPx();
-      const measured = needed.length
-        ? await Promise.all(needed.map((src) => preloadMeasured(src, heightPx)))
+      const firstResults = first.length
+        ? await preloadPool(first, heightPx, Math.min(6, first.length))
         : [];
       if (!alive) return;
 
-      const widths = new Map(measured.map((m) => [m.src, m.width]));
+      const widths = new Map(widthsRef.current);
+      for (const result of firstResults) {
+        if (result.ok) widths.set(result.src, result.width);
+      }
       widthsRef.current = widths;
 
-      const initial = withWidths(buildSlots(text, variants), widths);
+      setSlots((prev) => applyLoaded(prev, widths));
       setReady(true);
-      setSlots(initial);
 
-      if (reduceMotion.current) return;
+      if (!reduceMotion.current) {
+        busy.current = true;
+        const started = performance.now();
+        const indices = Array.from(text, (char, i) =>
+          char !== " " && (variants[char.toLowerCase()]?.length ?? 0) >= 2
+            ? i
+            : -1,
+        ).filter((i) => i >= 0);
 
-      busy.current = true;
-      const started = performance.now();
-      const indices = letterIndices(initial);
+        for (const idx of indices) {
+          const run = () => {
+            if (!alive) return;
+            setSlots((prev) => swapSlotAt(prev, idx, widthsRef.current));
+            if (performance.now() - started < durationMs) {
+              const nextIn = tickMs * (0.45 + Math.random() * 1.1);
+              later(nextIn, run);
+            }
+          };
+          later(Math.random() * tickMs * 1.2, run);
+        }
 
-      for (const idx of indices) {
-        const run = () => {
-          if (!alive) return;
-          setSlots((prev) => swapSlotAt(prev, idx, widthsRef.current));
-          if (performance.now() - started < durationMs) {
-            const nextIn = tickMs * (0.45 + Math.random() * 1.1);
-            later(nextIn, run);
-          }
-        };
-        later(Math.random() * tickMs * 1.2, run);
+        later(durationMs + tickMs + SWAP_MS, () => {
+          if (alive) busy.current = false;
+        });
       }
 
-      later(durationMs + tickMs + SWAP_MS, () => {
-        if (alive) busy.current = false;
+      if (slow) return;
+
+      const rest = remainingUrls(text, variants, widths);
+      if (!rest.length) return;
+
+      await preloadPool(rest, heightPx, PRELOAD_CONCURRENCY, (result) => {
+        if (!alive || !result.ok) return;
+        widthsRef.current.set(result.src, result.width);
+        setSlots((prev) => applyLoaded(prev, widthsRef.current));
       });
     })();
 

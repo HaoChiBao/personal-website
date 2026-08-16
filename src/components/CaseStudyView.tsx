@@ -75,7 +75,13 @@ function CaseHero({
           preload="metadata"
         />
       ) : (
-        <img className="case__media" src={hero.image} alt="" />
+        <img
+          className="case__media"
+          src={hero.image}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
       )}
       {hero.caption ? (
         <figcaption className="case__caption">{hero.caption}</figcaption>
@@ -111,7 +117,13 @@ function Block({ block }: { block: CaseBlock }) {
       if (!publicAssetExists(block.src)) return null;
       return (
         <figure className="case__figure">
-          <img className="case__media" src={block.src} alt={block.alt} />
+          <img
+            className="case__media"
+            src={block.src}
+            alt={block.alt}
+            loading="lazy"
+            decoding="async"
+          />
           {block.caption ? (
             <figcaption className="case__caption">{block.caption}</figcaption>
           ) : null}
