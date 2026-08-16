@@ -27,7 +27,6 @@ npm run optimize:letters
 
 That writes display-sized WebPs (max 192px, enough for a 3× phone screen). The flicker:
 
-1. Preloads one glyph per letter from HTML so phones start the download before JS.
-2. Shows those first glyphs, then fetches one extra style per letter for the intro shuffle.
-3. Loads the remaining styles only after hover or tap.
-4. Times out hung requests. On Save-Data / 2G it stops after the first glyph.
+1. Puts the first glyph of each letter in the HTML (`<img>` + high-priority preload) so the browser starts those 8 files during parse, not after JS.
+2. Shows each letter as soon as its file arrives. Extra styles wait for idle time, then hover/tap.
+3. Times out hung requests. On Save-Data / 2G it stops after the first glyph.

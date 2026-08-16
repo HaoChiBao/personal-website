@@ -24,7 +24,7 @@ export default function Home() {
   const hackathons = listHackathonProjects({ featured: true });
   const letterVariants = loadLetterVariants();
   for (const href of firstVariantUrls(profile.name, letterVariants)) {
-    preload(href, { as: "image" });
+    preload(href, { as: "image", fetchPriority: "high" });
   }
 
   const links = profile.links.filter((l) =>

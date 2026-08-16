@@ -104,18 +104,19 @@ function shuffled<T>(items: T[]): T[] {
   return arr;
 }
 
-/** Deterministic first frame for SSR / hydration: text until images arrive. */
+/** First glyph is in the HTML so the browser starts it during parse. */
 function buildSlots(text: string, variants: LetterVariantMap): Slot[] {
   return Array.from(text).map((char, i) => {
     const key = char.toLowerCase();
     const catalog =
       char === " " || !variants[key]?.length ? [] : variants[key];
+    const first = catalog[0];
     return {
       char,
       key: `${i}-${char}`,
       catalog,
-      urls: [],
-      active: -1,
+      urls: first ? [first] : [],
+      active: first ? 0 : -1,
       rot: i % 2 === 0 ? -18 : 18,
       dur: 0.52,
       width: null,
@@ -128,14 +129,17 @@ function applyLoaded(
   loaded: Map<string, number>,
 ): Slot[] {
   return slots.map((slot) => {
-    const urls = slot.catalog.filter((src) => loaded.has(src));
-    if (!urls.length) {
-      return { ...slot, urls: [], active: -1, width: null };
+    const extras = slot.catalog.filter(
+      (src) => loaded.has(src) && !slot.urls.includes(src),
+    );
+    if (!extras.length) {
+      const current = slot.urls[slot.active];
+      return current && loaded.has(current)
+        ? { ...slot, width: loaded.get(current) ?? slot.width }
+        : slot;
     }
-    const prevSrc =
-      slot.active >= 0 && slot.urls[slot.active]
-        ? slot.urls[slot.active]
-        : urls[0];
+    const urls = [...slot.urls, ...extras];
+    const prevSrc = slot.urls[slot.active] ?? urls[0];
     const active = Math.max(0, urls.indexOf(prevSrc));
     const src = urls[active] ?? urls[0];
     return {
@@ -272,7 +276,6 @@ export default function FlickerName({
   tickMs = 500,
 }: Props) {
   const [slots, setSlots] = useState<Slot[]>(() => buildSlots(text, variants));
-  const [ready, setReady] = useState(false);
   const [fitScale, setFitScale] = useState(1);
   const [shellHeight, setShellHeight] = useState<number | null>(null);
   const reduceMotion = useRef(false);
@@ -296,78 +299,97 @@ export default function FlickerName({
     return id;
   }
 
+  function rememberWidth(src: string, img: HTMLImageElement) {
+    const heightPx = heightPxRef.current || readFlickHeightPx();
+    const ratio =
+      img.naturalHeight > 0 ? img.naturalWidth / img.naturalHeight : 1;
+    const width = heightPx * ratio;
+    if (widthsRef.current.get(src) === width) return;
+    widthsRef.current.set(src, width);
+    setSlots((prev) =>
+      prev.map((slot) => {
+        if (!slot.urls.includes(src)) return slot;
+        const activeSrc = slot.urls[slot.active];
+        return activeSrc === src ? { ...slot, width } : slot;
+      }),
+    );
+  }
+
   useEffect(() => {
     let alive = true;
 
     reduceMotion.current = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-
-    const slow = preferSlowNetwork();
-    const heightPx = readFlickHeightPx();
-    heightPxRef.current = heightPx;
+    heightPxRef.current = readFlickHeightPx();
     restQueued.current = false;
-    const first = firstVariantUrls(text, variants);
 
-    (async () => {
-      const firstResults = first.length
-        ? await preloadPool(first, heightPx, Math.min(6, first.length))
-        : [];
-      if (!alive) return;
+    if (!reduceMotion.current) {
+      busy.current = true;
+      const started = performance.now();
+      const indices = Array.from(text, (char, i) =>
+        char !== " " && (variants[char.toLowerCase()]?.length ?? 0) >= 2
+          ? i
+          : -1,
+      ).filter((i) => i >= 0);
 
-      const widths = new Map(widthsRef.current);
-      for (const result of firstResults) {
-        if (result.ok) widths.set(result.src, result.width);
-      }
-      widthsRef.current = widths;
-
-      setSlots((prev) => applyLoaded(prev, widths));
-      setReady(true);
-
-      if (!reduceMotion.current) {
-        busy.current = true;
-        const started = performance.now();
-        const indices = Array.from(text, (char, i) =>
-          char !== " " && (variants[char.toLowerCase()]?.length ?? 0) >= 2
-            ? i
-            : -1,
-        ).filter((i) => i >= 0);
-
-        for (const idx of indices) {
-          const run = () => {
-            if (!alive) return;
-            setSlots((prev) => swapSlotAt(prev, idx, widthsRef.current));
-            if (performance.now() - started < durationMs) {
-              const nextIn = tickMs * (0.45 + Math.random() * 1.1);
-              later(nextIn, run);
-            }
-          };
-          later(Math.random() * tickMs * 1.2, run);
-        }
-
-        later(durationMs + tickMs + SWAP_MS, () => {
-          if (alive) busy.current = false;
-        });
+      for (const idx of indices) {
+        const run = () => {
+          if (!alive) return;
+          setSlots((prev) => swapSlotAt(prev, idx, widthsRef.current));
+          if (performance.now() - started < durationMs) {
+            const nextIn = tickMs * (0.45 + Math.random() * 1.1);
+            later(nextIn, run);
+          }
+        };
+        later(Math.random() * tickMs * 1.2, run);
       }
 
-      if (slow) return;
+      later(durationMs + tickMs + SWAP_MS, () => {
+        if (alive) busy.current = false;
+      });
+    }
 
-      // One extra style per letter unlocks the shuffle (~2× first-wave bytes)
-      // without pulling the remaining ~40 files on a phone radio.
-      const extras = extraVariantUrls(text, variants, widths.keys(), 1);
-      if (extras.length) {
-        await preloadPool(extras, heightPx, PRELOAD_CONCURRENCY, (result) => {
+    // Extra styles wait until the first glyphs are on screen and the
+    // main thread is idle so they do not contend for the first 48KB.
+    const prefetchExtras = () => {
+      if (!alive || preferSlowNetwork()) return;
+      const extras = extraVariantUrls(
+        text,
+        variants,
+        firstVariantUrls(text, variants),
+        1,
+      );
+      if (!extras.length) return;
+      void preloadPool(
+        extras,
+        heightPxRef.current,
+        PRELOAD_CONCURRENCY,
+        (result) => {
           if (!alive || !result.ok) return;
           widthsRef.current.set(result.src, result.width);
           setSlots((prev) => applyLoaded(prev, widthsRef.current));
-        });
-      }
-    })();
+        },
+      );
+    };
+
+    let idleId = 0;
+    const idle = window.requestIdleCallback;
+    if (typeof idle === "function") {
+      idleId = idle(prefetchExtras, { timeout: 2500 });
+    } else {
+      idleId = window.setTimeout(prefetchExtras, 1200);
+    }
 
     return () => {
       alive = false;
       busy.current = false;
       clearTimers();
+      if (typeof window.cancelIdleCallback === "function") {
+        window.cancelIdleCallback(idleId);
+      } else {
+        window.clearTimeout(idleId);
+      }
     };
   }, [text, variants, durationMs, tickMs]);
 
@@ -402,7 +424,7 @@ export default function FlickerName({
       window.removeEventListener("resize", measure);
       window.visualViewport?.removeEventListener("resize", measure);
     };
-  }, [slots, ready]);
+  }, [slots]);
 
   function queueRemainingVariants() {
     if (restQueued.current || preferSlowNetwork()) return;
@@ -423,7 +445,7 @@ export default function FlickerName({
 
   function swapOnce() {
     queueRemainingVariants();
-    if (!ready || reduceMotion.current || busy.current) return;
+    if (reduceMotion.current || busy.current) return;
     busy.current = true;
 
     const order = shuffled(letterIndices(slots));
@@ -445,7 +467,7 @@ export default function FlickerName({
   return (
     <h1
       ref={hostRef}
-      className={`flicker-name${ready ? " is-ready" : ""}`}
+      className="flicker-name is-ready"
       aria-label={text}
     >
       <span
@@ -497,6 +519,11 @@ export default function FlickerName({
                       alt=""
                       draggable={false}
                       decoding="async"
+                      loading="eager"
+                      fetchPriority={i === 0 ? "high" : "low"}
+                      onLoad={(event) =>
+                        rememberWidth(src, event.currentTarget)
+                      }
                     />
                   ))}
                 </span>

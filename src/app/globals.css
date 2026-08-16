@@ -85,7 +85,7 @@ a:hover {
   justify-content: center;
 }
 
-.flicker-name:not(.is-ready) {
+.flicker-name:not(.is-ready) .flicker-name__fallback {
   opacity: 0.55;
 }
 
