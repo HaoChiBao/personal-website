@@ -11,7 +11,9 @@ import {
   listWork,
   profile,
 } from "@/content";
+import { preload } from "react-dom";
 import { loadLetterVariants } from "@/lib/letter-assets";
+import { firstVariantUrls } from "@/lib/letter-urls";
 
 const GITHUB_USER = "HaoChiBao";
 
@@ -21,6 +23,9 @@ export default function Home() {
   const projects = listPersonalProjects({ featured: true });
   const hackathons = listHackathonProjects({ featured: true });
   const letterVariants = loadLetterVariants();
+  for (const href of firstVariantUrls(profile.name, letterVariants)) {
+    preload(href, { as: "image" });
+  }
 
   const links = profile.links.filter((l) =>
     ["email", "github", "linkedin", "resume"].includes(l.label),

@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import type { LetterVariantMap } from "@/lib/letter-assets";
+import {
+  extraVariantUrls,
+  firstVariantUrls,
+  type LetterVariantMap,
+} from "@/lib/letter-urls";
 
 type Props = {
   text: string;
@@ -143,19 +147,6 @@ function applyLoaded(
   });
 }
 
-function firstWaveUrls(text: string, variants: LetterVariantMap): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const char of text) {
-    const urls = variants[char.toLowerCase()];
-    const first = urls?.[0];
-    if (!first || seen.has(first)) continue;
-    seen.add(first);
-    out.push(first);
-  }
-  return out;
-}
-
 function remainingUrls(
   text: string,
   variants: LetterVariantMap,
@@ -288,6 +279,8 @@ export default function FlickerName({
   const busy = useRef(false);
   const timers = useRef<number[]>([]);
   const widthsRef = useRef<Map<string, number>>(new Map());
+  const heightPxRef = useRef(50);
+  const restQueued = useRef(false);
   const hostRef = useRef<HTMLHeadingElement>(null);
   const hitRef = useRef<HTMLButtonElement>(null);
   const rowRef = useRef<HTMLSpanElement>(null);
@@ -312,7 +305,9 @@ export default function FlickerName({
 
     const slow = preferSlowNetwork();
     const heightPx = readFlickHeightPx();
-    const first = firstWaveUrls(text, variants);
+    heightPxRef.current = heightPx;
+    restQueued.current = false;
+    const first = firstVariantUrls(text, variants);
 
     (async () => {
       const firstResults = first.length
@@ -357,14 +352,16 @@ export default function FlickerName({
 
       if (slow) return;
 
-      const rest = remainingUrls(text, variants, widths);
-      if (!rest.length) return;
-
-      await preloadPool(rest, heightPx, PRELOAD_CONCURRENCY, (result) => {
-        if (!alive || !result.ok) return;
-        widthsRef.current.set(result.src, result.width);
-        setSlots((prev) => applyLoaded(prev, widthsRef.current));
-      });
+      // One extra style per letter unlocks the shuffle (~2× first-wave bytes)
+      // without pulling the remaining ~40 files on a phone radio.
+      const extras = extraVariantUrls(text, variants, widths.keys(), 1);
+      if (extras.length) {
+        await preloadPool(extras, heightPx, PRELOAD_CONCURRENCY, (result) => {
+          if (!alive || !result.ok) return;
+          widthsRef.current.set(result.src, result.width);
+          setSlots((prev) => applyLoaded(prev, widthsRef.current));
+        });
+      }
     })();
 
     return () => {
@@ -407,7 +404,25 @@ export default function FlickerName({
     };
   }, [slots, ready]);
 
+  function queueRemainingVariants() {
+    if (restQueued.current || preferSlowNetwork()) return;
+    restQueued.current = true;
+    const rest = remainingUrls(text, variants, widthsRef.current);
+    if (!rest.length) return;
+    void preloadPool(
+      rest,
+      heightPxRef.current,
+      PRELOAD_CONCURRENCY,
+      (result) => {
+        if (!result.ok) return;
+        widthsRef.current.set(result.src, result.width);
+        setSlots((prev) => applyLoaded(prev, widthsRef.current));
+      },
+    );
+  }
+
   function swapOnce() {
+    queueRemainingVariants();
     if (!ready || reduceMotion.current || busy.current) return;
     busy.current = true;
 

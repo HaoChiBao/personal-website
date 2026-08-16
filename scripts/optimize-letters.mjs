@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Generate display-sized WebP variants next to each letter PNG.
- * Flicker glyphs render at ~3.6em (~50–80px); 512px covers 3x displays.
+ * Flicker glyphs render at 3.6em ≈ 55 CSS px. 192px covers a 3x
+ * display (167px) with a little slack for the hover scale.
  *
  * Usage: node scripts/optimize-letters.mjs
  */
@@ -16,8 +17,8 @@ const LETTERS_DIR = path.join(
   "public",
   "letters",
 );
-const MAX_PX = 512;
-const WEBP_QUALITY = 80;
+const MAX_PX = 192;
+const WEBP_QUALITY = 70;
 const SOURCE_EXT = new Set([".png", ".jpg", ".jpeg"]);
 
 async function optimizeFile(srcPath) {

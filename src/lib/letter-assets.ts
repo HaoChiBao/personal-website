@@ -1,12 +1,13 @@
 import { readdirSync, existsSync } from "fs";
 import path from "path";
+import type { LetterVariantMap } from "./letter-urls";
+
+export type { LetterVariantMap } from "./letter-urls";
+export { extraVariantUrls, firstVariantUrls } from "./letter-urls";
 
 const LETTERS_DIR = path.join(process.cwd(), "public", "letters");
 const IMAGE_EXT = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"]);
 const RASTER_FALLBACK = new Set([".png", ".jpg", ".jpeg"]);
-
-/** Map of lowercase letter → public URLs for that glyph's variants. */
-export type LetterVariantMap = Record<string, string[]>;
 
 function stem(filename: string): string {
   const ext = path.extname(filename);
