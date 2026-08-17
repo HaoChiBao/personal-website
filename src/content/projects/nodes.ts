@@ -38,6 +38,7 @@ Once it felt reliable, I added quality-of-life features: copy all, export option
   ],
   media: {
     video: "/media/nodes.mp4",
+    image: "/media/tag-nodes.png",
     caption: "Nodes extension in action",
   },
   caseStudy: {

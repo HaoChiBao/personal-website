@@ -33,7 +33,8 @@ const boardy: ProjectEntry = {
   ],
   media: {
     video: "/media/boardy.mp4",
-    caption: "Boardy meeting agent work",
+    image: "/media/tag-boardy.png",
+    caption: "Pulling an all-nighter at the Boardy offices",
   },
 };
 

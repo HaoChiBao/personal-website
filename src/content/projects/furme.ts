@@ -38,7 +38,7 @@ const furme: ProjectEntry = {
   ],
   media: {
     video: "/media/uofthacks.mp4",
-    caption: "FurMe at UofTHacks",
+    caption: "Winning moment at UofTHacks",
   },
 };
 
