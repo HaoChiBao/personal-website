@@ -63,6 +63,14 @@ listWork({ labels: ["internship"] });
 
 Put assets under `public/media/<project-id>/...` and reference them as `/media/<project-id>/...` (or a flat path like `/media/nodes.mp4`). Missing files are skipped so the layout does not break.
 
+Restored from the previous site (`origin/master`):
+
+- `/media/boardy.mp4` → Boardy
+- `/media/nodes.mp4` → Nodes
+- `/media/uofthacks.mp4` → FurMe
+- `/media/rbc-logo.jpg` → RBC Amplify
+- `/media/tag-boardy.png`, `/media/tag-nodes.png`, `/media/tag-rbc.png` → old highlight tags
+
 ```ts
 import { caseHref, getProject } from "@/content";
 
