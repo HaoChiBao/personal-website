@@ -174,7 +174,18 @@ export default function CaseStudyView({ project }: Props) {
       </p>
 
       <header className="case__header">
-        <h1 className="case__title">{title}</h1>
+        <div className="case__heading-row">
+          {project.media?.mark && publicAssetExists(project.media.mark) ? (
+            <img
+              className="case__mark"
+              src={project.media.mark}
+              alt=""
+              width={40}
+              height={40}
+            />
+          ) : null}
+          <h1 className="case__title">{title}</h1>
+        </div>
         {metaBits.length ? (
           <p className="case__meta">{metaBits.join(" · ")}</p>
         ) : null}

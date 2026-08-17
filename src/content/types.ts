@@ -110,6 +110,8 @@ export type ProjectEntry = {
   media?: {
     video?: string;
     image?: string;
+    /** Small brand/tag mark shown next to the case title */
+    mark?: string;
     caption?: string;
   };
   /** Optional structured case study; page falls back to summary/story/etc. */

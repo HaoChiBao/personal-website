@@ -378,8 +378,23 @@ a:hover {
   margin-bottom: 1.25rem;
 }
 
+.case__heading-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.35rem;
+}
+
+.case__mark {
+  width: 2.25rem;
+  height: 2.25rem;
+  object-fit: contain;
+  flex: 0 0 auto;
+  border-radius: 0.3rem;
+}
+
 .case__title {
-  margin: 0 0 0.35rem;
+  margin: 0;
   font-size: 1.35rem;
   font-weight: 500;
   letter-spacing: -0.02em;

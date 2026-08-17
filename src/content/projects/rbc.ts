@@ -35,6 +35,7 @@ const rbc: ProjectEntry = {
   ],
   media: {
     image: "/media/rbc-logo.jpg",
+    mark: "/media/tag-rbc.png",
     caption: "RBC Amplify internship",
   },
 };

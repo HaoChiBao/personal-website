@@ -69,7 +69,7 @@ Restored from the previous site (`origin/master`):
 - `/media/nodes.mp4` → Nodes
 - `/media/uofthacks.mp4` → FurMe
 - `/media/rbc-logo.jpg` → RBC Amplify
-- `/media/tag-boardy.png`, `/media/tag-nodes.png`, `/media/tag-rbc.png` → old highlight tags
+- `/media/tag-boardy.png`, `/media/tag-nodes.png`, `/media/tag-rbc.png` → case-study title marks (`media.mark`)
 
 ```ts
 import { caseHref, getProject } from "@/content";
