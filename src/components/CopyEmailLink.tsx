@@ -78,8 +78,26 @@ const CopyEmailLink = ({ email, label = "email" }: Props) => {
           role="status"
           aria-live="polite"
         >
-          <p className="copy-toast__label">Email copied to clipboard</p>
-          <p className="copy-toast__email">{email}</p>
+          <svg
+            className="copy-toast__check"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M3.5 8.2 6.4 11.2 12.5 4.8"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <div className="copy-toast__text">
+            <p className="copy-toast__label">Email copied to clipboard</p>
+            <p className="copy-toast__email">{email}</p>
+          </div>
         </div>
       </div>
     ) : null;

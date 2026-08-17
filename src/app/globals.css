@@ -200,11 +200,25 @@ a:hover {
 }
 
 .copy-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   background: var(--bg);
   border: 1px solid #eee;
-  padding: 10px 18px;
-  text-align: center;
+  border-radius: 8px;
+  padding: 10px 14px 10px 12px;
+  text-align: left;
   animation: copy-toast-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.copy-toast__check {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--ink);
+}
+
+.copy-toast__text {
+  min-width: 0;
 }
 
 .copy-toast--out {
