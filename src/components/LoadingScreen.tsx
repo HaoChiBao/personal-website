@@ -57,7 +57,7 @@ export default function LoadingScreen() {
         conn?.effectiveType === "2g",
     );
 
-    if (reduceMotion || saveData) {
+    if (reduceMotion || saveData || finishedRef.current) {
       setPhase("holding");
       const t = window.setTimeout(() => setPhase("dissolving"), 200);
       const t2 = window.setTimeout(() => setPhase("done"), 200 + DISSOLVE_MS);
@@ -71,7 +71,7 @@ export default function LoadingScreen() {
   }, []);
 
   useEffect(() => {
-    if (!src) return;
+    if (!src || finishedRef.current) return;
 
     const video = videoRef.current;
     if (!video) return;
@@ -182,6 +182,23 @@ export default function LoadingScreen() {
     };
   }, [src]);
 
+  const skip = () => {
+    if (phase === "dissolving" || phase === "done") return;
+    finishedRef.current = true;
+
+    const video = videoRef.current;
+    if (video) {
+      try {
+        video.pause();
+      } catch {
+        /* ignore */
+      }
+    }
+
+    setPhase("dissolving");
+    window.setTimeout(() => setPhase("done"), DISSOLVE_MS);
+  };
+
   if (phase === "done") return null;
 
   return (
@@ -241,6 +258,15 @@ export default function LoadingScreen() {
           ) : null}
         </div>
       </div>
+      {phase === "playing" || phase === "holding" ? (
+        <button
+          type="button"
+          className="loading-screen__skip"
+          onClick={skip}
+        >
+          skip
+        </button>
+      ) : null}
     </div>
   );
 }
