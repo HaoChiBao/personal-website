@@ -344,6 +344,12 @@ a:hover {
   pointer-events: none;
 }
 
+.loading-screen__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .loading-screen__frame {
   --radius: 32px;
   position: relative;
@@ -437,11 +443,7 @@ a:hover {
 }
 
 .loading-screen__skip {
-  position: absolute;
-  bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
+  margin: 0.7rem 0 0;
   padding: 0;
   border: 0;
   background: none;

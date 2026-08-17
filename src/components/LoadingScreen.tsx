@@ -208,7 +208,8 @@ export default function LoadingScreen() {
       aria-busy={phase !== "dissolving"}
       aria-live="polite"
     >
-      <div className="loading-screen__frame">
+      <div className="loading-screen__stack">
+        <div className="loading-screen__frame">
         <div className="loading-screen__bloom" aria-hidden>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -257,16 +258,17 @@ export default function LoadingScreen() {
             />
           ) : null}
         </div>
+        </div>
+        {phase === "playing" || phase === "holding" ? (
+          <button
+            type="button"
+            className="loading-screen__skip"
+            onClick={skip}
+          >
+            skip
+          </button>
+        ) : null}
       </div>
-      {phase === "playing" || phase === "holding" ? (
-        <button
-          type="button"
-          className="loading-screen__skip"
-          onClick={skip}
-        >
-          skip
-        </button>
-      ) : null}
     </div>
   );
 }
