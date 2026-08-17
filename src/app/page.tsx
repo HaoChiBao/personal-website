@@ -1,3 +1,4 @@
+import CopyEmailLink from "@/components/CopyEmailLink";
 import GithubContributions from "@/components/GithubContributions";
 import FlickerName from "@/components/FlickerName";
 import ProjectList from "@/components/ProjectList";
@@ -42,14 +43,18 @@ export default function Home() {
           {links.map((link, i) => (
             <span key={link.href}>
               {i > 0 ? " · " : null}
-              <a
-                href={link.href}
-                {...(link.external
-                  ? { target: "_blank", rel: "noreferrer" }
-                  : {})}
-              >
-                {link.label}
-              </a>
+              {link.label === "email" ? (
+                <CopyEmailLink email={profile.email} label={link.label} />
+              ) : (
+                <a
+                  href={link.href}
+                  {...(link.external
+                    ? { target: "_blank", rel: "noreferrer" }
+                    : {})}
+                >
+                  {link.label}
+                </a>
+              )}
             </span>
           ))}
         </p>
