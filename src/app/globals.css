@@ -10,8 +10,9 @@
   --pad: 1.25rem;
   --font: "IBM Plex Sans", "Helvetica Neue", Helvetica, sans-serif;
   --flick-size: 3.6em;
-  --glass-x: 0.55em;
-  --glass-y: 0.2rem;
+  --glass-x: 0.28em;
+  --glass-y: 0.08rem;
+  --glass-radius: 0.3rem;
   --glass-blur: 18px;
   --glass-fill: rgba(255, 255, 255, 0.55);
 }
@@ -305,6 +306,13 @@ a:hover {
 .entry__meta {
   flex: 0 0 auto;
   color: var(--muted);
+}
+
+.entry > span {
+  position: relative;
+  z-index: 0;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .section--contrib {
@@ -617,7 +625,7 @@ a:hover {
    Negative inset on ::before adds padding without moving the text. */
 .hero__links,
 .section h2,
-.entry,
+.entry > span,
 .contrib__fallback,
 .flicker-name__hit,
 .case__back,
@@ -637,7 +645,7 @@ a:hover {
 
 .hero__links::before,
 .section h2::before,
-.entry::before,
+.entry > span::before,
 .contrib__fallback::before,
 .flicker-name__hit::before,
 .case__back::before,
@@ -655,7 +663,7 @@ a:hover {
   position: absolute;
   z-index: -1;
   inset: calc(-1 * var(--glass-y)) calc(-1 * var(--glass-x));
-  border-radius: 999px;
+  border-radius: var(--glass-radius);
   background: var(--glass-fill);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.45);
   backdrop-filter: blur(var(--glass-blur)) saturate(1.45);
@@ -664,20 +672,20 @@ a:hover {
 }
 
 .flicker-name__hit::before {
-  inset: -0.4rem -0.75rem;
-  border-radius: 1.45rem;
+  inset: -0.18rem -0.35rem;
+  border-radius: 0.45rem;
 }
 
 .case__p::before,
 .case__quote::before,
 .case__blurb::before {
-  border-radius: 0.95rem;
+  border-radius: 0.4rem;
 }
 
 @media (prefers-reduced-transparency: reduce) {
   .hero__links::before,
   .section h2::before,
-  .entry::before,
+  .entry > span::before,
   .contrib__fallback::before,
   .flicker-name__hit::before,
   .case__back::before,
