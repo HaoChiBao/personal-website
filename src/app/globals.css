@@ -10,6 +10,10 @@
   --pad: 1.25rem;
   --font: "IBM Plex Sans", "Helvetica Neue", Helvetica, sans-serif;
   --flick-size: 3.6em;
+  --glass-x: 0.55em;
+  --glass-y: 0.2rem;
+  --glass-blur: 18px;
+  --glass-fill: rgba(255, 255, 255, 0.55);
 }
 
 * {
@@ -277,6 +281,8 @@ a:hover {
 }
 
 .section h2 {
+  width: fit-content;
+  max-width: 100%;
   margin: 0 0 0.35rem;
   font-size: 0.75rem;
   font-weight: 500;
@@ -475,6 +481,8 @@ a:hover {
 }
 
 .case__back {
+  width: fit-content;
+  max-width: 100%;
   margin: 0 0 1.5rem;
   color: var(--muted);
   font-size: 0.85rem;
@@ -488,6 +496,8 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.65rem;
+  width: fit-content;
+  max-width: 100%;
   margin-bottom: 0.35rem;
 }
 
@@ -509,6 +519,8 @@ a:hover {
 
 .case__meta,
 .case__blurb {
+  width: fit-content;
+  max-width: 100%;
   margin: 0;
   color: var(--muted);
 }
@@ -530,6 +542,8 @@ a:hover {
 }
 
 .case__caption {
+  width: fit-content;
+  max-width: 100%;
   margin-top: 0.4rem;
   font-size: 0.8rem;
   color: var(--muted);
@@ -540,6 +554,8 @@ a:hover {
 }
 
 .case__heading {
+  width: fit-content;
+  max-width: 100%;
   margin: 1.5rem 0 0.5rem;
   font-size: 0.95rem;
   font-weight: 500;
@@ -574,6 +590,8 @@ a:hover {
 }
 
 .case__list li {
+  width: fit-content;
+  max-width: 100%;
   margin-bottom: 0.35rem;
 }
 
@@ -586,11 +604,97 @@ a:hover {
 
 .case__stack,
 .case__links {
+  width: fit-content;
+  max-width: 100%;
   margin: 0 0 0.35rem;
 }
 
 .case__links a {
   color: var(--ink);
+}
+
+/* Frosted pill sits behind type so copy stays readable over the TV.
+   Negative inset on ::before adds padding without moving the text. */
+.hero__links,
+.section h2,
+.entry,
+.contrib__fallback,
+.flicker-name__hit,
+.case__back,
+.case__heading-row,
+.case__meta,
+.case__blurb,
+.case__p,
+.case__heading,
+.case__caption,
+.case__quote,
+.case__list li,
+.case__stack,
+.case__links {
+  position: relative;
+  z-index: 0;
+}
+
+.hero__links::before,
+.section h2::before,
+.entry::before,
+.contrib__fallback::before,
+.flicker-name__hit::before,
+.case__back::before,
+.case__heading-row::before,
+.case__meta::before,
+.case__blurb::before,
+.case__p::before,
+.case__heading::before,
+.case__caption::before,
+.case__quote::before,
+.case__list li::before,
+.case__stack::before,
+.case__links::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: calc(-1 * var(--glass-y)) calc(-1 * var(--glass-x));
+  border-radius: 999px;
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.45);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.45);
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+}
+
+.flicker-name__hit::before {
+  inset: -0.4rem -0.75rem;
+  border-radius: 1.45rem;
+}
+
+.case__p::before,
+.case__quote::before,
+.case__blurb::before {
+  border-radius: 0.95rem;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .hero__links::before,
+  .section h2::before,
+  .entry::before,
+  .contrib__fallback::before,
+  .flicker-name__hit::before,
+  .case__back::before,
+  .case__heading-row::before,
+  .case__meta::before,
+  .case__blurb::before,
+  .case__p::before,
+  .case__heading::before,
+  .case__caption::before,
+  .case__quote::before,
+  .case__list li::before,
+  .case__stack::before,
+  .case__links::before {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.92);
+  }
 }
 
 .retro-tv {

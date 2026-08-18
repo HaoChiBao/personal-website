@@ -19,22 +19,35 @@ const TV_WIDTH_M = 0.48;
 const DESK_SCALE = 1.4;
 /** Shift the TV toward the right side of the desk, as a fraction of desk width. */
 const DESK_TV_RIGHT = 0.17;
+/** Film aspect around the yawed CRT so leftover width sits to the left. */
+const SLOT_ASPECT = 1.28;
+/** Keep the TV's right edge this close to the film's right (NDC). */
+const TV_RIGHT_NDC = 0.96;
+const TV_RIGHT_NDC_MOBILE = 0.9;
+
+function clamp(n: number, lo: number, hi: number) {
+  return Math.min(hi, Math.max(lo, n));
+}
 
 function isCompactViewport() {
   return window.matchMedia(COMPACT_QUERY).matches;
 }
 
-/** Old canvas size, kept as the virtual film so the TV stays where it was. */
+/**
+ * Virtual film for the TV, pinned to the bottom-right of the viewport.
+ * Sized in vmin so equal aspect-ratio screens match, then clamped.
+ */
 function viewSlot(host?: HTMLElement | null) {
   const vw = Math.max(1, host?.clientWidth || window.innerWidth);
   const vh = Math.max(1, host?.clientHeight || window.innerHeight);
   const compact = isCompactViewport();
-  const slotW = compact
-    ? Math.min(520, vw * 0.96)
-    : Math.min(1040, vw * 0.88);
+  const vmin = Math.min(vw, vh);
   const slotH = compact
-    ? Math.min(360, vw * 0.78)
-    : Math.min(480, vw * 0.5);
+    ? clamp(vmin * 0.52, 160, 230)
+    : clamp(vmin * 0.48, 280, vmin * 0.56);
+  const slotW = compact
+    ? clamp(slotH * SLOT_ASPECT, 180, Math.min(280, vw * 0.78))
+    : clamp(slotH * SLOT_ASPECT, 320, vw * 0.38);
   return { vw, vh, slotW, slotH, compact };
 }
 
@@ -240,7 +253,7 @@ export default function RetroTV() {
       renderer.toneMappingExposure = 0.9;
       renderer.localClippingEnabled = false;
       renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.shadowMap.type = THREE.PCFShadowMap;
       host.appendChild(renderer.domElement);
 
       if (!compact) {
@@ -435,8 +448,13 @@ export default function RetroTV() {
       const raycaster = new THREE.Raycaster();
 
       const frameRig = () => {
-        const { vw: nextW, vh: nextH, slotW: filmW, slotH: filmH } =
-          viewSlot(host);
+        const {
+          vw: nextW,
+          vh: nextH,
+          slotW: filmW,
+          slotH: filmH,
+          compact: compactNow,
+        } = viewSlot(host);
         const tvFrame = new THREE.Box3().setFromObject(model);
         const deskFrame = new THREE.Box3().setFromObject(desk);
         const topY = tvFrame.max.y;
@@ -446,7 +464,7 @@ export default function RetroTV() {
         const fov = THREE.MathUtils.degToRad(camera.fov);
         let dist = viewH / 2 / Math.tan(fov / 2);
 
-        const midX = tvFrame.getCenter(new THREE.Vector3()).x;
+        let midX = tvFrame.getCenter(new THREE.Vector3()).x;
         const midY = (topY + botY) / 2;
         const midZ = tvFrame.getCenter(new THREE.Vector3()).z;
 
@@ -478,6 +496,18 @@ export default function RetroTV() {
           dist *= tvGrow;
           camera.near = Math.max(0.1, dist / 80);
           camera.far = dist * 10;
+          place();
+        }
+
+        const wantRight = compactNow ? TV_RIGHT_NDC_MOBILE : TV_RIGHT_NDC;
+        let tvRight = -Infinity;
+        for (const corner of boxCorners(tvFrame, THREE)) {
+          ndc.copy(corner).project(camera);
+          if (Number.isFinite(ndc.x)) tvRight = Math.max(tvRight, ndc.x);
+        }
+        if (Number.isFinite(tvRight) && tvRight < wantRight) {
+          const halfW = dist * Math.tan(fov / 2) * (filmW / filmH);
+          midX -= (wantRight - tvRight) * halfW;
           place();
         }
 
