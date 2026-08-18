@@ -25,7 +25,7 @@ Source sketches can stay as large PNGs. After adding or replacing rasters, run:
 npm run optimize:letters
 ```
 
-That writes display-sized WebPs (max 192px, enough for a 3× phone screen). The flicker:
+That tight-crops each raster to the letter ink (then pads the shorter axis so the canvas stays square) and writes display-sized WebPs (max 192px, enough for a 3× phone screen). The flicker:
 
 1. Puts the first glyph of each letter in the HTML (`<img>` + high-priority preload) so the browser starts those 8 files during parse, not after JS.
 2. Shows each letter as soon as its file arrives. Extra styles wait for idle time, then hover/tap.
