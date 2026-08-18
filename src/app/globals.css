@@ -3,7 +3,7 @@
 :root {
   --bg: #fff;
   --ink: #111;
-  --muted: #888;
+  --muted: #555;
   --measure: 28rem;
   --name-measure: calc(var(--measure) * 1.5);
   --case-measure: 40rem;
@@ -13,8 +13,8 @@
   --glass-x: 0.28em;
   --glass-y: 0.08rem;
   --glass-radius: 0.3rem;
-  --glass-blur: 18px;
-  --glass-fill: rgba(255, 255, 255, 0.55);
+  --glass-blur: 22px;
+  --glass-fill: rgba(255, 255, 255, 0.82);
 }
 
 * {
