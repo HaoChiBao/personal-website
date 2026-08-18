@@ -736,6 +736,23 @@ a:hover {
   pointer-events: none;
 }
 
+@media (max-width: 52rem) {
+  .retro-tv {
+    position: relative;
+    inset: auto;
+    z-index: 1;
+    width: 100%;
+    height: min(92vw, 32rem, 75vh);
+    pointer-events: auto;
+  }
+
+  .retro-tv canvas {
+    pointer-events: auto;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

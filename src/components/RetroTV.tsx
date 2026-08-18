@@ -9,8 +9,8 @@ const VIDEO_URL = "/media/tv/oogway-quote.mp4";
 const SCREEN_OFF = "#050505";
 /** Desktop: turn toward the page center from the bottom-right corner. */
 const DESKTOP_YAW = -0.43;
-/** Mobile: face the viewer a bit more, still sitting in the bottom-right. */
-const MOBILE_YAW = -0.08;
+/** Mobile: face the camera straight on. */
+const MOBILE_YAW = 0;
 const FRAME_MARGIN = 1.12;
 const COMPACT_QUERY = "(max-width: 52rem)";
 /** Assumed CRT width in meters, used to scale the 1.4m desk. */
@@ -23,7 +23,8 @@ const DESK_TV_RIGHT = 0.17;
 const SLOT_ASPECT = 1.28;
 /** Keep the TV's right edge this close to the film's right (NDC). */
 const TV_RIGHT_NDC = 0.96;
-const TV_RIGHT_NDC_MOBILE = 0.9;
+/** On mobile, fill this much of the canvas width with the CRT. */
+const MOBILE_TV_WIDTH_NDC = 0.9;
 
 function clamp(n: number, lo: number, hi: number) {
   return Math.min(hi, Math.max(lo, n));
@@ -34,20 +35,24 @@ function isCompactViewport() {
 }
 
 /**
- * Virtual film for the TV, pinned to the bottom-right of the viewport.
- * Sized in vmin so equal aspect-ratio screens match, then clamped.
+ * Desktop: virtual film pinned to the bottom-right of the full viewport.
+ * Mobile: the in-flow canvas itself; the CRT is framed to fill it.
  */
 function viewSlot(host?: HTMLElement | null) {
+  const compact = isCompactViewport();
+  if (compact) {
+    const vw = Math.max(1, host?.clientWidth || window.innerWidth);
+    const vh = Math.max(
+      1,
+      host?.clientHeight || Math.round(Math.min(vw * 0.78, window.innerHeight * 0.7)),
+    );
+    return { vw, vh, slotW: vw, slotH: vh, compact };
+  }
   const vw = Math.max(1, host?.clientWidth || window.innerWidth);
   const vh = Math.max(1, host?.clientHeight || window.innerHeight);
-  const compact = isCompactViewport();
   const vmin = Math.min(vw, vh);
-  const slotH = compact
-    ? clamp(vmin * 0.52, 160, 230)
-    : clamp(vmin * 0.48, 280, vmin * 0.56);
-  const slotW = compact
-    ? clamp(slotH * SLOT_ASPECT, 180, Math.min(280, vw * 0.78))
-    : clamp(slotH * SLOT_ASPECT, 320, vw * 0.38);
+  const slotH = clamp(vmin * 0.48, 280, vmin * 0.56);
+  const slotW = clamp(slotH * SLOT_ASPECT, 320, vw * 0.38);
   return { vw, vh, slotW, slotH, compact };
 }
 
@@ -469,7 +474,7 @@ export default function RetroTV() {
         const midZ = tvFrame.getCenter(new THREE.Vector3()).z;
 
         camera.clearViewOffset();
-        camera.aspect = filmW / filmH;
+        camera.aspect = compactNow ? nextW / nextH : filmW / filmH;
         camera.near = Math.max(0.1, dist / 80);
         camera.far = dist * 10;
 
@@ -499,26 +504,47 @@ export default function RetroTV() {
           place();
         }
 
-        const wantRight = compactNow ? TV_RIGHT_NDC_MOBILE : TV_RIGHT_NDC;
-        let tvRight = -Infinity;
-        for (const corner of boxCorners(tvFrame, THREE)) {
-          ndc.copy(corner).project(camera);
-          if (Number.isFinite(ndc.x)) tvRight = Math.max(tvRight, ndc.x);
-        }
-        if (Number.isFinite(tvRight) && tvRight < wantRight) {
-          const halfW = dist * Math.tan(fov / 2) * (filmW / filmH);
-          midX -= (wantRight - tvRight) * halfW;
-          place();
-        }
+        if (compactNow) {
+          for (let pass = 0; pass < 8; pass++) {
+            let maxX = 0;
+            let maxY = 0;
+            for (const corner of boxCorners(tvFrame, THREE)) {
+              ndc.copy(corner).project(camera);
+              if (!Number.isFinite(ndc.x) || !Number.isFinite(ndc.y)) continue;
+              maxX = Math.max(maxX, Math.abs(ndc.x));
+              maxY = Math.max(maxY, Math.abs(ndc.y));
+            }
+            const scale = Math.max(
+              maxX / MOBILE_TV_WIDTH_NDC,
+              maxY / 0.96,
+            );
+            if (!Number.isFinite(scale) || Math.abs(scale - 1) < 0.012) break;
+            dist *= scale;
+            camera.near = Math.max(0.1, dist / 80);
+            camera.far = dist * 10;
+            place();
+          }
+        } else {
+          let tvRight = -Infinity;
+          for (const corner of boxCorners(tvFrame, THREE)) {
+            ndc.copy(corner).project(camera);
+            if (Number.isFinite(ndc.x)) tvRight = Math.max(tvRight, ndc.x);
+          }
+          if (Number.isFinite(tvRight) && tvRight < TV_RIGHT_NDC) {
+            const halfW = dist * Math.tan(fov / 2) * (filmW / filmH);
+            midX -= (TV_RIGHT_NDC - tvRight) * halfW;
+            place();
+          }
 
-        camera.setViewOffset(
-          filmW,
-          filmH,
-          filmW - nextW,
-          filmH - nextH,
-          nextW,
-          nextH,
-        );
+          camera.setViewOffset(
+            filmW,
+            filmH,
+            filmW - nextW,
+            filmH - nextH,
+            nextW,
+            nextH,
+          );
+        }
         fitShadow();
       };
       frameRig();
