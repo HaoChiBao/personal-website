@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { IBM_Plex_Sans } from "next/font/google";
 import LoadingScreen from "@/components/LoadingScreen";
+import RetroTV from "@/components/RetroTV";
 import "./globals.css";
 
 const plex = IBM_Plex_Sans({
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body style={{ fontFamily: "var(--font-plex), var(--font)" }}>
         <LoadingScreen />
         <div className="site">{children}</div>
+        <RetroTV />
       </body>
     </html>
   );
