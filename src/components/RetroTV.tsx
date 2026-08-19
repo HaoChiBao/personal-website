@@ -425,8 +425,8 @@ export default function RetroTV({
       const tvSize = tvBox.getSize(new THREE.Vector3());
       const tvCenter = tvBox.getCenter(new THREE.Vector3());
       let desk: import("three").Group | undefined;
-      let deskPlaced: THREE.Box3 | undefined;
-      let deskSize: THREE.Vector3 | undefined;
+      let deskPlaced: import("three").Box3 | undefined;
+      let deskSize: import("three").Vector3 | undefined;
       if (deskGltf) {
         desk = deskGltf.scene;
         desk.traverse((obj) => {
