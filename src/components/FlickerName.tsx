@@ -403,7 +403,8 @@ export default function FlickerName({
       // offset/scroll sizes ignore parent transforms — natural layout width.
       const naturalW = row.scrollWidth;
       const naturalH = row.offsetHeight;
-      const available = host.clientWidth;
+      const frame = host.closest(".hero") ?? host.parentElement ?? host;
+      const available = frame.clientWidth;
       const next =
         naturalW > 0 && available > 0
           ? Math.min(1, (available - 2) / naturalW)
@@ -414,7 +415,8 @@ export default function FlickerName({
 
     measure();
     const ro = new ResizeObserver(measure);
-    ro.observe(host);
+    const frame = host.closest(".hero") ?? host.parentElement ?? host;
+    ro.observe(frame);
     ro.observe(row);
     window.addEventListener("resize", measure);
     window.visualViewport?.addEventListener("resize", measure);

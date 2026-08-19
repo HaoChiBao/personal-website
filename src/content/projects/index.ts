@@ -20,6 +20,7 @@ import initProject from "./init";
 import inklink from "./inklink";
 import insight from "./insight";
 import interviewRoyale from "./interview-royale";
+import langchain from "./langchain";
 import mednow from "./mednow";
 import mostRealisticGame from "./most-realistic-game";
 import neolume from "./neolume";
@@ -41,6 +42,7 @@ import youtubeUploader from "./youtube-uploader";
 
 /** All project-like entries (OSS, products, hackathons, work case studies). */
 export const projects: ProjectEntry[] = [
+  langchain,
   openworker,
   supermemory,
   stagehand,

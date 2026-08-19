@@ -15,6 +15,7 @@ content/
   skills.ts
   awards.ts
   projects/          # one file per project
+    langchain.ts
     openworker.ts
     supermemory.ts
     stagehand.ts

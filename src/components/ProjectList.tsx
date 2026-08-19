@@ -3,6 +3,7 @@ import { caseHref, type ProjectEntry } from "@/content";
 
 type Props = {
   items: ProjectEntry[];
+  siteRoot?: string;
 };
 
 function entryMeta(project: ProjectEntry): string {
@@ -12,7 +13,7 @@ function entryMeta(project: ProjectEntry): string {
   return String(hackathon.year || dates);
 }
 
-export default function ProjectList({ items }: Props) {
+export default function ProjectList({ items, siteRoot = "" }: Props) {
   if (items.length === 0) return null;
 
   return (
@@ -20,7 +21,7 @@ export default function ProjectList({ items }: Props) {
       {items.map((project) => (
         <li key={project.id} className="entry">
           <span>
-            <Link href={caseHref(project.id)}>{project.name}</Link>
+            <Link href={caseHref(project.id, siteRoot)}>{project.name}</Link>
             {project.hackathon?.event ? (
               <span className="entry__meta"> · {project.hackathon.event}</span>
             ) : null}

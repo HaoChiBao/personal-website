@@ -6,6 +6,7 @@ import { SECTIONS } from "@/content";
 
 type Props = {
   project: ProjectEntry;
+  homeHref?: string;
 };
 
 function publicAssetExists(src: string): boolean {
@@ -150,7 +151,7 @@ function Block({ block }: { block: CaseBlock }) {
   }
 }
 
-export default function CaseStudyView({ project }: Props) {
+export default function CaseStudyView({ project, homeHref = "/" }: Props) {
   const study = project.caseStudy ?? buildFallback(project);
   const title = study.headline ?? project.name;
   const sectionLabel =
@@ -170,7 +171,7 @@ export default function CaseStudyView({ project }: Props) {
   return (
     <article className="case">
       <p className="case__back">
-        <Link href="/">← Home</Link>
+        <Link href={homeHref}>← Home</Link>
       </p>
 
       <header className="case__header">

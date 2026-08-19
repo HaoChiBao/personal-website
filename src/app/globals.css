@@ -5,7 +5,6 @@
   --ink: #111;
   --muted: #555;
   --measure: 28rem;
-  --name-measure: calc(var(--measure) * 1.5);
   --case-measure: 40rem;
   --pad: 1.25rem;
   --font: "IBM Plex Sans", "Helvetica Neue", Helvetica, sans-serif;
@@ -14,7 +13,7 @@
   --glass-y: 0.08rem;
   --glass-radius: 0.3rem;
   --glass-blur: 22px;
-  --glass-fill: rgba(255, 255, 255, 0.82);
+  --glass-fill: rgba(255, 255, 255, 0.42);
 }
 
 * {
@@ -46,6 +45,41 @@ a:hover {
   text-underline-offset: 0.12em;
 }
 
+body:has(.forest-bg) {
+  background: #dce8ee;
+}
+
+.forest-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.forest-bg[data-ready="true"] {
+  opacity: 1;
+}
+
+.forest-bg[data-skip="true"] {
+  display: none;
+}
+
+.forest-bg canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  pointer-events: none;
+  image-rendering: auto;
+  filter: blur(0.75px) saturate(1.08) contrast(0.97);
+}
+
 .site {
   position: relative;
   z-index: 1;
@@ -61,16 +95,12 @@ a:hover {
   width: min(var(--case-measure), 100%);
 }
 
+body:has(.site-footer) .site {
+  padding-bottom: 7rem;
+}
+
 .hero {
-  /* Full-bleed out of .site so the wide name centers on the viewport */
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
   margin-bottom: 2rem;
-  padding-left: max(var(--pad), env(safe-area-inset-left, 0px));
-  padding-right: max(var(--pad), env(safe-area-inset-right, 0px));
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,8 +116,8 @@ a:hover {
 }
 
 .flicker-name {
-  width: 100%;
-  max-width: min(var(--name-measure), 100%);
+  width: max-content;
+  max-width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -99,7 +129,8 @@ a:hover {
 .flicker-name__shell {
   display: flex;
   justify-content: center;
-  width: 100%;
+  width: max-content;
+  max-width: 100%;
   /* Height set inline to natural * scale so layout matches the visual size */
 }
 
@@ -193,7 +224,9 @@ a:hover {
 }
 
 .hero__links {
-  margin: 0;
+  margin: 0 auto;
+  width: fit-content;
+  max-width: 100%;
   color: var(--muted);
 }
 
@@ -309,10 +342,113 @@ a:hover {
 }
 
 .entry > span {
-  position: relative;
-  z-index: 0;
   width: fit-content;
   max-width: 100%;
+}
+
+/* Frosted liquid-glass chips behind type so the forest shows through.
+   Negative inset on ::before adds padding without moving the text. */
+.hero__links,
+.section h2,
+.entry > span,
+.contrib__fallback,
+.case__back,
+.case__heading-row,
+.case__meta,
+.case__blurb,
+.case__p,
+.case__heading,
+.case__caption,
+.case__quote,
+.case__list li,
+.case__stack,
+.case__links {
+  position: relative;
+  z-index: 0;
+}
+
+.hero__links::before,
+.section h2::before,
+.entry > span::before,
+.contrib__fallback::before,
+.case__back::before,
+.case__heading-row::before,
+.case__meta::before,
+.case__blurb::before,
+.case__p::before,
+.case__heading::before,
+.case__caption::before,
+.case__quote::before,
+.case__list li::before,
+.case__stack::before,
+.case__links::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: calc(-1 * var(--glass-y)) calc(-1 * var(--glass-x));
+  border-radius: var(--glass-radius);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.38) 0%,
+      rgba(255, 255, 255, 0.08) 42%,
+      rgba(255, 255, 255, 0.18) 100%
+    ),
+    var(--glass-fill);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 0 0 0.5px rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+}
+
+.case__p::before,
+.case__quote::before,
+.case__blurb::before {
+  border-radius: 0.4rem;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .hero__links::before,
+  .section h2::before,
+  .entry > span::before,
+  .contrib__fallback::before,
+  .case__back::before,
+  .case__heading-row::before,
+  .case__meta::before,
+  .case__blurb::before,
+  .case__p::before,
+  .case__heading::before,
+  .case__caption::before,
+  .case__quote::before,
+  .case__list li::before,
+  .case__stack::before,
+  .case__links::before {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: none;
+  }
+}
+
+/* Glass chips only belong over the forest (experimental). */
+body:not(:has(.forest-bg)) .hero__links::before,
+body:not(:has(.forest-bg)) .section h2::before,
+body:not(:has(.forest-bg)) .entry > span::before,
+body:not(:has(.forest-bg)) .contrib__fallback::before,
+body:not(:has(.forest-bg)) .case__back::before,
+body:not(:has(.forest-bg)) .case__heading-row::before,
+body:not(:has(.forest-bg)) .case__meta::before,
+body:not(:has(.forest-bg)) .case__blurb::before,
+body:not(:has(.forest-bg)) .case__p::before,
+body:not(:has(.forest-bg)) .case__heading::before,
+body:not(:has(.forest-bg)) .case__caption::before,
+body:not(:has(.forest-bg)) .case__quote::before,
+body:not(:has(.forest-bg)) .case__list li::before,
+body:not(:has(.forest-bg)) .case__stack::before,
+body:not(:has(.forest-bg)) .case__links::before {
+  content: none;
 }
 
 .section--contrib {
@@ -512,9 +648,11 @@ a:hover {
 .case__mark {
   width: 2.25rem;
   height: 2.25rem;
+  padding: 0.2rem;
   object-fit: contain;
   flex: 0 0 auto;
-  border-radius: 0.3rem;
+  border-radius: 0.4rem;
+  background: #eee;
 }
 
 .case__title {
@@ -621,88 +759,62 @@ a:hover {
   color: var(--ink);
 }
 
-/* Frosted pill sits behind type so copy stays readable over the TV.
-   Negative inset on ::before adds padding without moving the text. */
-.hero__links,
-.section h2,
-.entry > span,
-.contrib__fallback,
-.flicker-name__hit,
-.case__back,
-.case__heading-row,
-.case__meta,
-.case__blurb,
-.case__p,
-.case__heading,
-.case__caption,
-.case__quote,
-.case__list li,
-.case__stack,
-.case__links {
+.site-footer {
   position: relative;
-  z-index: 0;
+  z-index: 1;
+  width: calc(100% - 20px);
+  height: 60vh;
+  height: 60dvh;
+  margin: 0 10px 10px;
+  background: #e8e8e8;
+  border-radius: 10px;
+  overflow: visible;
 }
 
-.hero__links::before,
-.section h2::before,
-.entry > span::before,
-.contrib__fallback::before,
-.flicker-name__hit::before,
-.case__back::before,
-.case__heading-row::before,
-.case__meta::before,
-.case__blurb::before,
-.case__p::before,
-.case__heading::before,
-.case__caption::before,
-.case__quote::before,
-.case__list li::before,
-.case__stack::before,
-.case__links::before {
-  content: "";
+.site-footer__motto {
   position: absolute;
-  z-index: -1;
-  inset: calc(-1 * var(--glass-y)) calc(-1 * var(--glass-x));
-  border-radius: var(--glass-radius);
-  background: var(--glass-fill);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.45);
-  backdrop-filter: blur(var(--glass-blur)) saturate(1.45);
-  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.55);
+  left: 50%;
+  top: 52%;
+  z-index: 3;
+  margin: 0;
+  max-width: min(22rem, calc(100% - 6rem));
+  transform: translate(-50%, -50%);
+  font-family: var(--font-plex-serif), "Iowan Old Style", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+  line-height: 1.38;
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-wrap: pretty;
   pointer-events: none;
 }
 
-.flicker-name__hit::before {
-  inset: -0.18rem -0.35rem;
-  border-radius: 0.45rem;
+.site-footer__socials {
+  position: absolute;
+  left: 1.15rem;
+  bottom: 1.4rem;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  pointer-events: auto;
 }
 
-.case__p::before,
-.case__quote::before,
-.case__blurb::before {
-  border-radius: 0.4rem;
+.site-footer__social {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--ink);
+  opacity: 0.38;
+  transition: opacity 0.18s ease;
 }
 
-@media (prefers-reduced-transparency: reduce) {
-  .hero__links::before,
-  .section h2::before,
-  .entry > span::before,
-  .contrib__fallback::before,
-  .flicker-name__hit::before,
-  .case__back::before,
-  .case__heading-row::before,
-  .case__meta::before,
-  .case__blurb::before,
-  .case__p::before,
-  .case__heading::before,
-  .case__caption::before,
-  .case__quote::before,
-  .case__list li::before,
-  .case__stack::before,
-  .case__links::before {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: rgba(255, 255, 255, 0.92);
-  }
+.site-footer__social:hover,
+.site-footer__social:focus-visible {
+  opacity: 1;
+  text-decoration: none;
 }
 
 .retro-tv {
@@ -717,6 +829,38 @@ a:hover {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.35s ease;
+}
+
+.retro-tv[data-scale] {
+  z-index: 2;
+}
+
+.retro-tv[data-dock="footer"] {
+  position: absolute;
+  inset: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  height: min(52vh, 28rem);
+  transform: translateY(-55%);
+  pointer-events: none;
+}
+
+.retro-tv[data-board-focus="true"] {
+  z-index: 6;
+  pointer-events: auto;
+}
+
+.retro-tv[data-board-focus="true"] canvas {
+  pointer-events: auto;
+}
+
+body.is-board-focus .site {
+  opacity: 0.12;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
 }
 
 .retro-tv[data-ready="true"] {
@@ -734,9 +878,18 @@ a:hover {
   max-width: none;
   max-height: none;
   pointer-events: none;
+  image-rendering: auto;
+  filter: blur(0.45px) saturate(1.06) contrast(0.98);
 }
 
 @media (max-width: 52rem) {
+  .site-footer__socials {
+    left: 0.85rem;
+    bottom: 1rem;
+    flex-direction: row;
+    gap: 0.45rem;
+  }
+
   .retro-tv {
     position: relative;
     inset: auto;
@@ -744,6 +897,25 @@ a:hover {
     width: 100%;
     height: min(92vw, 32rem, 75vh);
     pointer-events: auto;
+  }
+
+  .retro-tv[data-scale="0.6"] {
+    width: 60%;
+    height: min(55.2vw, 19.2rem, 45vh);
+    margin-left: auto;
+  }
+
+  .retro-tv[data-dock="footer"] {
+    position: absolute;
+    inset: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: min(44vh, 21rem);
+    margin-left: 0;
+    transform: translateY(-55%);
+    pointer-events: none;
   }
 
   .retro-tv canvas {
@@ -763,4 +935,93 @@ a:hover {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+.eye-btn {
+  position: fixed;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--ink);
+  opacity: 0.28;
+  border-radius: 999px;
+  transition: opacity 0.2s ease;
+}
+
+.eye-btn svg {
+  display: block;
+  transform-origin: 50% 50%;
+}
+
+.eye-btn:hover,
+.eye-btn:focus-visible {
+  opacity: 0.85;
+  text-decoration: none;
+}
+
+.eye-btn:hover svg,
+.eye-btn:focus-visible svg {
+  animation: eye-blink 0.5s ease-in-out 1;
+}
+
+@keyframes eye-blink {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eye-btn:hover svg,
+  .eye-btn:focus-visible svg {
+    animation: none;
+  }
+}
+
+body:has(.wundun) {
+  background: #000;
+  color: #fff;
+}
+
+.wundun {
+  min-height: 100dvh;
+  background: #000;
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.wundun-gate input {
+  width: 12rem;
+  padding: 0.4rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #333;
+  color: #fff;
+  caret-color: #fff;
+  font: inherit;
+  letter-spacing: 0.18em;
+  text-align: center;
+  outline: none;
+}
+
+.wundun-gate input:focus {
+  border-bottom-color: #666;
+}
+
+.wundun-gate input[aria-invalid="true"] {
+  border-bottom-color: #5a2a2a;
+}
+
+.wundun__content {
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.04em;
 }

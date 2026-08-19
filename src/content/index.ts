@@ -28,8 +28,8 @@ export type {
 } from "./types";
 
 /** Path to a project case study page. */
-export function caseHref(id: string): string {
-  return `/case/${id}`;
+export function caseHref(id: string, siteRoot = ""): string {
+  return `${siteRoot}/case/${id}`;
 }
 
 export { profile, resumeContact } from "./profile";
