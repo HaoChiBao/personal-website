@@ -237,7 +237,7 @@ export default function ForestBackground() {
       const forestRoot = gltf.scene;
       forestRoot.traverse((obj) => {
         obj.frustumCulled = true;
-        const mesh = obj as Mesh;
+        const mesh = obj as import("three").Mesh;
         if (!mesh.isMesh) return;
         const mats = Array.isArray(mesh.material)
           ? mesh.material
