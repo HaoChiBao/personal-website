@@ -346,9 +346,10 @@ body:has(.site-footer) .site {
   max-width: 100%;
 }
 
-/* Frosted liquid-glass chips behind type so the forest shows through.
+/* Frosted liquid-glass chips behind type so sticky notes show through.
    Negative inset on ::before adds padding without moving the text. */
 .hero__links,
+.flicker-name,
 .section h2,
 .entry > span,
 .contrib__fallback,
@@ -365,9 +366,11 @@ body:has(.site-footer) .site {
 .case__links {
   position: relative;
   z-index: 0;
+  isolation: isolate;
 }
 
 .hero__links::before,
+.flicker-name::before,
 .section h2::before,
 .entry > span::before,
 .contrib__fallback::before,
@@ -411,6 +414,7 @@ body:has(.site-footer) .site {
 
 @media (prefers-reduced-transparency: reduce) {
   .hero__links::before,
+  .flicker-name::before,
   .section h2::before,
   .entry > span::before,
   .contrib__fallback::before,
@@ -430,25 +434,6 @@ body:has(.site-footer) .site {
     background: rgba(255, 255, 255, 0.92);
     box-shadow: none;
   }
-}
-
-/* Glass chips only belong over the forest (experimental). */
-body:not(:has(.forest-bg)) .hero__links::before,
-body:not(:has(.forest-bg)) .section h2::before,
-body:not(:has(.forest-bg)) .entry > span::before,
-body:not(:has(.forest-bg)) .contrib__fallback::before,
-body:not(:has(.forest-bg)) .case__back::before,
-body:not(:has(.forest-bg)) .case__heading-row::before,
-body:not(:has(.forest-bg)) .case__meta::before,
-body:not(:has(.forest-bg)) .case__blurb::before,
-body:not(:has(.forest-bg)) .case__p::before,
-body:not(:has(.forest-bg)) .case__heading::before,
-body:not(:has(.forest-bg)) .case__caption::before,
-body:not(:has(.forest-bg)) .case__quote::before,
-body:not(:has(.forest-bg)) .case__list li::before,
-body:not(:has(.forest-bg)) .case__stack::before,
-body:not(:has(.forest-bg)) .case__links::before {
-  content: none;
 }
 
 .section--contrib {
@@ -912,7 +897,7 @@ body.is-board-focus .site {
     right: 0;
     top: 0;
     width: 100%;
-    height: min(44vh, 21rem);
+    height: min(68vh, 32rem);
     margin-left: 0;
     transform: translateY(-55%);
     pointer-events: none;
@@ -1024,4 +1009,254 @@ body:has(.wundun) {
   margin: 0;
   font-weight: 500;
   letter-spacing: 0.04em;
+}
+
+.sticky-notes__layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.sticky-notes__dock {
+  position: fixed;
+  z-index: 5;
+  top: 0.9rem;
+  left: 0.9rem;
+}
+
+.sticky-notes__add,
+.sticky-editor__swatch,
+.sticky-editor__font,
+.sticky-editor__ghost,
+.sticky-editor__submit {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.sticky-notes__add {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.sticky-notes__add:hover,
+.sticky-notes__add:focus-visible {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.sticky-editor {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgb(255 255 255 / 0.28);
+  backdrop-filter: blur(22px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+}
+
+body.is-sticky-editor .site,
+body.is-sticky-editor .sticky-notes__layer,
+body.is-sticky-editor .sticky-notes__dock,
+body.is-sticky-editor .site-footer,
+body.is-sticky-editor .eye-btn {
+  filter: blur(16px);
+  transform: scale(1.015);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .sticky-editor {
+    background: rgb(255 255 255 / 0.88);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  body.is-sticky-editor .site,
+  body.is-sticky-editor .sticky-notes__layer,
+  body.is-sticky-editor .sticky-notes__dock,
+  body.is-sticky-editor .site-footer,
+  body.is-sticky-editor .eye-btn {
+    filter: none;
+    transform: none;
+  }
+}
+
+.sticky-editor__dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(22rem, 100%);
+}
+
+.sticky-editor__title {
+  margin: 0 0 1.1rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sticky-editor__sheet {
+  width: min(20rem, 100%);
+  aspect-ratio: 1;
+  padding: 1.35rem 1.4rem;
+}
+
+.sticky-editor__field {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  color: #3a2a12;
+  font: inherit;
+  font-size: 1.15rem;
+  line-height: 1.4;
+  background: transparent;
+  border: 0;
+  resize: none;
+}
+
+.sticky-editor__field:focus {
+  outline: none;
+}
+
+.sticky-editor__field::placeholder {
+  color: rgb(58 42 18 / 0.38);
+}
+
+.sticky-editor__tools {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  width: min(20rem, 100%);
+  margin-top: 1.35rem;
+}
+
+.sticky-editor__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sticky-editor__label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sticky-editor__swatches,
+.sticky-editor__fonts {
+  display: flex;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.sticky-editor__swatch {
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 1px solid rgb(0 0 0 / 0.08);
+}
+
+.sticky-editor__swatch.is-selected,
+.sticky-editor__font.is-selected {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.sticky-editor__font {
+  padding: 0.2rem 0.45rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.sticky-editor__font.is-selected,
+.sticky-editor__font:hover,
+.sticky-editor__font:focus-visible {
+  color: var(--ink);
+}
+
+.sticky-editor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+  width: min(20rem, 100%);
+  margin-top: 1.5rem;
+}
+
+.sticky-editor__error {
+  flex: 1 0 100%;
+  margin: 0;
+  color: #8a2f2f;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.sticky-editor__ghost {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.sticky-editor__ghost:hover,
+.sticky-editor__ghost:focus-visible {
+  color: var(--ink);
+}
+
+.sticky-editor__submit {
+  color: var(--ink);
+  font-size: 0.85rem;
+}
+
+.sticky-editor__submit:hover,
+.sticky-editor__submit:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+}
+
+.sticky-editor__submit:disabled {
+  opacity: 0.4;
+  text-decoration: none;
+  cursor: default;
+}
+
+.sticky-note {
+  position: fixed;
+  z-index: 4;
+  display: flex;
+  align-items: flex-start;
+  width: 9.4rem;
+  height: 9.4rem;
+  padding: 0.7rem 0.85rem;
+  overflow: hidden;
+  background: #ffe56a;
+  cursor: grab;
+  touch-action: none;
+  pointer-events: auto;
+}
+
+.sticky-note.is-dragging {
+  cursor: grabbing;
+}
+
+.sticky-note__text {
+  margin: 0;
+  width: 100%;
+  overflow: hidden;
+  color: #3a2a12;
+  font: inherit;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  word-break: break-word;
 }

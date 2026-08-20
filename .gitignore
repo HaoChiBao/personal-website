@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# local sticky-note guestbook
+/data/sticky-notes.json
+
 # vercel
 .vercel
 

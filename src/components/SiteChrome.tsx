@@ -4,6 +4,7 @@ import ForestBackground from "@/components/ForestBackground";
 import FooterSocials from "@/components/FooterSocials";
 import LoadingScreen from "@/components/LoadingScreen";
 import RetroTV from "@/components/RetroTV";
+import StickyNotes from "@/components/StickyNotes";
 import { DEFAULT_PAGE_TV_SCALE } from "@/lib/tv-desk-settings";
 
 type Props = {
@@ -16,6 +17,7 @@ export default function SiteChrome({ children, forest = false }: Props) {
     <>
       <LoadingScreen />
       {forest ? <ForestBackground /> : null}
+      {forest ? null : <StickyNotes />}
       <div className="site">{children}</div>
       {forest ? (
         <RetroTV scale={1} showDesk />
