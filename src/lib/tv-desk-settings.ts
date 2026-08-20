@@ -44,7 +44,7 @@ export const TV_RIGHT_NDC = 0.96;
  */
 export const TV_BOTTOM_BIAS = 0.62;
 /** On mobile, fill this much of the canvas width with the CRT. */
-export const MOBILE_TV_WIDTH_NDC = 0.98;
+export const MOBILE_TV_WIDTH_NDC = 0.92;
 export const CAMERA_FOV = 24;
 
 /** On the white-wall homepage, the CRT sits in front of the copy at 3/5 original size. */

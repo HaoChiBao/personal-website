@@ -46,8 +46,8 @@ function isCompactViewport() {
 
 /**
  * Desktop: virtual film pinned to the bottom-right of the full viewport.
- * Footer: same film, pinned to the top of the black footer host.
- * Mobile: the in-flow canvas itself; the CRT is framed to fill it.
+ * Footer (desktop): same film, pinned to the top of the footer host.
+ * Mobile: the canvas itself; the CRT faces the camera and fills it.
  */
 function viewSlot(
   host?: HTMLElement | null,
@@ -55,7 +55,7 @@ function viewSlot(
   docked = false,
 ) {
   const compact = isCompactViewport();
-  if (docked) {
+  if (docked && !compact) {
     const vw = Math.max(1, host?.clientWidth || window.innerWidth);
     const vh = Math.max(
       1,
@@ -72,7 +72,7 @@ function viewSlot(
       1,
       host?.clientHeight || Math.round(Math.min(vw * 0.78, window.innerHeight * 0.7)),
     );
-    return { vw, vh, slotW: vw, slotH: vh, compact, docked: false };
+    return { vw, vh, slotW: vw, slotH: vh, compact, docked };
   }
   const vw = Math.max(1, host?.clientWidth || window.innerWidth);
   const vh = Math.max(1, host?.clientHeight || window.innerHeight);
@@ -662,7 +662,7 @@ export default function RetroTV({
       }
       scene.add(rig);
 
-      rig.rotation.y = pinned ? DESKTOP_YAW : MOBILE_YAW;
+      rig.rotation.y = compact ? MOBILE_YAW : DESKTOP_YAW;
       rig.updateWorldMatrix(true, true);
 
       const fitShadow = () => {
@@ -702,7 +702,7 @@ export default function RetroTV({
           compact: compactNow,
           docked: dockedNow,
         } = slot();
-        const pinFilm = dockedNow || !compactNow;
+        const pinFilm = !compactNow;
         const tvFrame = new THREE.Box3().setFromObject(model);
         const tvH = tvFrame.max.y - tvFrame.min.y;
         const topY = tvFrame.max.y;
@@ -1399,7 +1399,7 @@ void main() {`,
         if (!renderer || disposed) return;
         const { vw: nextW, vh: nextH, compact: compactNow, docked: dockedNow } =
           slot();
-        rig.rotation.y = dockedNow || !compactNow ? DESKTOP_YAW : MOBILE_YAW;
+        rig.rotation.y = compactNow ? MOBILE_YAW : DESKTOP_YAW;
         if (boardFocus) applyBoardCam();
         else frameRig();
         renderer.setPixelRatio(

@@ -893,11 +893,11 @@ body.is-board-focus .site {
   .retro-tv[data-dock="footer"] {
     position: absolute;
     inset: auto;
-    left: 0;
+    left: auto;
     right: 0;
     top: 0;
-    width: 100%;
-    height: min(68vh, 32rem);
+    width: 40%;
+    height: min(50vw, 22rem);
     margin-left: 0;
     transform: translateY(-55%);
     pointer-events: none;
