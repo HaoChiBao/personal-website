@@ -896,8 +896,8 @@ body.is-board-focus .site {
     left: auto;
     right: 0;
     top: 0;
-    width: 40%;
-    height: min(50vw, 22rem);
+    width: 30%;
+    height: min(37.5vw, 16.5rem);
     margin-left: 0;
     transform: translateY(-55%);
     pointer-events: none;
@@ -907,6 +907,7 @@ body.is-board-focus .site {
     pointer-events: auto;
     cursor: pointer;
     touch-action: manipulation;
+    filter: saturate(1.06) contrast(0.98);
   }
 }
 

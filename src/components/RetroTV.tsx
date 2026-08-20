@@ -44,6 +44,11 @@ function isCompactViewport() {
   return window.matchMedia(COMPACT_QUERY).matches;
 }
 
+/** Desktop stays cheap; mobile renders closer to the device pixel density. */
+function canvasPixelRatio(compact: boolean) {
+  return Math.min(window.devicePixelRatio || 1, compact ? 2 : 1.05);
+}
+
 /**
  * Desktop: virtual film pinned to the bottom-right of the full viewport.
  * Footer (desktop): same film, pinned to the top of the footer host.
@@ -302,9 +307,7 @@ export default function RetroTV({
         return;
       }
       renderer.setClearColor(0x000000, 0);
-      renderer.setPixelRatio(
-        Math.min(window.devicePixelRatio, pinned ? 1.05 : 0.9),
-      );
+      renderer.setPixelRatio(canvasPixelRatio(compact));
       renderer.setSize(width, height, false);
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1397,17 +1400,11 @@ void main() {`,
 
       const resize = () => {
         if (!renderer || disposed) return;
-        const { vw: nextW, vh: nextH, compact: compactNow, docked: dockedNow } =
-          slot();
+        const { vw: nextW, vh: nextH, compact: compactNow } = slot();
         rig.rotation.y = compactNow ? MOBILE_YAW : DESKTOP_YAW;
         if (boardFocus) applyBoardCam();
         else frameRig();
-        renderer.setPixelRatio(
-          Math.min(
-            window.devicePixelRatio,
-            dockedNow || !compactNow ? 1.05 : 0.9,
-          ),
-        );
+        renderer.setPixelRatio(canvasPixelRatio(compactNow));
         renderer.setSize(nextW, nextH, false);
         paint();
       };
