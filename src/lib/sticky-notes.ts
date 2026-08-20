@@ -1,3 +1,9 @@
+/**
+ * Visitor sticky-note wall. Flip `SHOW_STICKY_NOTES` to `true` to restore
+ * Leave a note, the editor, and notes in the background.
+ */
+export const SHOW_STICKY_NOTES = false;
+
 export const STICKY_COLORS = [
   { id: "yellow", value: "#ffe56a", label: "Yellow" },
   { id: "pink", value: "#ffb4c8", label: "Pink" },
