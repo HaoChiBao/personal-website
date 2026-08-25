@@ -192,28 +192,10 @@ export default function CaseStudyView({ project, homeHref = "/" }: Props) {
         ) : null}
       </header>
 
-      {study.hero ? <CaseHero hero={study.hero} /> : null}
-
-      <div className="case__body">
-        {study.blocks.map((block, i) => (
-          <Block key={`${block.type}-${i}`} block={block} />
-        ))}
-      </div>
-
-      {(project.stack.length > 0 || project.links.length > 0) && (
-        <footer className="case__footer">
-          {project.stack.length > 0 ? (
-            <p className="case__stack">
-              {project.stack.map((item, i) => (
-                <span key={item}>
-                  {i > 0 ? " · " : null}
-                  {item}
-                </span>
-              ))}
-            </p>
-          ) : null}
+      {(project.links.length > 0 || project.stack.length > 0) && (
+        <div className="case__chrome">
           {project.links.length > 0 ? (
-            <p className="case__links">
+            <p className="case__chrome-links">
               {project.links.map((link, i) => (
                 <span key={link.href}>
                   {i > 0 ? " · " : null}
@@ -229,8 +211,25 @@ export default function CaseStudyView({ project, homeHref = "/" }: Props) {
               ))}
             </p>
           ) : null}
-        </footer>
+          {project.stack.length > 0 ? (
+            <p className="case__chrome-stack">
+              {project.stack.map((item) => (
+                <span key={item} className="case__chip">
+                  {item}
+                </span>
+              ))}
+            </p>
+          ) : null}
+        </div>
       )}
+
+      {study.hero ? <CaseHero hero={study.hero} /> : null}
+
+      <div className="case__body">
+        {study.blocks.map((block, i) => (
+          <Block key={`${block.type}-${i}`} block={block} />
+        ))}
+      </div>
     </article>
   );
 }

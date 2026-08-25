@@ -40,6 +40,50 @@ const furme: ProjectEntry = {
     video: "/media/uofthacks.mp4",
     caption: "Winning moment at UofTHacks",
   },
+  caseStudy: {
+    headline: "FurMe",
+    hero: {
+      video: "/media/uofthacks.mp4",
+      caption: "Winning moment at UofTHacks",
+    },
+    blocks: [
+      {
+        type: "paragraph",
+        text: "FurMe won 1st overall at UofTHacks 11. It combines OpenCV face-tracking with an Arduino servo controller so the device physically rotates to keep the user centered, then layers emotion detection and LLMs for conversational context and Spotify playlist curation.",
+      },
+      {
+        type: "heading",
+        text: "The problem",
+      },
+      {
+        type: "paragraph",
+        text: "We wanted a desk companion that felt physically present and emotionally aware rather than another chat window: something that tracked you, reacted to your mood, and picked music to match, all within a 24-hour build window.",
+      },
+      {
+        type: "heading",
+        text: "What I built",
+      },
+      {
+        type: "list",
+        items: [
+          "Closed-loop OpenCV face-tracking with Arduino servos to center the user in the camera viewport in real time.",
+          "DeepFace emotion detection with Cohere and OpenAI for verbal responses and live sentiment-based Spotify playlists.",
+          "IoT teleoperation dashboard in React and WebSockets for camera feed, keyboard servo control, and authenticated remote access.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Outcomes",
+      },
+      {
+        type: "list",
+        items: [
+          "1st overall at UofTHacks 11 among 600+ hackers.",
+          "Working embodied AI demo with hardware, vision, and conversational layers.",
+        ],
+      },
+    ],
+  },
 };
 
 export default furme;

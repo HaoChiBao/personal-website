@@ -38,6 +38,52 @@ const rbc: ProjectEntry = {
     mark: "/media/tag-rbc.png",
     caption: "RBC Amplify internship",
   },
+  caseStudy: {
+    headline: "RBC Amplify — Liquidity Forecasting",
+    hero: {
+      image: "/media/rbc-logo.jpg",
+      caption: "RBC Amplify internship",
+    },
+    blocks: [
+      {
+        type: "paragraph",
+        text: "At RBC Amplify I built a liquidity forecasting platform with a scalable full-stack architecture. Commercial Banking adopted it to oversee $10B+ in annual transactions, and the project won a $20K Industry Disruptor Prize.",
+      },
+      {
+        type: "heading",
+        text: "The problem",
+      },
+      {
+        type: "paragraph",
+        text: "Commercial Banking needed a way to model and forecast liquidity collaboratively across teams, without the manual, spreadsheet-driven cash-flow structuring that dominated the existing workflow.",
+      },
+      {
+        type: "heading",
+        text: "What I built",
+      },
+      {
+        type: "list",
+        items: [
+          "Multi-user synchronization engine on Python FastAPI WebSockets, adapting algorithms from Figma's published research for collaborative financial modeling.",
+          "Interactive infinite canvas in React.js with tree-based data structures for drag-and-drop cash-flow mapping.",
+          "Three specialized AI agent microservices (Analyzer, Architect, Recommender) that cut manual client-structuring time by 92%.",
+          "CI/CD and hosting on OpenShift (Kubernetes) for high-availability WebSocket sessions in a secure banking environment.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Outcomes",
+      },
+      {
+        type: "list",
+        items: [
+          "Won $20K Industry Disruptor Prize.",
+          "Adopted by Commercial Banking for $10B+ annual transaction oversight.",
+          "92% reduction in manual structuring time via AI agent onboarding.",
+        ],
+      },
+    ],
+  },
 };
 
 export default rbc;

@@ -10,10 +10,7 @@ const nodes: ProjectEntry = {
   section: "projects",
   labels: ["indie", "tooling", "shipped", "featured"],
   stack: ["React", "TypeScript", "Firebase", "Chrome APIs"],
-  links: [
-    { label: "site", href: "https://thenodes.ca", external: true },
-    { label: "github", href: "https://github.com/HaoChiBao", external: true },
-  ],
+  links: [{ label: "site", href: "https://thenodes.ca", external: true }],
   role: "Indie Developer",
   summary:
     "Built and shipped a LinkedIn outreach Chrome extension solo in under a month, growing to 1,000+ installs and 17,000+ profiles indexed to date. Extraction runs client-side through a queue that opens each search results page in a hidden iframe inside the user's own logged-in session, parsing against fallback selector chains so a LinkedIn markup change drops single fields instead of failing the run.",
