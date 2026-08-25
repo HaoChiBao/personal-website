@@ -7,11 +7,7 @@ import ProjectList from "@/components/ProjectList";
 import WorkList from "@/components/WorkList";
 import {
   SECTIONS,
-<<<<<<< HEAD
-  caseHref,
   education,
-=======
->>>>>>> origin/haochibao/work-titles-blurbs-6ecd
   listHackathonProjects,
   listOpenSource,
   listPersonalProjects,
