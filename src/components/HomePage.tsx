@@ -4,11 +4,14 @@ import GithubContributions from "@/components/GithubContributions";
 import FlickerName from "@/components/FlickerName";
 import HeroIntro from "@/components/HeroIntro";
 import ProjectList from "@/components/ProjectList";
-import Link from "next/link";
+import WorkList from "@/components/WorkList";
 import {
   SECTIONS,
+<<<<<<< HEAD
   caseHref,
   education,
+=======
+>>>>>>> origin/haochibao/work-titles-blurbs-6ecd
   listHackathonProjects,
   listOpenSource,
   listPersonalProjects,
@@ -72,27 +75,7 @@ export default function HomePage({ siteRoot = "" }: Props) {
 
       <section className="section" id="work">
         <h2>{SECTIONS.work.title}</h2>
-        <ul className="entry-list">
-          {work.map((job) => {
-            const caseId = job.projectIds?.[0];
-            return (
-              <li key={job.id} className="entry">
-                <span>
-                  {caseId ? (
-                    <Link href={caseHref(caseId, siteRoot)}>{job.org}</Link>
-                  ) : job.href ? (
-                    <a href={job.href} target="_blank" rel="noreferrer">
-                      {job.org}
-                    </a>
-                  ) : (
-                    job.org
-                  )}
-                </span>
-                <span className="entry__meta">{job.dates}</span>
-              </li>
-            );
-          })}
-        </ul>
+        <WorkList work={work} siteRoot={siteRoot} />
       </section>
 
       <section className="section" id="opensource">

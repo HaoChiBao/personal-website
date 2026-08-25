@@ -369,6 +369,37 @@ body:has(.site-footer) .site {
   max-width: 100%;
 }
 
+/* Left column for rows with a secondary blurb line (see ProjectList): stacks
+   the title row above the blurb and lets the blurb shrink so it can ellipsize
+   instead of pushing the row wider than its available space. */
+.entry > span.entry__main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+}
+
+.entry__blurb {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 30rem) {
+  .entry:has(.entry__blurb) {
+    flex-wrap: wrap;
+  }
+
+  .entry:has(.entry__blurb) > .entry__meta {
+    flex-basis: 100%;
+  }
+}
+
 /* Frosted liquid-glass chips behind type so sticky notes show through.
    Negative inset on ::before adds padding without moving the text. */
 .hero__links,

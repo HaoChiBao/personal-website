@@ -20,10 +20,20 @@ export default function ProjectList({ items, siteRoot = "" }: Props) {
     <ul className="entry-list">
       {items.map((project) => (
         <li key={project.id} className="entry">
-          <span>
-            <Link href={caseHref(project.id, siteRoot)}>{project.name}</Link>
-            {project.hackathon?.event ? (
-              <span className="entry__meta"> · {project.hackathon.event}</span>
+          <span className="entry__main">
+            <span className="entry__title">
+              <Link href={caseHref(project.id, siteRoot)}>
+                {project.name}
+              </Link>
+              {project.hackathon?.event ? (
+                <span className="entry__meta">
+                  {" "}
+                  · {project.hackathon.event}
+                </span>
+              ) : null}
+            </span>
+            {project.blurb ? (
+              <span className="entry__blurb">{project.blurb}</span>
             ) : null}
           </span>
           <span className="entry__meta">{entryMeta(project)}</span>
