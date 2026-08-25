@@ -9,7 +9,7 @@ const paper_orchestra: ProjectEntry = {
   dates: "2023",
   section: "hackathons",
   hackathon: { event: "MetHacks", year: 2023, placement: "3rd place" },
-  labels: ["hackathon", "award", "featured", "vision"],
+  labels: ["hackathon", "award", "vision"],
   stack: [
       "MediaPipe",
       "Tone.js",

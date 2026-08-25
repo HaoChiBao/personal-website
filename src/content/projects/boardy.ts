@@ -17,7 +17,7 @@ const boardy: ProjectEntry = {
     "Railway",
     "GraphQL",
   ],
-  links: [{ label: "github", href: "https://github.com/HaoChiBao", external: true }],
+  links: [],
   role: "Contract Software Engineer",
   summary:
     "At Boardy (an AI networking agent startup) I engineered an autonomous meeting agent that joins Zoom and Google Meet, listens, and responds in real time with high reliability and low latency.",

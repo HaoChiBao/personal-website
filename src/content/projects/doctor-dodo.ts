@@ -12,7 +12,6 @@ const doctor_dodo: ProjectEntry = {
   labels: [
       "hackathon",
       "award",
-      "featured",
       "education",
       "vision",
       "extension",

@@ -3,8 +3,8 @@ import type { Profile } from "./types";
 /** Contact / identity from James-Yang-Resume.pdf */
 export const profile: Profile = {
   name: "James Yang",
-  headline: "Software engineer · Chronic builder",
-  bio: "I used to play with Legos, now I build with code. I poke at problems, fix what breaks, and make hard things understandable.",
+  headline: "Full-stack engineer · AI agent builder",
+  bio: "I used to play with Legos, now I build full-stack apps and AI agents. I poke at problems, fix what breaks, and make hard things understandable.",
   location: "Toronto, Canada",
   email: "jamesyangbuilds@gmail.com",
   phone: "647-937-5288",

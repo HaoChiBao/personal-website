@@ -8,7 +8,7 @@ const youtubeUploader: ProjectEntry = {
     "OAuth multi-channel uploads, scheduled publish, R2-backed queues, and a Studio-style dashboard.",
   dates: "2026",
   section: "projects",
-  labels: ["indie", "tooling", "shipped", "featured"],
+  labels: ["indie", "tooling", "shipped"],
   stack: [
     "Python",
     "YouTube Data API v3",

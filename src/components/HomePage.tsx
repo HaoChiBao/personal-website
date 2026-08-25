@@ -1,11 +1,14 @@
+import AwardsStrip from "@/components/AwardsStrip";
 import CopyEmailLink from "@/components/CopyEmailLink";
 import GithubContributions from "@/components/GithubContributions";
 import FlickerName from "@/components/FlickerName";
+import HeroIntro from "@/components/HeroIntro";
 import ProjectList from "@/components/ProjectList";
 import Link from "next/link";
 import {
   SECTIONS,
   caseHref,
+  education,
   listHackathonProjects,
   listOpenSource,
   listPersonalProjects,
@@ -43,6 +46,7 @@ export default function HomePage({ siteRoot = "" }: Props) {
     <main>
       <header className="hero">
         <FlickerName text={profile.name} variants={letterVariants} />
+        <HeroIntro profile={profile} education={education[0]} />
         <p className="hero__links">
           {links.map((link, i) => (
             <span key={link.href}>
@@ -63,6 +67,8 @@ export default function HomePage({ siteRoot = "" }: Props) {
           ))}
         </p>
       </header>
+
+      <AwardsStrip siteRoot={siteRoot} />
 
       <section className="section" id="work">
         <h2>{SECTIONS.work.title}</h2>

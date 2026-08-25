@@ -223,6 +223,29 @@ body:has(.site-footer) .site {
   }
 }
 
+.hero__intro {
+  width: min(30rem, 100%);
+  margin: 0 auto 0.9rem;
+}
+
+.hero__headline {
+  margin: 0 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.hero__bio {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.hero__edu {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
 .hero__links {
   margin: 0 auto;
   width: fit-content;
@@ -362,8 +385,7 @@ body:has(.site-footer) .site {
 .case__caption,
 .case__quote,
 .case__list li,
-.case__stack,
-.case__links {
+.case__chrome-links {
   position: relative;
   z-index: 0;
   isolation: isolate;
@@ -383,8 +405,7 @@ body:has(.site-footer) .site {
 .case__caption::before,
 .case__quote::before,
 .case__list li::before,
-.case__stack::before,
-.case__links::before {
+.case__chrome-links::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -427,8 +448,7 @@ body:has(.site-footer) .site {
   .case__caption::before,
   .case__quote::before,
   .case__list li::before,
-  .case__stack::before,
-  .case__links::before {
+  .case__chrome-links::before {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: rgba(255, 255, 255, 0.92);
@@ -726,22 +746,45 @@ body:has(.site-footer) .site {
   margin-bottom: 0.35rem;
 }
 
-.case__footer {
-  padding-top: 1rem;
+.case__chrome {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0 0 1.5rem;
+  padding: 0.75rem 0;
   border-top: 1px solid #eee;
-  color: var(--muted);
+  border-bottom: 1px solid #eee;
   font-size: 0.85rem;
 }
 
-.case__stack,
-.case__links {
+.case__chrome-links {
   width: fit-content;
   max-width: 100%;
-  margin: 0 0 0.35rem;
+  margin: 0;
+  color: var(--muted);
 }
 
-.case__links a {
+.case__chrome-links a {
   color: var(--ink);
+}
+
+.case__chrome-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case__chip {
+  width: fit-content;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #eee;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
 }
 
 .site-footer {
