@@ -1,3 +1,4 @@
+import AwardsStrip from "@/components/AwardsStrip";
 import CopyEmailLink from "@/components/CopyEmailLink";
 import GithubContributions from "@/components/GithubContributions";
 import FlickerName from "@/components/FlickerName";
@@ -63,6 +64,8 @@ export default function HomePage({ siteRoot = "" }: Props) {
           ))}
         </p>
       </header>
+
+      <AwardsStrip siteRoot={siteRoot} />
 
       <section className="section" id="work">
         <h2>{SECTIONS.work.title}</h2>

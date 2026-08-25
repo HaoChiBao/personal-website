@@ -3,6 +3,11 @@
  * Projects carry a `section` field; work lives in `work.ts`.
  */
 export const SECTIONS = {
+  recognition: {
+    id: "recognition",
+    title: "Recognition",
+    description: "Awards and hackathon placements",
+  },
   work: {
     id: "work",
     title: "Work",
