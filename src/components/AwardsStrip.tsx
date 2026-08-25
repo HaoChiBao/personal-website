@@ -31,17 +31,27 @@ export default function AwardsStrip({ siteRoot = "" }: Props) {
       <ul className="entry-list">
         {featured.map((award) => (
           <li key={award.id} className="entry">
-            <span>
-              {award.projectId ? (
+            <span className={award.detail ? "entry__main" : undefined}>
+              {award.detail ? (
+                <>
+                  <span className="entry__title">
+                    {award.projectId ? (
+                      <Link href={caseHref(award.projectId, siteRoot)}>
+                        {award.title}
+                      </Link>
+                    ) : (
+                      award.title
+                    )}
+                  </span>
+                  <span className="entry__blurb">{award.detail}</span>
+                </>
+              ) : award.projectId ? (
                 <Link href={caseHref(award.projectId, siteRoot)}>
                   {award.title}
                 </Link>
               ) : (
                 award.title
               )}
-              {award.detail ? (
-                <span className="entry__meta"> · {award.detail}</span>
-              ) : null}
             </span>
           </li>
         ))}
