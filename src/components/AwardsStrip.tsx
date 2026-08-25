@@ -3,14 +3,12 @@ import { SECTIONS, awards, caseHref } from "@/content";
 
 /**
  * Curated ids to surface on the homepage strip, in display order.
- * Edit this list to change what shows — keep it short (max ~6).
+ * Keep this short — titles only, details live on case pages.
  */
 const FEATURED_AWARD_IDS = [
   "rbc-industry-disruptor",
   "uofthacks-1st",
   "hackharvard",
-  "overhaul-1st",
-  "dataquest-1st",
   "nexhacks",
 ] as const;
 
@@ -31,21 +29,8 @@ export default function AwardsStrip({ siteRoot = "" }: Props) {
       <ul className="entry-list">
         {featured.map((award) => (
           <li key={award.id} className="entry">
-            <span className={award.detail ? "entry__main" : undefined}>
-              {award.detail ? (
-                <>
-                  <span className="entry__title">
-                    {award.projectId ? (
-                      <Link href={caseHref(award.projectId, siteRoot)}>
-                        {award.title}
-                      </Link>
-                    ) : (
-                      award.title
-                    )}
-                  </span>
-                  <span className="entry__blurb">{award.detail}</span>
-                </>
-              ) : award.projectId ? (
+            <span>
+              {award.projectId ? (
                 <Link href={caseHref(award.projectId, siteRoot)}>
                   {award.title}
                 </Link>
