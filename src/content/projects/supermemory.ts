@@ -8,7 +8,7 @@ const supermemory: ProjectEntry = {
     "Merged contributor: finished leftover Included Memories UI on the T3 extension surface.",
   dates: "2026",
   section: "opensource",
-  labels: ["opensource", "shipped", "tooling", "featured"],
+  labels: ["opensource", "shipped", "tooling"],
   stack: ["TypeScript", "Browser extension"],
   links: [
     {

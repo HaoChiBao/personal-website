@@ -8,7 +8,7 @@ const stagehand: ProjectEntry = {
     "Merged contributor: removed stale docs claiming metrics() was unimplemented.",
   dates: "2026",
   section: "opensource",
-  labels: ["opensource", "shipped", "tooling", "featured"],
+  labels: ["opensource", "shipped", "tooling"],
   stack: ["TypeScript", "Python"],
   links: [
     {

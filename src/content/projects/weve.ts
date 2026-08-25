@@ -9,7 +9,7 @@ const weve: ProjectEntry = {
   dates: "2024",
   section: "hackathons",
   hackathon: { event: "Hackville", year: 2024, placement: "2nd place" },
-  labels: ["hackathon", "award", "featured", "education", "extension"],
+  labels: ["hackathon", "award", "education", "extension"],
   stack: [
       "Chrome extension",
       "Firebase",

@@ -8,7 +8,7 @@ const embedgpt: ProjectEntry = {
     "Chrome extension: highlight-to-ask, in-page chat, popup history, and image queries without leaving the tab.",
   dates: "2024 – 2025",
   section: "projects",
-  labels: ["indie", "extension", "shipped", "featured"],
+  labels: ["indie", "extension", "shipped"],
   stack: [
     "JavaScript",
     "Chrome extension",

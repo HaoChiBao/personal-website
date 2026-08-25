@@ -8,7 +8,7 @@ const cloudflareDocs: ProjectEntry = {
     "Merged contributor: waitUntil background-work warning, Workflows sleep units, and a leftover PAC TODO.",
   dates: "2026",
   section: "opensource",
-  labels: ["opensource", "shipped", "featured"],
+  labels: ["opensource", "shipped"],
   stack: ["Markdown"],
   links: [
     {
