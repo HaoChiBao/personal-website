@@ -759,6 +759,11 @@ body:has(.site-footer) .site {
   background: #f5f5f5;
 }
 
+.case__hero video.case__media,
+.case__figure video.case__media {
+  pointer-events: none;
+}
+
 .case__caption {
   width: fit-content;
   max-width: 100%;

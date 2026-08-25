@@ -56,6 +56,24 @@ function buildFallback(project: ProjectEntry): CaseStudy {
   };
 }
 
+function CaseVideo({ src }: { src: string }) {
+  return (
+    <video
+      className="case__media"
+      src={src}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      controls={false}
+      disablePictureInPicture
+      // iOS < 13 ignores playsInline unless the webkit attribute is set.
+      {...{ "webkit-playsinline": "true" }}
+    />
+  );
+}
+
 function CaseHero({
   hero,
 }: {
@@ -68,13 +86,7 @@ function CaseHero({
   return (
     <figure className="case__hero">
       {videoOk ? (
-        <video
-          className="case__media"
-          src={hero.video}
-          controls
-          playsInline
-          preload="metadata"
-        />
+        <CaseVideo src={hero.video!} />
       ) : (
         <img
           className="case__media"
@@ -134,13 +146,7 @@ function Block({ block }: { block: CaseBlock }) {
       if (!publicAssetExists(block.src)) return null;
       return (
         <figure className="case__figure">
-          <video
-            className="case__media"
-            src={block.src}
-            controls
-            playsInline
-            preload="metadata"
-          />
+          <CaseVideo src={block.src} />
           {block.caption ? (
             <figcaption className="case__caption">{block.caption}</figcaption>
           ) : null}
