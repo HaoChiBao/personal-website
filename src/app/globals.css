@@ -1359,9 +1359,9 @@ body.is-sticky-editor .eye-btn {
   z-index: 4;
   display: flex;
   align-items: flex-start;
-  width: 9.4rem;
-  height: 9.4rem;
-  padding: 0.7rem 0.85rem;
+  width: 11rem;
+  height: 11.5rem;
+  padding: 0.7rem 0.8rem;
   overflow: hidden;
   background: #ffe56a;
   cursor: grab;
@@ -1379,6 +1379,7 @@ body.is-sticky-editor .eye-btn {
   overflow: hidden;
   color: #3a2a12;
   font: inherit;
+  font-size: 0.72rem;
   line-height: 1.35;
   white-space: pre-wrap;
   word-break: break-word;

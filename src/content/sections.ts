@@ -28,6 +28,11 @@ export const SECTIONS = {
     title: "Hackathons",
     description: "Competition builds and placements",
   },
+  goals: {
+    id: "goals",
+    title: "Goals",
+    description: "Long projects in progress",
+  },
 } as const;
 
 /** Which section a project entry belongs to. */

@@ -3,6 +3,7 @@ import path from "path";
 import { list, put } from "@vercel/blob";
 import {
   DEFAULT_STICKY_NOTE,
+  SEED_STICKY_NOTES,
   STICKY_WALL_MAX,
   type StickyNoteData,
 } from "@/lib/sticky-notes";
@@ -68,8 +69,10 @@ async function writeWall(notes: StickyNoteData[]) {
 
 export async function listStickyNotes() {
   const notes = await readWall();
-  if (notes.length === 0) return [DEFAULT_STICKY_NOTE];
-  return notes;
+  if (notes.length === 0) return [...SEED_STICKY_NOTES, DEFAULT_STICKY_NOTE];
+  const seen = new Set(notes.map((note) => note.id));
+  const missing = SEED_STICKY_NOTES.filter((note) => !seen.has(note.id));
+  return missing.length ? [...missing, ...notes] : notes;
 }
 
 export async function addStickyNote(

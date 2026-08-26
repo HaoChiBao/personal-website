@@ -15,6 +15,7 @@ import embedgpt from "./embedgpt";
 import eyeexplore from "./eyeexplore";
 import furme from "./furme";
 import glimpse from "./glimpse";
+import goals from "./goals";
 import infu from "./infu";
 import initProject from "./init";
 import inklink from "./inklink";
@@ -67,6 +68,7 @@ export const projects: ProjectEntry[] = [
   neolume,
   glimpse,
   furme,
+  goals,
   weve,
   doctorDodo,
   initProject,

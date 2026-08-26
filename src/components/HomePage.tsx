@@ -2,6 +2,7 @@ import AwardsStrip from "@/components/AwardsStrip";
 import CopyEmailLink from "@/components/CopyEmailLink";
 import GithubContributions from "@/components/GithubContributions";
 import FlickerName from "@/components/FlickerName";
+import GoalsList from "@/components/GoalsList";
 import HeroIntro from "@/components/HeroIntro";
 import ProjectList from "@/components/ProjectList";
 import WorkList from "@/components/WorkList";
@@ -72,6 +73,11 @@ export default function HomePage({ siteRoot = "" }: Props) {
       <section className="section" id="work">
         <h2>{SECTIONS.work.title}</h2>
         <WorkList work={work} siteRoot={siteRoot} />
+      </section>
+
+      <section className="section" id="goals">
+        <h2>{SECTIONS.goals.title}</h2>
+        <GoalsList siteRoot={siteRoot} />
       </section>
 
       <section className="section" id="opensource">
