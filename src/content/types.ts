@@ -18,6 +18,8 @@ export type Profile = {
   phone?: string;
   website?: string;
   links: ContentLink[];
+  /** Optional honor shown after the headline, e.g. MLH Top 50 */
+  honor?: { label: string; projectId: string };
 };
 
 export type EducationEntry = {

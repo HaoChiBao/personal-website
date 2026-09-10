@@ -9,7 +9,7 @@ const booking_cancellations: ProjectEntry = {
   dates: "2023",
   section: "hackathons",
   hackathon: { event: "DataQuest", year: 2023, placement: "1st place" },
-  labels: ["hackathon", "award", "featured"],
+  labels: ["hackathon", "award"],
   stack: [
       "Python",
       "scikit-learn",

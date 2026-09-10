@@ -9,7 +9,7 @@ const cota: ProjectEntry = {
   dates: "2024",
   section: "hackathons",
   hackathon: { event: "DeltaHacks X", year: 2024, placement: "Best Education Hack" },
-  labels: ["hackathon", "award", "featured", "education"],
+  labels: ["hackathon", "award", "education"],
   stack: [
       "Cohere",
       "FastAPI",
