@@ -5,7 +5,7 @@ const mlhTop50: ProjectEntry = {
   name: "MLH Top 50",
   title: "MLH Top 50",
   blurb:
-    "Named to Major League Hacking’s annual list of 50 student hackers.",
+    "Named to Major League Hacking's annual list of 50 student hackers.",
   dates: "2026",
   section: "projects",
   labels: ["award", "hackathon"],
@@ -56,7 +56,7 @@ const mlhTop50: ProjectEntry = {
       },
       {
         type: "paragraph",
-        text: "Official write-up lives on MLH’s Top 50 site. This page is the short version from my side.",
+        text: "Official write-up lives on MLH's Top 50 site. This page is the short version from my side.",
       },
     ],
   },

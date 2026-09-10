@@ -7,8 +7,7 @@ export const awards: AwardEntry[] = [
   {
     id: "mlh-top-50",
     title: "MLH Top 50",
-    detail:
-      "Major League Hacking’s annual list of 50 student hackers",
+    detail: "Major League Hacking's annual list of 50 student hackers",
     labels: ["award", "hackathon"],
     projectId: "mlh-top-50",
   },
