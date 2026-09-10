@@ -46,7 +46,11 @@ export default function HomePage({ siteRoot = "" }: Props) {
     <main>
       <header className="hero">
         <FlickerName text={profile.name} variants={letterVariants} />
-        <HeroIntro profile={profile} education={education[0]} />
+        <HeroIntro
+          profile={profile}
+          education={education[0]}
+          siteRoot={siteRoot}
+        />
         <p className="hero__links">
           {links.map((link, i) => (
             <span key={link.href}>

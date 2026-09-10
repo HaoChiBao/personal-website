@@ -6,10 +6,10 @@ import { SECTIONS, awards, caseHref } from "@/content";
  * Keep this short — titles only, details live on case pages.
  */
 const FEATURED_AWARD_IDS = [
+  "mlh-top-50",
   "rbc-industry-disruptor",
   "uofthacks-1st",
   "hackharvard",
-  "nexhacks",
 ] as const;
 
 type Props = {

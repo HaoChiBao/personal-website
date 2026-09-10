@@ -5,6 +5,14 @@ import type { AwardEntry } from "./types";
  */
 export const awards: AwardEntry[] = [
   {
+    id: "mlh-top-50",
+    title: "MLH Top 50",
+    detail:
+      "Major League Hacking’s annual list of 50 student hackers",
+    labels: ["award", "hackathon"],
+    projectId: "mlh-top-50",
+  },
+  {
     id: "rbc-industry-disruptor",
     title: "RBC Amplify — $20K Industry Disruptor Prize",
     detail:

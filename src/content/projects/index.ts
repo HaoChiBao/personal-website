@@ -23,6 +23,7 @@ import insight from "./insight";
 import interviewRoyale from "./interview-royale";
 import langchain from "./langchain";
 import mednow from "./mednow";
+import mlhTop50 from "./mlh-top-50";
 import mostRealisticGame from "./most-realistic-game";
 import neolume from "./neolume";
 import nodes from "./nodes";
@@ -68,6 +69,7 @@ export const projects: ProjectEntry[] = [
   neolume,
   glimpse,
   furme,
+  mlhTop50,
   goals,
   weve,
   doctorDodo,

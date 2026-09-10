@@ -1,4 +1,5 @@
-import type { EducationEntry, Profile } from "@/content";
+import Link from "next/link";
+import { caseHref, type EducationEntry, type Profile } from "@/content";
 
 /** Words that shouldn't count toward a degree's abbreviation. */
 const DEGREE_STOPWORDS = new Set(["of", "in", "and", "the"]);
@@ -40,12 +41,27 @@ function educationLine(entry: EducationEntry): string {
 type Props = {
   profile: Profile;
   education?: EducationEntry;
+  siteRoot?: string;
 };
 
-export default function HeroIntro({ profile, education }: Props) {
+export default function HeroIntro({
+  profile,
+  education,
+  siteRoot = "",
+}: Props) {
   return (
     <div className="hero__intro">
-      <p className="hero__headline">{profile.headline}</p>
+      <p className="hero__headline">
+        {profile.headline}
+        {profile.honor ? (
+          <>
+            {" · "}
+            <Link href={caseHref(profile.honor.projectId, siteRoot)}>
+              {profile.honor.label}
+            </Link>
+          </>
+        ) : null}
+      </p>
       <p className="hero__bio">{profile.bio}</p>
       {education ? (
         <p className="hero__edu">{educationLine(education)}</p>
