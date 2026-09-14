@@ -12,7 +12,6 @@ const infu: ProjectEntry = {
   labels: [
       "hackathon",
       "award",
-      "featured",
       "hardware",
       "vision",
     ],

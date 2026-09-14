@@ -34,10 +34,10 @@ export default function StickyNote({ note, onMove, onFront }: Props) {
       className={`sticky-note${dragging ? " is-dragging" : ""}`}
       style={{
         left: placed(note.x)
-          ? `clamp(0.4rem, ${note.x * 100}vw, calc(100vw - 9.6rem))`
+          ? `clamp(0.4rem, ${note.x * 100}vw, calc(100vw - 11.4rem))`
           : note.x,
         top: placed(note.y)
-          ? `clamp(0.4rem, ${note.y * 100}vh, calc(100vh - 9.6rem))`
+          ? `clamp(0.4rem, ${note.y * 100}vh, calc(100vh - 11.9rem))`
           : note.y,
         zIndex: dragging ? note.z + 20 : note.z,
         background: stickyColor(note.color),

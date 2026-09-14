@@ -8,7 +8,7 @@ const volleyballAi: ProjectEntry = {
     "Court keypoints, SAM player tracks, VballNet ball tracks, score, and 3D court. GPU on Modal only.",
   dates: "2026",
   section: "projects",
-  labels: ["indie", "vision", "featured"],
+  labels: ["indie", "vision"],
   stack: [
     "Next.js",
     "TypeScript",

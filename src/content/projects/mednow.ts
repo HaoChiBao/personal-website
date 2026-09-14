@@ -9,7 +9,7 @@ const mednow: ProjectEntry = {
   dates: "2023",
   section: "hackathons",
   hackathon: { event: "MapleHacks", year: 2023, placement: "Best Health Hack" },
-  labels: ["hackathon", "award", "featured", "health"],
+  labels: ["hackathon", "award", "health"],
   stack: [
       "Agora",
       "React",

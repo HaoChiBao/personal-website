@@ -17,7 +17,7 @@ const boardy: ProjectEntry = {
     "Railway",
     "GraphQL",
   ],
-  links: [{ label: "github", href: "https://github.com/HaoChiBao", external: true }],
+  links: [],
   role: "Contract Software Engineer",
   summary:
     "At Boardy (an AI networking agent startup) I engineered an autonomous meeting agent that joins Zoom and Google Meet, listens, and responds in real time with high reliability and low latency.",
@@ -35,6 +35,51 @@ const boardy: ProjectEntry = {
     video: "/media/boardy.mp4",
     mark: "/media/tag-boardy.png",
     caption: "Pulling an all-nighter at the Boardy offices",
+  },
+  caseStudy: {
+    headline: "Boardy",
+    hero: {
+      video: "/media/boardy.mp4",
+      caption: "Pulling an all-nighter at the Boardy offices",
+    },
+    blocks: [
+      {
+        type: "paragraph",
+        text: "At Boardy (an AI networking agent startup) I engineered an autonomous meeting agent that joins Zoom and Google Meet, listens, and responds in real time with high reliability and low latency.",
+      },
+      {
+        type: "heading",
+        text: "The problem",
+      },
+      {
+        type: "paragraph",
+        text: "Boardy's networking agent needed to sit inside real Zoom and Google Meet calls, follow the conversation live, and speak back with low enough latency to feel like a participant rather than a bot, at a cost that could scale across many concurrent calls.",
+      },
+      {
+        type: "heading",
+        text: "What I built",
+      },
+      {
+        type: "list",
+        items: [
+          "Built the meeting agent on Recall.ai, Deepgram, and LiveKit with a 99% join success rate and sub-500ms voice response times.",
+          "Cut inference costs 40% with layered models and context-aware prompt chaining for unstructured conversations.",
+          "Deployed event-driven infrastructure on Railway with dynamic worker pools and custom autoscaling via Railway's GraphQL API.",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Outcomes",
+      },
+      {
+        type: "list",
+        items: [
+          "Supported 50+ concurrent audio streams without performance degradation.",
+          "40% lower inference cost while keeping conversational quality.",
+          "Production-grade join reliability across Zoom and Google Meet.",
+        ],
+      },
+    ],
   },
 };
 

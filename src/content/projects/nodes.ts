@@ -10,22 +10,17 @@ const nodes: ProjectEntry = {
   section: "projects",
   labels: ["indie", "tooling", "shipped", "featured"],
   stack: ["React", "TypeScript", "Firebase", "Chrome APIs"],
-  links: [
-    { label: "site", href: "https://thenodes.ca", external: true },
-    { label: "github", href: "https://github.com/HaoChiBao", external: true },
-  ],
+  links: [{ label: "site", href: "https://thenodes.ca", external: true }],
   role: "Indie Developer",
   summary:
     "Built and shipped a LinkedIn outreach Chrome extension solo in under a month, growing to 1,000+ installs and 17,000+ profiles indexed to date. Extraction runs client-side through a queue that opens each search results page in a hidden iframe inside the user's own logged-in session, parsing against fallback selector chains so a LinkedIn markup change drops single fields instead of failing the run.",
-  story: `I built Nodes because I was tired of wasting time doing the same outreach prep steps over and over. I'd open a company site, scroll the footer, check the about page, search "contact," and still miss emails hiding in random places. Multiply that by dozens of websites and it turns into a painfully slow process.
+  story: `I built Nodes because LinkedIn outreach prep was eating my week. Open a search, click into each profile, copy the name, title, and company into a sheet, repeat — then lose the thread when a selector changed or a tab crashed. Multiply that by hundreds of prospects and the work stops being outreach and becomes data entry.
 
-At first, I tried a few popular email-finder tools. Some were accurate but expensive. Others were slow, locked behind accounts, or required exporting and cleaning results. I wanted something simple: just show me every email that's already visible on the page.
+Existing scrapers were either blocked, brittle, or shipped data off-device. I wanted extraction that stayed inside my own logged-in Chrome session, respected ordinary browsing rhythm, and failed gracefully when LinkedIn tweaked markup.
 
-So I started with a barebones Chrome extension: a button, a scan function, and a list. The first prototype worked in minutes, but the real work started immediately after. Real websites are messy.
+So I shipped a Chrome extension that queues LinkedIn search-result pages, opens each one in a hidden iframe in-session, and parses profile fields through fallback selector chains. The first pass worked on happy-path results; the real work was surviving layout churn without aborting the whole run when a single field disappeared.
 
-I iterated by testing on lots of sites and collecting failure cases. Each time it missed something, I'd add a new pattern or fix a parsing edge case. Then I focused on making it feel fast: no laggy UI, no long blocking scans, and no noisy duplicates.
-
-Once it felt reliable, I added quality-of-life features: copy all, export options, and a clean UI that doesn't distract from the page you're on.`,
+I tuned pacing between loads so the queue looked like careful manual browsing, not a burst scraper — account safety over raw throughput. Then I hardened the UI around copy/export flows so the extracted list was something I could actually use the same afternoon.`,
   contributions: [
     "Ran extraction client-side via a hidden-iframe queue inside the user's logged-in session.",
     "Used fallback selector chains so markup changes drop single fields instead of failing the whole run.",
@@ -58,27 +53,15 @@ Once it felt reliable, I added quality-of-life features: copy all, export option
       },
       {
         type: "paragraph",
-        text: "I built Nodes because I was tired of wasting time doing the same outreach prep steps over and over. I'd open a company site, scroll the footer, check the about page, search \"contact,\" and still miss emails hiding in random places. Multiply that by dozens of websites and it turns into a painfully slow process.",
-      },
-      {
-        type: "paragraph",
-        text: "At first, I tried a few popular email-finder tools. Some were accurate but expensive. Others were slow, locked behind accounts, or required exporting and cleaning results. I wanted something simple: just show me every email that's already visible on the page.",
+        text: "LinkedIn outreach prep was eating my week: open a search, click each profile, copy name/title/company into a sheet, repeat. Existing scrapers were blocked, brittle, or shipped data off-device. I needed extraction that stayed inside my own logged-in Chrome session and survived markup churn.",
       },
       {
         type: "heading",
-        text: "Building the extension",
+        text: "What I built",
       },
       {
         type: "paragraph",
-        text: "So I started with a barebones Chrome extension: a button, a scan function, and a list. The first prototype worked in minutes, but the real work started immediately after. Real websites are messy.",
-      },
-      {
-        type: "paragraph",
-        text: "I iterated by testing on lots of sites and collecting failure cases. Each time it missed something, I'd add a new pattern or fix a parsing edge case. Then I focused on making it feel fast: no laggy UI, no long blocking scans, and no noisy duplicates.",
-      },
-      {
-        type: "paragraph",
-        text: "Once it felt reliable, I added quality-of-life features: copy all, export options, and a clean UI that doesn't distract from the page you're on.",
+        text: "A Chrome extension that queues LinkedIn search-result pages, opens each in a hidden iframe in-session, and parses profile fields through fallback selector chains so a single missing field does not abort the run.",
       },
       {
         type: "heading",

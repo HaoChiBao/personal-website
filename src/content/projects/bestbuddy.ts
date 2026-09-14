@@ -8,7 +8,7 @@ const bestbuddy: ProjectEntry = {
     "Pick up, throw, and customize a Japanese mochi pet that sticks to the page and watches videos with you.",
   dates: "2022 – 2023",
   section: "projects",
-  labels: ["indie", "extension", "shipped", "featured"],
+  labels: ["indie", "extension", "shipped"],
   stack: ["JavaScript", "Chrome extension (MV3)", "CSS", "HTML"],
   links: [
     {

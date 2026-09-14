@@ -56,6 +56,24 @@ function buildFallback(project: ProjectEntry): CaseStudy {
   };
 }
 
+function CaseVideo({ src }: { src: string }) {
+  return (
+    <video
+      className="case__media"
+      src={src}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      controls={false}
+      disablePictureInPicture
+      // iOS < 13 ignores playsInline unless the webkit attribute is set.
+      {...{ "webkit-playsinline": "true" }}
+    />
+  );
+}
+
 function CaseHero({
   hero,
 }: {
@@ -68,13 +86,7 @@ function CaseHero({
   return (
     <figure className="case__hero">
       {videoOk ? (
-        <video
-          className="case__media"
-          src={hero.video}
-          controls
-          playsInline
-          preload="metadata"
-        />
+        <CaseVideo src={hero.video!} />
       ) : (
         <img
           className="case__media"
@@ -134,13 +146,7 @@ function Block({ block }: { block: CaseBlock }) {
       if (!publicAssetExists(block.src)) return null;
       return (
         <figure className="case__figure">
-          <video
-            className="case__media"
-            src={block.src}
-            controls
-            playsInline
-            preload="metadata"
-          />
+          <CaseVideo src={block.src} />
           {block.caption ? (
             <figcaption className="case__caption">{block.caption}</figcaption>
           ) : null}
@@ -192,28 +198,10 @@ export default function CaseStudyView({ project, homeHref = "/" }: Props) {
         ) : null}
       </header>
 
-      {study.hero ? <CaseHero hero={study.hero} /> : null}
-
-      <div className="case__body">
-        {study.blocks.map((block, i) => (
-          <Block key={`${block.type}-${i}`} block={block} />
-        ))}
-      </div>
-
-      {(project.stack.length > 0 || project.links.length > 0) && (
-        <footer className="case__footer">
-          {project.stack.length > 0 ? (
-            <p className="case__stack">
-              {project.stack.map((item, i) => (
-                <span key={item}>
-                  {i > 0 ? " · " : null}
-                  {item}
-                </span>
-              ))}
-            </p>
-          ) : null}
+      {(project.links.length > 0 || project.stack.length > 0) && (
+        <div className="case__chrome">
           {project.links.length > 0 ? (
-            <p className="case__links">
+            <p className="case__chrome-links">
               {project.links.map((link, i) => (
                 <span key={link.href}>
                   {i > 0 ? " · " : null}
@@ -229,8 +217,25 @@ export default function CaseStudyView({ project, homeHref = "/" }: Props) {
               ))}
             </p>
           ) : null}
-        </footer>
+          {project.stack.length > 0 ? (
+            <p className="case__chrome-stack">
+              {project.stack.map((item) => (
+                <span key={item} className="case__chip">
+                  {item}
+                </span>
+              ))}
+            </p>
+          ) : null}
+        </div>
       )}
+
+      {study.hero ? <CaseHero hero={study.hero} /> : null}
+
+      <div className="case__body">
+        {study.blocks.map((block, i) => (
+          <Block key={`${block.type}-${i}`} block={block} />
+        ))}
+      </div>
     </article>
   );
 }
