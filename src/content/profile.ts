@@ -4,6 +4,7 @@ import type { Profile } from "./types";
 export const profile: Profile = {
   name: "James Yang",
   headline: "Software engineer · Chronic builder",
+  honor: { label: "MLH Top 50", projectId: "mlh-top-50" },
   bio: "I used to play with Legos, now I build with code. I poke at problems, fix what breaks, and make hard things understandable.",
   location: "Toronto, Canada",
   email: "jamesyangbuilds@gmail.com",

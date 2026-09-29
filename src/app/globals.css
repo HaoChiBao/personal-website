@@ -223,6 +223,13 @@ body:has(.site-footer) .site {
   }
 }
 
+.hero__honor {
+  margin: -0.45rem auto 0.85rem;
+  width: fit-content;
+  max-width: 100%;
+  color: var(--muted);
+}
+
 .hero__links {
   margin: 0 auto;
   width: fit-content;
@@ -348,6 +355,7 @@ body:has(.site-footer) .site {
 
 /* Frosted liquid-glass chips behind type so sticky notes show through.
    Negative inset on ::before adds padding without moving the text. */
+.hero__honor,
 .hero__links,
 .flicker-name,
 .section h2,
@@ -369,6 +377,7 @@ body:has(.site-footer) .site {
   isolation: isolate;
 }
 
+.hero__honor::before,
 .hero__links::before,
 .flicker-name::before,
 .section h2::before,
@@ -413,6 +422,7 @@ body:has(.site-footer) .site {
 }
 
 @media (prefers-reduced-transparency: reduce) {
+  .hero__honor::before,
   .hero__links::before,
   .flicker-name::before,
   .section h2::before,
