@@ -3,6 +3,8 @@ export type FireworkQuality = {
   maxDpr: number;
   sparkBudget: number;
   pompomDensity: number;
+  glyphGap: number;
+  rayScale: number;
 };
 
 export function fireworkQuality(
@@ -18,7 +20,9 @@ export function fireworkQuality(
   return {
     columns,
     maxDpr: narrow ? 1 : Math.min(ratio || 1, 2),
-    sparkBudget: narrow ? 600 : 1400,
-    pompomDensity: narrow ? 3.3 : 6.6,
+    sparkBudget: narrow ? 220 : 1400,
+    pompomDensity: narrow ? 1.6 : 6.6,
+    glyphGap: narrow ? 1.15 : 0.42,
+    rayScale: narrow ? 0.5 : 1,
   };
 }

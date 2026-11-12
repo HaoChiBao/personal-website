@@ -7,7 +7,7 @@
  */
 
 import { quantizeRgb } from "@/lib/fireworks-color";
-import { clearLitCells } from "@/lib/fireworks-draw";
+import { clearLitCells, paintCells, useFillTextPaint } from "@/lib/fireworks-draw";
 import { pompomChar, pompomCount } from "@/lib/fireworks-pompom";
 import { fireworkQuality, type FireworkQuality } from "@/lib/fireworks-quality";
 
@@ -140,12 +140,13 @@ const ATLAS = 1024;
 export type FireworksHandle = {
   launch: (x: number, y: number) => void;
   sparkCount: () => number;
+  litCells: () => number;
   stop: () => void;
 };
 
 export function startFireworks(canvas: HTMLCanvasElement): FireworksHandle {
   const maybeCtx = canvas.getContext("2d", { alpha: true });
-  if (!maybeCtx) return { launch() {}, sparkCount: () => 0, stop() {} };
+  if (!maybeCtx) return { launch() {}, sparkCount: () => 0, litCells: () => 0, stop() {} };
   const ctx: CanvasRenderingContext2D = maybeCtx;
 
   let cssW = 0;
@@ -406,7 +407,7 @@ export function startFireworks(canvas: HTMLCanvasElement): FireworksHandle {
     }
 
     if (kind === "crossette") {
-      const rays = Math.max(6, Math.round(spec.arms * size * 0.3));
+      const rays = Math.max(6, Math.round(spec.arms * size * 0.3 * quality.rayScale));
       let ang = Math.random() * Math.PI * 2;
       const stepAng = (Math.PI * 2) / rays;
       for (let i = 0; i < rays; i++) {
@@ -421,7 +422,7 @@ export function startFireworks(canvas: HTMLCanvasElement): FireworksHandle {
       return;
     }
 
-    const rays = Math.max(4, Math.round(spec.arms * size));
+    const rays = Math.max(4, Math.round(spec.arms * size * quality.rayScale));
     let ang = Math.random() * Math.PI * 2;
     const stepAng = (Math.PI * 2) / rays;
     for (let i = 0; i < rays; i++) {
@@ -599,7 +600,7 @@ export function startFireworks(canvas: HTMLCanvasElement): FireworksHandle {
       }
     }
 
-    const gap = Math.min(cellW, cellH) * 0.42;
+    const gap = Math.min(cellW, cellH) * quality.glyphGap;
     for (let i = sparks.length - 1; i >= 0; i--) {
       const s = sparks[i];
       s.age += dt;
@@ -787,11 +788,15 @@ export function startFireworks(canvas: HTMLCanvasElement): FireworksHandle {
   }
 
   function paintLit() {
-    for (let n = 0; n < litCount; n++) {
-      const i = lit[n];
-      const ch = glyphs[i];
-      if (!ch) continue;
-      paintGlyph(ctx, ch, colors[i], (i % cols) * cellW, ((i / cols) | 0) * cellH);
+    if (useFillTextPaint(litCount, cssW < 800)) {
+      paintCells(ctx, lit, litCount, cols, cellW, cellH, glyphs, colors, fontCss);
+    } else {
+      for (let n = 0; n < litCount; n++) {
+        const i = lit[n];
+        const ch = glyphs[i];
+        if (!ch) continue;
+        paintGlyph(ctx, ch, colors[i], (i % cols) * cellW, ((i / cols) | 0) * cellH);
+      }
     }
     pruneGlyphCache();
   }
@@ -896,6 +901,7 @@ export function startFireworks(canvas: HTMLCanvasElement): FireworksHandle {
   return {
     launch,
     sparkCount: () => sparks.length,
+    litCells: () => litCount,
     stop() {
       observer.disconnect();
       window.clearTimeout(resizeTimer);

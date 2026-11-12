@@ -1,5 +1,5 @@
 export function pompomCount(arms: number, size: number, density: number): number {
-  return Math.max(48, Math.round(arms * size * density));
+  return Math.max(24, Math.round(arms * size * density));
 }
 
 export function pompomChar(

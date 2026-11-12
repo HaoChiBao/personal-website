@@ -26,3 +26,38 @@ export function clearLitCells(
     );
   }
 }
+
+export function useFillTextPaint(litCount: number, narrow: boolean): boolean {
+  return narrow || litCount > 80;
+}
+
+export function paintCells(
+  ctx: CanvasRenderingContext2D,
+  lit: ArrayLike<number>,
+  litCount: number,
+  cols: number,
+  cellW: number,
+  cellH: number,
+  glyphs: ArrayLike<string | undefined>,
+  colors: ArrayLike<number>,
+  font: string,
+): void {
+  ctx.font = font;
+  ctx.textBaseline = "top";
+  ctx.textAlign = "left";
+  let color = -1;
+  for (let n = 0; n < litCount; n++) {
+    const i = lit[n];
+    const glyph = glyphs[i];
+    if (glyph == null) continue;
+    const key = colors[i];
+    if (key !== color) {
+      color = key;
+      const r = (key >> 16) & 255;
+      const g = (key >> 8) & 255;
+      const b = key & 255;
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+    }
+    ctx.fillText(glyph, (i % cols) * cellW, ((i / cols) | 0) * cellH);
+  }
+}

@@ -2,7 +2,9 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { startFireworks } from "@/lib/fireworks";
+import { autoBurstCount } from "@/lib/fireworks-budget";
 import { fireworkQuality } from "@/lib/fireworks-quality";
+import { WASH_SETTLE_MS } from "@/lib/firework-wash-timing";
 
 const BLOCK =
   "a, button, input, textarea, select, label, video, canvas, summary, [role='button'], [contenteditable='true'], .loading-screen, .sticky-note, .sticky-notes__dock, .sticky-editor, .eye-btn, .site-footer, .retro-tv, .copy-toast, .flicker-name, .contrib";
@@ -85,9 +87,12 @@ function fireworkCursor() {
 
 const WASH_OUT_MS = 760;
 
-function FireworkWash({ leaving }: { leaving: boolean }) {
+function FireworkWash({ leaving, settled }: { leaving: boolean; settled: boolean }) {
+  const className = ["firework-wash", leaving ? "firework-wash--out" : "", settled && !leaving ? "firework-wash--settled" : ""]
+    .filter(Boolean)
+    .join(" ");
   return (
-    <div className={leaving ? "firework-wash firework-wash--out" : "firework-wash"} aria-hidden="true">
+    <div className={className} aria-hidden="true">
       {BLOBS.map((blob) => (
         <span
           key={`${blob.left}-${blob.top}`}
@@ -113,14 +118,17 @@ export default function FireworksBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const launchRef = useRef<((x: number, y: number) => void) | null>(null);
   const sparkCountRef = useRef<(() => number) | null>(null);
+  const litCellsRef = useRef<(() => number) | null>(null);
   const reducedRef = useRef(false);
   const modeRef = useRef(false);
   const autoRef = useRef(0);
   const exitTimer = useRef(0);
+  const settleTimer = useRef(0);
   const lastBurst = useRef<BurstPoint[]>([]);
   const [mode, setMode] = useState(false);
   const [wash, setWash] = useState(false);
   const [leaving, setLeaving] = useState(false);
+  const [settled, setSettled] = useState(false);
 
   function stopAuto() {
     window.clearInterval(autoRef.current);
@@ -134,12 +142,18 @@ export default function FireworksBackground() {
     if (!launch || !canvas) return;
     const rect = canvas.getBoundingClientRect();
     if (rect.width < 1 || rect.height < 1) return;
-    const budget = fireworkQuality(rect.width, window.devicePixelRatio || 1).sparkBudget;
-    if ((sparkCountRef.current?.() ?? 0) >= budget) return;
+    const quality = fireworkQuality(rect.width, window.devicePixelRatio || 1);
+    const bursts = autoBurstCount({
+      narrow: rect.width < 800,
+      sparks: sparkCountRef.current?.() ?? 0,
+      sparkBudget: quality.sparkBudget,
+      litCells: litCellsRef.current?.() ?? 0,
+    });
+    if (bursts === 0) return;
     const pair = spacedBursts(rect.width, rect.height, lastBurst.current);
-    lastBurst.current = pair;
-    launch(pair[0].x, pair[0].y);
-    launch(pair[1].x, pair[1].y);
+    const launched = pair.slice(0, bursts);
+    lastBurst.current = launched;
+    for (const point of launched) launch(point.x, point.y);
   }
 
   function startAuto() {
@@ -163,6 +177,7 @@ export default function FireworksBackground() {
     const fireworks = startFireworks(canvas);
     launchRef.current = fireworks.launch;
     sparkCountRef.current = fireworks.sparkCount;
+    litCellsRef.current = fireworks.litCells;
     const onClick = (event: MouseEvent) => {
       if (!modeRef.current || reducedRef.current) return;
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
@@ -179,8 +194,10 @@ export default function FireworksBackground() {
     return () => {
       stopAuto();
       window.clearTimeout(exitTimer.current);
+      window.clearTimeout(settleTimer.current);
       launchRef.current = null;
       sparkCountRef.current = null;
+      litCellsRef.current = null;
       document.removeEventListener("visibilitychange", onVisibility);
       motion.removeEventListener("change", onMotion);
       window.removeEventListener("click", onClick);
@@ -193,7 +210,18 @@ export default function FireworksBackground() {
   function clearWash() {
     setWash(false);
     setLeaving(false);
+    setSettled(false);
     document.body.classList.remove("is-firework-mode");
+  }
+
+  function armSettle() {
+    window.clearTimeout(settleTimer.current);
+    if (reducedRef.current) {
+      setSettled(true);
+      return;
+    }
+    setSettled(false);
+    settleTimer.current = window.setTimeout(() => setSettled(true), WASH_SETTLE_MS);
   }
 
   function onHintClick() {
@@ -204,6 +232,8 @@ export default function FireworksBackground() {
       setMode(false);
       document.documentElement.style.removeProperty("--firework-cursor");
       window.clearTimeout(exitTimer.current);
+      window.clearTimeout(settleTimer.current);
+      setSettled(false);
       if (reducedRef.current) {
         clearWash();
         return;
@@ -219,12 +249,13 @@ export default function FireworksBackground() {
     setWash(true);
     setMode(true);
     document.body.classList.add("is-firework-mode");
+    armSettle();
     startAuto();
   }
 
   return (
     <>
-      {wash ? <FireworkWash leaving={leaving} /> : null}
+      {wash ? <FireworkWash leaving={leaving} settled={settled} /> : null}
       <canvas ref={canvasRef} className="fireworks-bg" aria-hidden="true" />
       <button type="button" className="fireworks-hint" onClick={onHintClick}>
         {mode ? "no more fireworks" : "fireworks?"}
