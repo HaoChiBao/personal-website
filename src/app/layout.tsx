@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Serif, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const plex = IBM_Plex_Sans({
@@ -25,6 +25,14 @@ const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
 });
 
+const fireworksFace = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: "italic",
+  display: "swap",
+  variable: "--font-fireworks",
+});
+
 export const metadata: Metadata = {
   title: "James Yang",
   description: "Software engineer in Toronto.",
@@ -34,7 +42,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${plex.variable} ${plexSerif.variable} ${plexMono.variable}`}
+      className={`${plex.variable} ${plexSerif.variable} ${plexMono.variable} ${fireworksFace.variable}`}
     >
       <body style={{ fontFamily: "var(--font-plex), var(--font)" }}>
         {children}

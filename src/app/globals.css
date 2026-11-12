@@ -49,6 +49,139 @@ body:has(.forest-bg) {
   background: #dce8ee;
 }
 
+.fireworks-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  pointer-events: none;
+}
+
+.firework-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.firework-wash__blob {
+  position: absolute;
+  background: #000;
+  filter: blur(56px);
+  opacity: 0;
+  border-radius: 48% 52% 60% 40% / 46% 58% 42% 54%;
+  animation: firework-blob var(--blob-dur, 0.55s) ease-out var(--blob-delay, 0s) forwards;
+}
+
+.firework-wash--out .firework-wash__blob {
+  animation: firework-blob var(--blob-dur, 0.55s) ease-in var(--blob-delay, 0s) reverse both;
+}
+
+.firework-wash__veil {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  animation: firework-veil 0.28s ease-in 0.28s forwards;
+}
+
+.firework-wash--out .firework-wash__veil {
+  animation: firework-veil 0.24s ease-in reverse both;
+}
+
+@keyframes firework-blob {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 6%, 0) scale(0.45);
+    border-radius: 62% 38% 54% 46% / 48% 64% 36% 52%;
+  }
+  30% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(var(--dx, 0), var(--dy, 0), 0) scale(1.22);
+    border-radius: 40% 60% 46% 54% / 58% 38% 62% 42%;
+  }
+}
+
+@keyframes firework-veil {
+  to {
+    opacity: 1;
+  }
+}
+
+body.is-firework-mode,
+body.is-firework-mode * {
+  cursor: var(--firework-cursor) !important;
+}
+
+body.is-firework-mode {
+  --ink: #f4f4f4;
+  --muted: #d2d2d2;
+  --glass-fill: rgba(0, 0, 0, 0.62);
+  color: var(--ink);
+}
+
+body.is-firework-mode .site,
+body.is-firework-mode .site-footer,
+body.is-firework-mode .fireworks-hint,
+body.is-firework-mode .eye-btn {
+  color: var(--ink);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.92), 0 1px 2px #000;
+}
+
+body.is-firework-mode .site-footer {
+  background: #121212;
+  transition: background-color 0.35s ease;
+}
+
+body.is-firework-mode .eye-btn {
+  opacity: 0.8;
+}
+
+body.is-firework-mode :is(
+  .hero__honor,
+  .hero__links,
+  .section h2,
+  .entry > span,
+  .contrib__fallback,
+  .case__back,
+  .case__heading-row,
+  .case__meta,
+  .case__blurb,
+  .case__p,
+  .case__heading,
+  .case__caption,
+  .case__quote,
+  .case__list li,
+  .case__stack,
+  .case__links
+)::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03) 46%, rgba(255, 255, 255, 0.06)),
+    var(--glass-fill);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 0 0.5px rgba(255, 255, 255, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .firework-wash__blob,
+  .firework-wash__veil {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  body.is-firework-mode .site-footer {
+    transition: none;
+  }
+}
+
 .forest-bg {
   position: fixed;
   inset: 0;
@@ -357,7 +490,6 @@ body:has(.site-footer) .site {
    Negative inset on ::before adds padding without moving the text. */
 .hero__honor,
 .hero__links,
-.flicker-name,
 .section h2,
 .entry > span,
 .contrib__fallback,
@@ -379,7 +511,6 @@ body:has(.site-footer) .site {
 
 .hero__honor::before,
 .hero__links::before,
-.flicker-name::before,
 .section h2::before,
 .entry > span::before,
 .contrib__fallback::before,
@@ -424,7 +555,6 @@ body:has(.site-footer) .site {
 @media (prefers-reduced-transparency: reduce) {
   .hero__honor::before,
   .hero__links::before,
-  .flicker-name::before,
   .section h2::before,
   .entry > span::before,
   .contrib__fallback::before,
@@ -787,7 +917,7 @@ body:has(.site-footer) .site {
 
 .site-footer__socials {
   position: absolute;
-  left: 1.15rem;
+  left: 3.6rem;
   bottom: 1.4rem;
   z-index: 3;
   display: flex;
@@ -878,8 +1008,12 @@ body.is-board-focus .site {
 }
 
 @media (max-width: 52rem) {
+  body:has(.fireworks-hint) .site {
+    padding-top: 3.35rem;
+  }
+
   .site-footer__socials {
-    left: 0.85rem;
+    left: 3.6rem;
     bottom: 1rem;
     flex-direction: row;
     gap: 0.45rem;
@@ -933,10 +1067,37 @@ body.is-board-focus .site {
   border: 0;
 }
 
-.eye-btn {
+.fireworks-hint {
   position: fixed;
   top: 0.9rem;
   right: 0.9rem;
+  z-index: 40;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-fireworks), "Iowan Old Style", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.2rem;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  text-align: right;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.fireworks-hint:hover,
+.fireworks-hint:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.eye-btn {
+  position: fixed;
+  bottom: 0.9rem;
+  left: 0.9rem;
   z-index: 5;
   display: grid;
   place-items: center;
@@ -1076,7 +1237,8 @@ body.is-sticky-editor .site,
 body.is-sticky-editor .sticky-notes__layer,
 body.is-sticky-editor .sticky-notes__dock,
 body.is-sticky-editor .site-footer,
-body.is-sticky-editor .eye-btn {
+body.is-sticky-editor .eye-btn,
+body.is-sticky-editor .fireworks-hint {
   filter: blur(16px);
   transform: scale(1.015);
   pointer-events: none;
@@ -1093,7 +1255,8 @@ body.is-sticky-editor .eye-btn {
   body.is-sticky-editor .sticky-notes__layer,
   body.is-sticky-editor .sticky-notes__dock,
   body.is-sticky-editor .site-footer,
-  body.is-sticky-editor .eye-btn {
+  body.is-sticky-editor .eye-btn,
+  body.is-sticky-editor .fireworks-hint {
     filter: none;
     transform: none;
   }

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import FireworksBackground from "@/components/FireworksBackground";
 import EyeButton from "@/components/EyeButton";
 import ForestBackground from "@/components/ForestBackground";
 import FooterSocials from "@/components/FooterSocials";
@@ -18,6 +19,7 @@ export default function SiteChrome({ children, forest = false }: Props) {
     <>
       <LoadingScreen />
       {forest ? <ForestBackground /> : null}
+      <FireworksBackground />
       {forest || !SHOW_STICKY_NOTES ? null : <StickyNotes />}
       <div className="site">{children}</div>
       {forest ? (
