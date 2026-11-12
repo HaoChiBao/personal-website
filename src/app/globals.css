@@ -934,7 +934,7 @@ body:has(.site-footer) .site {
   font-family: var(--font-plex-serif), "Iowan Old Style", Georgia, serif;
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(1.55rem, 4vw, 2.35rem);
+  font-size: clamp(1.03rem, 2.67vw, 1.57rem);
   line-height: 1.38;
   letter-spacing: -0.02em;
   text-align: center;
