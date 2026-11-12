@@ -32,9 +32,9 @@ export default function SiteChrome({ children, forest = false }: Props) {
             docked
           />
           <p className="site-footer__motto">
-            A focused idiot achieves more
+            A dumbass in motion achieves more
             <br />
-            than the distracted genius.
+            than a genius at rest.
           </p>
           <FooterSocials />
         </footer>
