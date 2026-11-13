@@ -89,7 +89,7 @@ export default function HomePage({ siteRoot = "" }: Props) {
                     job.org
                   )}
                 </span>
-                <span className="entry__meta">{job.dates}</span>
+                <span className="entry__meta">{job.role}</span>
               </li>
             );
           })}
