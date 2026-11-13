@@ -33,9 +33,33 @@ const fireworksFace = Instrument_Serif({
   variable: "--font-fireworks",
 });
 
+const description = "Building agentic systems people rely on.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://yangjames.com"),
   title: "James Yang",
-  description: "Software engineer in Toronto.",
+  description,
+  openGraph: {
+    title: "James Yang",
+    description,
+    url: "https://yangjames.com",
+    siteName: "James Yang",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph.png",
+        width: 1024,
+        height: 537,
+        alt: "James Yang. Building agentic systems people rely on.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "James Yang",
+    description,
+    images: ["/opengraph.png"],
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
