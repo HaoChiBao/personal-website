@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+@property --ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111;
+}
+
+@property --muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #555;
+}
+
+@property --glass-fill {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.42);
+}
+
 :root {
   --bg: #fff;
   --ink: #111;
@@ -28,11 +46,18 @@ html {
 body {
   margin: 0;
   background: var(--bg);
+  --ink: #111;
+  --muted: #555;
+  --glass-fill: rgba(255, 255, 255, 0.42);
   color: var(--ink);
   font-family: var(--font);
   font-size: 14px;
   line-height: 1.45;
   overflow-x: clip;
+  transition:
+    --ink 0.76s ease,
+    --muted 0.76s ease,
+    --glass-fill 0.76s ease;
 }
 
 a {
@@ -143,7 +168,6 @@ body.is-firework-mode .eye-btn {
 
 body.is-firework-mode .site-footer {
   background: #121212;
-  transition: background-color 0.35s ease;
 }
 
 body.is-firework-mode .eye-btn {
@@ -176,22 +200,24 @@ body.is-firework-mode :is(
     0 0 0 0.5px rgba(255, 255, 255, 0.14);
 }
 
-body.is-firework-mode .hero__honor::before,
-body.is-firework-mode .hero__links::before,
-body.is-firework-mode .section h2::before,
-body.is-firework-mode .entry > span::before,
-body.is-firework-mode .contrib__fallback::before,
-body.is-firework-mode .case__back::before,
-body.is-firework-mode .case__heading-row::before,
-body.is-firework-mode .case__meta::before,
-body.is-firework-mode .case__blurb::before,
-body.is-firework-mode .case__p::before,
-body.is-firework-mode .case__heading::before,
-body.is-firework-mode .case__caption::before,
-body.is-firework-mode .case__quote::before,
-body.is-firework-mode .case__list li::before,
-body.is-firework-mode .case__stack::before,
-body.is-firework-mode .case__links::before {
+body:is(.is-firework-mode, .is-firework-leaving) :is(
+  .hero__honor,
+  .hero__links,
+  .section h2,
+  .entry > span,
+  .contrib__fallback,
+  .case__back,
+  .case__heading-row,
+  .case__meta,
+  .case__blurb,
+  .case__p,
+  .case__heading,
+  .case__caption,
+  .case__quote,
+  .case__list li,
+  .case__stack,
+  .case__links
+)::before {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
@@ -204,7 +230,27 @@ body.is-firework-mode .case__links::before {
     transform: none;
   }
 
-  body.is-firework-mode .site-footer {
+  body,
+  .site,
+  .site-footer,
+  .fireworks-hint,
+  .eye-btn,
+  .hero__honor::before,
+  .hero__links::before,
+  .section h2::before,
+  .entry > span::before,
+  .contrib__fallback::before,
+  .case__back::before,
+  .case__heading-row::before,
+  .case__meta::before,
+  .case__blurb::before,
+  .case__p::before,
+  .case__heading::before,
+  .case__caption::before,
+  .case__quote::before,
+  .case__list li::before,
+  .case__stack::before,
+  .case__links::before {
     transition: none;
   }
 }
@@ -249,6 +295,8 @@ body.is-firework-mode .case__links::before {
   padding-top: 2.5rem;
   padding-bottom: 3rem;
   overflow-x: visible;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0);
+  transition: text-shadow 0.76s ease;
 }
 
 .site:has(.case) {
@@ -571,6 +619,9 @@ body:has(.site-footer) .site {
     inset 0 1px 0 rgba(255, 255, 255, 0.55),
     0 0 0 0.5px rgba(255, 255, 255, 0.45);
   pointer-events: none;
+  transition:
+    background 0.76s ease,
+    box-shadow 0.76s ease;
 }
 
 .case__p::before,
@@ -921,6 +972,10 @@ body:has(.site-footer) .site {
   background: #e8e8e8;
   border-radius: 10px;
   overflow: visible;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0);
+  transition:
+    background-color 0.76s ease,
+    text-shadow 0.76s ease;
 }
 
 .site-footer__motto {
@@ -1113,6 +1168,8 @@ body.is-board-focus .site {
   text-align: right;
   white-space: nowrap;
   cursor: pointer;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0);
+  transition: text-shadow 0.76s ease;
 }
 
 .fireworks-hint:hover,
@@ -1133,7 +1190,10 @@ body.is-board-focus .site {
   color: var(--ink);
   opacity: 0.28;
   border-radius: 999px;
-  transition: opacity 0.2s ease;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0);
+  transition:
+    opacity 0.2s ease,
+    text-shadow 0.76s ease;
 }
 
 .eye-btn svg {

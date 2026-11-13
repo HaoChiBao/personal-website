@@ -202,7 +202,7 @@ export default function FireworksBackground() {
       motion.removeEventListener("change", onMotion);
       window.removeEventListener("click", onClick);
       fireworks.stop();
-      document.body.classList.remove("is-firework-mode");
+      document.body.classList.remove("is-firework-mode", "is-firework-leaving");
       document.documentElement.style.removeProperty("--firework-cursor");
     };
   }, []);
@@ -211,7 +211,7 @@ export default function FireworksBackground() {
     setWash(false);
     setLeaving(false);
     setSettled(false);
-    document.body.classList.remove("is-firework-mode");
+    document.body.classList.remove("is-firework-mode", "is-firework-leaving");
   }
 
   function armSettle() {
@@ -238,6 +238,8 @@ export default function FireworksBackground() {
         clearWash();
         return;
       }
+      document.body.classList.remove("is-firework-mode");
+      document.body.classList.add("is-firework-leaving");
       setLeaving(true);
       exitTimer.current = window.setTimeout(clearWash, WASH_OUT_MS);
       return;
@@ -248,6 +250,7 @@ export default function FireworksBackground() {
     setLeaving(false);
     setWash(true);
     setMode(true);
+    document.body.classList.remove("is-firework-leaving");
     document.body.classList.add("is-firework-mode");
     armSettle();
     startAuto();
