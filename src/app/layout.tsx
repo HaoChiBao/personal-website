@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Serif, Instrument_Serif } from "next/font/google";
 import "./globals.css";
@@ -34,15 +34,19 @@ const fireworksFace = Instrument_Serif({
 });
 
 const description = "Building agentic systems people rely on.";
+const siteUrl = "https://www.yangjames.com";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://yangjames.com"),
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: "./",
+  },
   title: "James Yang",
   description,
   openGraph: {
     title: "James Yang",
     description,
-    url: "https://yangjames.com",
+    url: siteUrl,
     siteName: "James Yang",
     type: "website",
     images: [
@@ -62,6 +66,21 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "James Yang",
+  url: siteUrl,
+  sameAs: [
+    "https://github.com/HaoChiBao",
+    "https://www.linkedin.com/in/jpyang",
+  ],
+};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
@@ -69,6 +88,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${plex.variable} ${plexSerif.variable} ${plexMono.variable} ${fireworksFace.variable}`}
     >
       <body style={{ fontFamily: "var(--font-plex), var(--font)" }}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         {children}
       </body>
     </html>
